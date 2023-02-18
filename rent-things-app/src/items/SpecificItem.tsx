@@ -1,20 +1,19 @@
 import { itemDTO } from "./items.model";
-import css from './SpecificItem.module.css';
+import css from "./SpecificItem.module.css";
 
-export default function SpecificItem(props: itemDTO){
+export default function SpecificItem(props: itemDTO) {
+  const buildLink = () => `/item/${props.id}`;
 
-  const buildLink = () => `/items/${props.id}` 
-  return(
+  return (
     <div className={css.div}>
-      <h3>Specific Item</h3>
+      <h4>specific item</h4>
       <a href={buildLink()}>
-        <img alt="itemImage" src={props.itemImage} />
+        <img alt="Product" src={props.itemImage} />
       </a>
       <p>
-        <a href = {buildLink()}>{props.title}</a> <br/>
-        <a href ={buildLink()}>{props.priece} RON/zi</a>
+        <a href={buildLink()}>{props.title}</a> <br />
+        <a>Pret: {props.price} RON/zi</a>
       </p>
     </div>
-
   );
 }
