@@ -1,9 +1,10 @@
 import "./App.css";
-import SpecificItem from "./items/SpecificItem";
-import { itemDTO, landingPageDTO } from "./items/items.model";
+import { landingPageDTO } from "./items/items.model";
 import ItemsList from "./items/ItemsList";
 import { useEffect, useState } from "react";
 import Menu from "./Menu";
+import { Routes, Route } from "react-router-dom";
+import IndexCategory from "./category/IndexCategory";
 
 function App() {
   const [items, setItems] = useState<landingPageDTO>({});
@@ -53,35 +54,26 @@ function App() {
     return () => clearTimeout(timerId);
   });
 
-  // const transport: itemDTO[] = [
-  //   {
-  //     id: 3,
-  //     title: "Remorca auto",
-  //     description: "Remorca 2 roti",
-  //     price: 40,
-  //     itemImage:
-  //       "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Baset_trailer.jpg/220px-Baset_trailer.jpg",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Bicicleta de munte",
-  //     description: "Foarte buna",
-  //     price: 20,
-  //     itemImage:
-  //       "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Hardtail-mountain-bike.jpg/220px-Hardtail-mountain-bike.jpg",
-  //   },
-  // ];
-
   return (
     <>
-      <Menu/>
-      
+      <Menu />
       <div className="container">
-        <h3>Sport si Relaxare</h3>
-        <ItemsList listOfItems={items.sportsAndRelax} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                {" "}
+                <h3>Sport si Relaxare</h3>
+                <ItemsList listOfItems={items.sportsAndRelax} />
+                <h3>Transport</h3>
+                <ItemsList listOfItems={items.transport} />
+              </>
+            }
+          />
 
-        <h3>Transport</h3>
-        <ItemsList listOfItems={items.transport} />
+          <Route path="/category" element={<IndexCategory />} />
+        </Routes>
       </div>
     </>
   );

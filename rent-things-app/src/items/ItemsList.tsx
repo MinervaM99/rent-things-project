@@ -1,7 +1,6 @@
 import { itemDTO } from "./items.model";
 import SpecificItem from "./SpecificItem";
 import css from "./ItemsList.module.css";
-import Loading from "../utils/Loading";
 import GenericListComponent from "../utils/GenericListComponent";
 
 export default function ItemsList(props: itemsListProps) {
