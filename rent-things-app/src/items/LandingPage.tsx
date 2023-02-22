@@ -16,6 +16,7 @@ export default function LandingPage() {
             price: 5,
             itemImage:
               "https://upload.wikimedia.org/wikipedia/ro/0/06/Idiotul.jpg",
+            forSale: true,
           },
           {
             id: 2,
@@ -24,6 +25,7 @@ export default function LandingPage() {
             price: 4,
             itemImage:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Cover_of_the_first_edition_of_Crime_and_Punishment.jpg/200px-Cover_of_the_first_edition_of_Crime_and_Punishment.jpg",
+            forSale: false,
           },
         ],
         transport: [
@@ -34,14 +36,16 @@ export default function LandingPage() {
             price: 40,
             itemImage:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Baset_trailer.jpg/220px-Baset_trailer.jpg",
+            forSale: false,
           },
           {
-            id:4,
+            id: 4,
             title: "Bicicleta de munte",
             description: "Foarte buna",
             price: 20,
             itemImage:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Hardtail-mountain-bike.jpg/220px-Hardtail-mountain-bike.jpg",
+            forSale: true,
           },
         ],
       });

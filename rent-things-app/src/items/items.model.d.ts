@@ -4,6 +4,7 @@ export interface itemDTO {
   description: string;
   price: number;
   itemImage: string;
+  forSale: boolean;
   // category: string;
   // condition: string;
 }
