@@ -1,11 +1,19 @@
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
+import CategoryForm from "../forms/CategoryForm";
 
 export default function EditCategory() {
   const {id} : any = useParams();
   return (
     <>
       <h3>Edit category</h3>
-      The id is {id}
+      <CategoryForm
+        model={{ name: " " }}
+        onSubmit={async (value) => {
+          await new Promise((r) => setTimeout(r, 1000));
+          console.log(id);
+          console.log(value);
+        }}
+      />
     </>
   );
 }

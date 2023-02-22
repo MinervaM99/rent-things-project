@@ -36,7 +36,7 @@ export default function LandingPage() {
               "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Baset_trailer.jpg/220px-Baset_trailer.jpg",
           },
           {
-            id: 4,
+            id:4,
             title: "Bicicleta de munte",
             description: "Foarte buna",
             price: 20,

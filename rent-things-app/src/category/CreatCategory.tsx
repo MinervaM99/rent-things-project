@@ -1,9 +1,16 @@
-export default function CreateCategory(){
+import CategoryForm from "../forms/CategoryForm";
 
-  return(
+export default function CreateCategory() {
+  return (
     <>
-      <h3>Creat category</h3>
-      
+      <h3>Adauga o categorie</h3>
+      <CategoryForm
+        model={{ name: "" }}
+        onSubmit={async (value) => {
+          await new Promise((r) => setTimeout(r, 1000));
+          console.log(value);
+        }}
+      />
     </>
   );
 }

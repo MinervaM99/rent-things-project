@@ -13,13 +13,13 @@ import NonExistingRoute from "./utils/NonExistingRoute";
 const routes = [
   {path: '/category', component: IndexCategory},
   {path: '/category/create', component: CreateCategory},
-  {path: '/category/edit/:id(\\d+)', component: EditCategory},
+  {path: "/category/edit/:id", component: EditCategory},
 
   {path: '/rentalFrequency', component: IndexRentalFrequency},
   {path: '/rentalFrequency/create', component: CreateRentalFrequency},
 
   {path: '/items/create', component: CreateItem},
-  {path: '/items/edit/:id(\\d+)', component: EditItem},
+  {path: '/items/edit/:id', component: EditItem},
   {path: '/items/filter', component: FilterItems},
 
   {path: '/', component: LandingPage},
