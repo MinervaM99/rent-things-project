@@ -8,7 +8,7 @@ export default function SpecificItem(props: itemDTO) {
     <div className={css.div}>
       <h4>specific item</h4>
       <a href={buildLink()}>
-        <img alt="Product" src={props.itemImage} />
+        <img alt="Product" src={props.pictureURL} />
       </a>
       <p>
         <a href={buildLink()}>{props.title}</a> <br />

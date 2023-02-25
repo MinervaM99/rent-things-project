@@ -14,7 +14,7 @@ export default function LandingPage() {
             title: "Idiotul",
             description: "Dostoievsky",
             price: 5,
-            itemImage:
+            pictureURL:
               "https://upload.wikimedia.org/wikipedia/ro/0/06/Idiotul.jpg",
             forSale: true,
           },
@@ -23,7 +23,7 @@ export default function LandingPage() {
             title: "Crima si pedeapsa",
             description: "Dostoievsky",
             price: 4,
-            itemImage:
+            pictureURL:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Cover_of_the_first_edition_of_Crime_and_Punishment.jpg/200px-Cover_of_the_first_edition_of_Crime_and_Punishment.jpg",
             forSale: false,
           },
@@ -34,7 +34,7 @@ export default function LandingPage() {
             title: "Remorca auto",
             description: "Remorca 2 roti",
             price: 40,
-            itemImage:
+            pictureURL:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Baset_trailer.jpg/220px-Baset_trailer.jpg",
             forSale: false,
           },
@@ -43,7 +43,7 @@ export default function LandingPage() {
             title: "Bicicleta de munte",
             description: "Foarte buna",
             price: 20,
-            itemImage:
+            pictureURL:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Hardtail-mountain-bike.jpg/220px-Hardtail-mountain-bike.jpg",
             forSale: true,
           },

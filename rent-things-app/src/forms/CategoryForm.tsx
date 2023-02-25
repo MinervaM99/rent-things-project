@@ -4,6 +4,7 @@ import Button from "../utils/Button";
 import TextField from "./TextField";
 import * as Yup from "yup";
 import { categoryCreationDTO } from "./category.model";
+import DateField from "./DateField";
 
 export default function CategoryForm(props: categoryFormProps) {
   return (
@@ -15,6 +16,8 @@ export default function CategoryForm(props: categoryFormProps) {
           name: Yup.string()
             .required("Acest camp este obligatoriu")
             .firstLetterUppercase(),
+            dataNasterii: Yup.date().nullable()
+            .required("Acest camp este obligatoriu"),
         })}
       >
         {/* desable the subscribe button */}
@@ -29,6 +32,7 @@ export default function CategoryForm(props: categoryFormProps) {
             <Link className="btn btn-secondary" to="/category">
               Anuleaza
             </Link>
+            <DateField displayName="Data nasterii" field="dataNasterii"/>
           </Form>
         )}
       </Formik>

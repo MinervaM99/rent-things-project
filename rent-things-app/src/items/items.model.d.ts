@@ -1,10 +1,11 @@
 export interface itemDTO {
   id: number;
   title: string;
-  description: string;
+  description?: string;
   price: number;
-  itemImage: string;
-  forSale: boolean;
+  itemImage?: File;
+  pictureURL?: string;
+  forSale?: boolean;
   // category: string;
   // condition: string;
 }

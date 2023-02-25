@@ -11,6 +11,8 @@ export default function CreateCategory() {
           console.log(value);
         }}
       />
+
+      
     </>
   );
 }
