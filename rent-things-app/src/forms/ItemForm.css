@@ -1,0 +1,14 @@
+
+.container {
+  position: relative;
+  width: 70%;
+  
+}
+
+.basic-single {
+  position: flex;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 9999; /* setam valoarea z-index la o valoare mare */
+}

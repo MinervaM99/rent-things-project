@@ -12,11 +12,14 @@
     "@types/react-dom": "^18.0.10",
     "bootstrap": "5.0.2",
     "formik": "^2.2.9",
+    "leaflet": "^1.9.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.0",
     "react-markdown": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "react-scripts": "^4.0.3",
+    "react-select": "^5.7.0",
     "typed-react-markdown": "^0.1.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
@@ -34,19 +37,13 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.20.13"
+    "@babel/plugin-transform-react-jsx": "^7.20.13",
+    "@types/leaflet": "^1.9.1"
   }
 }

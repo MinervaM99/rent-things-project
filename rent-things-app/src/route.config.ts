@@ -5,18 +5,16 @@ import CreateItem from "./items/CreateItem";
 import EditItem from "./items/EditItem";
 import FilterItems from "./items/FilterItems";
 import LandingPage from "./items/LandingPage";
-import CreateRentalFrequency from "./rentalFrequency/CreateRentalFrequency";
-import IndexRentalFrequency from "./rentalFrequency/IndexRentalFrequency";
+import LoginForm from "./login/LoginForm";
 import NonExistingRoute from "./utils/NonExistingRoute";
 
 
 const routes = [
   {path: '/category', component: IndexCategory},
   {path: '/category/create', component: CreateCategory},
-  {path: "/category/edit/:id", component: EditCategory},
+  {path: '/category/edit/:id', component: EditCategory},
 
-  {path: '/rentalFrequency', component: IndexRentalFrequency},
-  {path: '/rentalFrequency/create', component: CreateRentalFrequency},
+  {path: '/login/lgin', component: LoginForm},
 
   {path: '/items/create', component: CreateItem},
   {path: '/items/edit/:id', component: EditItem},

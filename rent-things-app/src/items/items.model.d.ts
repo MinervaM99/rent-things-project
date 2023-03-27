@@ -6,7 +6,7 @@ export interface itemDTO {
   itemImage?: File;
   pictureURL?: string;
   forSale?: boolean;
-  // category: string;
+  categoryIds: number;
   // condition: string;
 }
 

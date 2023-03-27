@@ -13,9 +13,6 @@ export default function Menu() {
               <NavLink className="nav-link" to="/category">
                 Categorii
               </NavLink>
-              <NavLink className="nav-link" to="/rentalFrequency">
-                Rental Frequency
-              </NavLink>
               <NavLink className="nav-link" to="/items/filter">
                 Filtreaza item-uri
               </NavLink>
