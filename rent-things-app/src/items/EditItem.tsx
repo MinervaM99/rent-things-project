@@ -4,7 +4,6 @@ import ItemForm from "../forms/ItemForm";
 export default function EditItem() {
   const { id }: any = useParams();
 
-  const selectedCategory = [{ id: 2, name: "Gradina" }];
   return (
     <>
       <h3>Edit Item</h3>
