@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RentThingsAPI.Services;
 
 namespace RentThingsAPI.Controllers
 {
@@ -12,15 +13,18 @@ namespace RentThingsAPI.Controllers
 	};
 
 		private readonly ILogger<WeatherForecastController> _logger;
+		private readonly IRepository repository;
 
-		public WeatherForecastController(ILogger<WeatherForecastController> logger)
+		public WeatherForecastController(ILogger<WeatherForecastController> logger, IRepository repository)
 		{
 			_logger = logger;
+			this.repository = repository;
 		}
 
 		[HttpGet(Name = "GetWeatherForecast")]
 		public IEnumerable<WeatherForecast> Get()
 		{
+			
 			return Enumerable.Range(1, 5).Select(index => new WeatherForecast
 			{
 				Date = DateTime.Now.AddDays(index),

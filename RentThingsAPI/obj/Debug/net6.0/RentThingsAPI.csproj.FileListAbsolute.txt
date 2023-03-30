@@ -30,3 +30,6 @@ D:\Licenta\rent-things-project\RentThingsAPI\obj\Debug\net6.0\refint\RentThingsA
 D:\Licenta\rent-things-project\RentThingsAPI\obj\Debug\net6.0\RentThingsAPI.pdb
 D:\Licenta\rent-things-project\RentThingsAPI\obj\Debug\net6.0\RentThingsAPI.genruntimeconfig.cache
 D:\Licenta\rent-things-project\RentThingsAPI\obj\Debug\net6.0\ref\RentThingsAPI.dll
+D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net6.0\Microsoft.Owin.dll
+D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net6.0\Microsoft.Owin.Host.SystemWeb.dll
+D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net6.0\Owin.dll
