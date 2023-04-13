@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RentThingsAPI.Entities;
-using RentThingsAPI.Services;
 
 namespace RentThingsAPI.Controllers
 {
@@ -9,51 +8,44 @@ namespace RentThingsAPI.Controllers
 	[ApiController] //don't need explicit validation
 	public class CategoriesController: ControllerBase
 	{
-		private readonly IRepository repository;
+		private readonly ILogger<CategoriesController> logger;
 
-		public CategoriesController(IRepository repository)
+		public CategoriesController(ILogger<CategoriesController> logger)
 		{
-			this.repository = repository;
+			this.logger = logger;
 		}
 
 
 		[HttpGet]
 		public async Task<ActionResult<List<Category>>> Get()
 		{
-			return await repository.GetAllCategories();
+			logger.LogInformation("Getting all the categories");
+
+			return new List<Category>() { new Category() { Id = 1, Name = "bucatarie" } };
 		}
 
 		[HttpGet("{Id:int}")] //api/categories/example
-		public ActionResult<Category> GetId(int Id, [BindRequired] string name)
+		public ActionResult<Category> GetId(int Id)
 		{
-			var category = repository.GetCategoryById(Id);
-
-			if (category == null)
-			{
-				return NotFound();
-			}
-
-			return category;
-
+			throw new NotImplementedException();
 		}
-
 
 		[HttpPost]
 		public ActionResult Post([FromBody] Category category)
 		{
-			return NoContent();
+			throw new NotImplementedException();
 		}
 
 		[HttpPut]
 		public ActionResult Put([FromBody] Category category)
 		{
-			return NoContent();
+			throw new NotImplementedException();
 		}
 
 		[HttpDelete]
 		public ActionResult Delete()
 		{
-			return NoContent();
+			throw new NotImplementedException();
 		}
 	}
 }

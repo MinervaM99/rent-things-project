@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "tCOez/appTSx3+WFTsQSLNEmlIggLkftx+NqLBKb0RSW6nNpHBMCKz1J7TDgTeNAEhmHF3hQXEh0e4qyJoyDqQ==",
+  "dgSpecHash": "6AnmjOCKUsXJ+DaZ3LJXuC6RT+ja5A8V0I7Ph68lGwqhA+AY2wBz/yVOJ1HzAUOrYLfpgX5v2cHitHAOoqj3WQ==",
   "success": true,
   "projectFilePath": "D:\\Licenta\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj",
   "expectedPackageFiles": [
@@ -12,11 +12,7 @@
     "C:\\Users\\Minerva Muresan\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\Minerva Muresan\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "C:\\Users\\Minerva Muresan\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
-    "C:\\Users\\Minerva Muresan\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
-    "C:\\Users\\Minerva Muresan\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.12\\microsoft.netcore.app.host.win-x64.6.0.12.nupkg.sha512",
-    "C:\\Users\\Minerva Muresan\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.12\\microsoft.aspnetcore.app.ref.6.0.12.nupkg.sha512",
-    "C:\\Users\\Minerva Muresan\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.12\\microsoft.windowsdesktop.app.ref.6.0.12.nupkg.sha512",
-    "C:\\Users\\Minerva Muresan\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.12\\microsoft.netcore.app.ref.6.0.12.nupkg.sha512"
+    "C:\\Users\\Minerva Muresan\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
   ],
   "logs": [
     {
