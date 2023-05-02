@@ -4,7 +4,7 @@ import IndexCategory from "./category/IndexCategory";
 import CreateItem from "./items/CreateItem";
 import EditItem from "./items/EditItem";
 import FilterItems from "./items/FilterItems";
-import LandingPage from "./items/LandingPage";
+import LandingPage from "./home/LandingPage";
 import LoginForm from "./login/LoginForm";
 import NonExistingRoute from "./utils/NonExistingRoute";
 

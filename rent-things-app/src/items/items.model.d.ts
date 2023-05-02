@@ -8,6 +8,7 @@ export interface itemDTO {
   forSale?: boolean;
   categoryIds: number;
   // condition: string;
+  // data
 }
 
 export interface landingPageDTO{

@@ -9,7 +9,7 @@ import MarkdownField from "./MarkdownField";
 import Map from "../utils/Map";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
-import { categoryDTO } from "./category.model";
+import { categoryDTO } from "../category/category.model";
 import Select from "react-select";
 import "./ItemForm.css";
 

@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import { categoryDTO } from "../forms/category.model";
+import { categoryDTO } from "../category/category.model";
 import Button from "../utils/Button";
 
 export default function FilterItems() {

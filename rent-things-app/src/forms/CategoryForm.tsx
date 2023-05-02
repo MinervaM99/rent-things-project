@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Button from "../utils/Button";
 import TextField from "./TextField";
 import * as Yup from "yup";
-import { categoryCreationDTO } from "./category.model";
+import { categoryCreationDTO } from "../category/category.model";
 import DateField from "./DateField";
 
 export default function CategoryForm(props: categoryFormProps) {
@@ -15,9 +15,10 @@ export default function CategoryForm(props: categoryFormProps) {
         validationSchema={Yup.object({
           name: Yup.string()
             .required("Acest camp este obligatoriu")
+            .max(50, 'Ati depasit numarul de caractere permise')
             .firstLetterUppercase(),
-            dataNasterii: Yup.date().nullable()
-            .required("Acest camp este obligatoriu"),
+            // dataNasterii: Yup.date().nullable()
+            // .required("Acest camp este obligatoriu"),
         })}
       >
         {/* desable the subscribe button */}
@@ -32,7 +33,7 @@ export default function CategoryForm(props: categoryFormProps) {
             <Link className="btn btn-secondary" to="/category">
               Anuleaza
             </Link>
-            <DateField displayName="Data nasterii" field="dataNasterii"/>
+            {/* <DateField displayName="Data nasterii" field="dataNasterii"/> */}
           </Form>
         )}
       </Formik>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { landingPageDTO } from "./items.model";
-import ItemsList from "./ItemsList";
+import { landingPageDTO } from "../items/items.model";
+import ItemsList from "../items/ItemsList";
 
 export default function LandingPage() {
   const [items, setItems] = useState<landingPageDTO>({});
@@ -17,6 +17,7 @@ export default function LandingPage() {
             pictureURL:
               "https://upload.wikimedia.org/wikipedia/ro/0/06/Idiotul.jpg",
             forSale: true,
+            categoryIds: 1,
           },
           {
             id: 2,
@@ -26,6 +27,7 @@ export default function LandingPage() {
             pictureURL:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Cover_of_the_first_edition_of_Crime_and_Punishment.jpg/200px-Cover_of_the_first_edition_of_Crime_and_Punishment.jpg",
             forSale: false,
+            categoryIds: 2,
           },
         ],
         transport: [
@@ -37,6 +39,7 @@ export default function LandingPage() {
             pictureURL:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Baset_trailer.jpg/220px-Baset_trailer.jpg",
             forSale: false,
+            categoryIds: 1,
           },
           {
             id: 4,
@@ -46,6 +49,7 @@ export default function LandingPage() {
             pictureURL:
               "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Hardtail-mountain-bike.jpg/220px-Hardtail-mountain-bike.jpg",
             forSale: true,
+            categoryIds: 2,
           },
         ],
       });
