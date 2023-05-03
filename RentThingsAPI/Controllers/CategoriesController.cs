@@ -38,16 +38,21 @@ namespace RentThingsAPI.Controllers
 
 
 		[HttpGet("{Id:int}")] //api/categories/example
-		public ActionResult<Category> GetId(int Id)
+		public async Task<ActionResult<CategoryDTO>> GetId(int Id)
 		{
-			throw new NotImplementedException();
+			var category = await context.Categories.FirstOrDefaultAsync(x => x.Id == Id);
+
+			if(category == null) { return NotFound(); }
+			
+			return mapper.Map<CategoryDTO>(category);
+
 		}
 
 
 
 
 		[HttpPost] 
-		public async Task<ActionResult>Post([FromBody] CategoryCreationDTO categoryCreationDTO)
+		public async Task<ActionResult> Post([FromBody] CategoryCreationDTO categoryCreationDTO)
 		{
 			var genere = mapper.Map<Category>(categoryCreationDTO);
 			context.Add(genere);
@@ -55,16 +60,29 @@ namespace RentThingsAPI.Controllers
 			return NoContent();
 		}
 
-		[HttpPut]
-		public ActionResult Put([FromBody] Category category)
+		[HttpPut("{id:int}")]
+		public async Task<ActionResult> Put(int id, [FromBody] CategoryCreationDTO categoryCreationDTO)
 		{
-			throw new NotImplementedException();
+			var category = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+			if(category == null) { return NotFound();}
+			category = mapper.Map(categoryCreationDTO, category);
+
+			await context.SaveChangesAsync();
+			return NoContent();
 		}
 
-		[HttpDelete]
-		public ActionResult Delete()
+		[HttpDelete("{id:int}")]
+		public async Task<ActionResult> Delete(int id)
 		{
-			throw new NotImplementedException();
+			var exists = await context.Categories.AnyAsync(x => x.Id == id);
+
+			if (!exists) { return NotFound(); }
+
+			context.Remove(new Category() { Id = id });
+			await context.SaveChangesAsync();
+			return NoContent();
+
 		}
 	}
 }
