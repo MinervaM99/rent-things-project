@@ -1,35 +1,14 @@
 import { NavLink } from "react-router-dom";
 import {
-  Navbar,
-  Nav,
   NavDropdown,
   Form,
   FormControl,
   Button,
 } from "react-bootstrap";
 import "./home/home.css";
-import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Menu() {
-  const [isNavAffix, setIsNavAffix] = useState(false);
-
-  useEffect(() => {
-    function handleScroll() {
-      if (window.pageYOffset > 50) {
-        setIsNavAffix(true);
-      } else {
-        setIsNavAffix(false);
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll);
-
-    // cleanup function
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   return (
     <>

@@ -7,6 +7,7 @@ import GenericListComponent from "../utils/GenericListComponent";
 import Button from "../utils/Button";
 import Pagination from "../utils/Pagination";
 import RecordsPerPageSelect from "../utils/RecordsPerPageSelect";
+import customConfirm from "../utils/customConfirm";
 
 export default function IndexCategory() {
   const [categories, setCategories] = useState<categoryDTO[]>();
@@ -15,6 +16,11 @@ export default function IndexCategory() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, recordsPerPage]);
+
+  async function loadData() {
     axios
       .get(urlCategorirs, { params: { page, recordsPerPage } })
       // .get('https://localhost:7216/api/categories')
@@ -27,7 +33,18 @@ export default function IndexCategory() {
 
         setCategories(response.data);
       });
-  }, [page, recordsPerPage]);
+  }
+
+  async function deleteCategory(id: number) {
+    try {
+      await axios.delete(`${urlCategorirs}/${id}`);
+      loadData();
+    } catch (error: any) {
+      if (error && error.response) {
+        console.error(error.response.data);
+      }
+    }
+  }
 
   return (
     <>
@@ -59,7 +76,12 @@ export default function IndexCategory() {
                     Edit
                   </Link>
 
-                  <Button>Delete</Button>
+                  <Button
+                    onClick={() => customConfirm(() => deleteCategory(category.id))}
+                    className="btn btn-danger"
+                  >
+                    Delete
+                  </Button>
                 </td>
                 <td>{category.name}</td>
               </tr>
