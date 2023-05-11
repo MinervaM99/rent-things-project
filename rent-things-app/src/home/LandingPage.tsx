@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { landingPageDTO } from "../items/items.model";
 import ItemsList from "../items/ItemsList";
+import Authorized from "../security/Authorized";
 
 export default function LandingPage() {
   const [items, setItems] = useState<landingPageDTO>({});
@@ -60,6 +61,11 @@ export default function LandingPage() {
 
   return (
     <>
+      <Authorized
+        authorized={<>You are authorized</>}
+        notAuthorized={<>NOT authorized</>}
+        role="admin"
+      />
       <h3>Sport si Relaxare</h3>
       <ItemsList listOfItems={items.sportsAndRelax} />
       <h3>Transport</h3>

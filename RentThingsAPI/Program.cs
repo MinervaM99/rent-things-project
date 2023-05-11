@@ -9,6 +9,9 @@ using RentThingsAPI;
 using Microsoft.EntityFrameworkCore;
 using RentThingsAPI.Entities;
 using RentThingsAPI.DTOs;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,19 +22,46 @@ var builder = WebApplication.CreateBuilder(args);
 
 var frontendUrl = builder.Configuration.GetValue<string>("frontend-url");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var configuration = builder.Configuration;
 
 
 // Add services to the container.
+
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddControllers(options =>
 { 
 	options.Filters.Add(typeof(MyExceptionFilter));
 	options.Filters.Add(typeof(ParseBadRequest));
 });
-//builder.Services.AddAuthentication();
+
+
+//add security
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders();
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	.AddJwtBearer(options =>
+	{
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = false,
+			ValidateAudience = false,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"])),
+			ClockSkew = TimeSpan.Zero
+		};
+	});
+
+//end: add security
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
 
 builder.Services.AddCors(options =>
 {

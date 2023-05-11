@@ -10,9 +10,9 @@ import NonExistingRoute from "./utils/NonExistingRoute";
 
 
 const routes = [
-  {path: '/category', component: IndexCategory},
-  {path: '/category/create', component: CreateCategory},
-  {path: '/category/edit/:id', component: EditCategory},
+  {path: '/category', component: IndexCategory, isAdmin: true},
+  {path: '/category/create', component: CreateCategory, isAdmin: true},
+  {path: '/category/edit/:id', component: EditCategory, isAdmin: true},
 
   {path: '/login/lgin', component: LoginForm},
 

@@ -10,5 +10,7 @@ namespace RentThingsAPI.Entities
 		[StringLength(40)]
 		[FirstLetterUppercase]
 		public string Name { get; set; }
+
+		public List<Item> Items { get; set; }
 	}
 }
