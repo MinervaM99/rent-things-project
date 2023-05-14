@@ -1,10 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { NavDropdown, Form, FormControl, Button } from "react-bootstrap";
 import "./home/home.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Authorized from "./security/Authorized";
+import { logout } from "./security/handelJWT";
+import { useContext } from "react";
+import AuthenticationContext from "./security/AuthentictionContext";
 
 export default function Menu() {
+  const { update, claims } = useContext(AuthenticationContext);
+
+  function getUserEmail(): string {
+    return claims.filter((x) => x.name == "email")[0]?.value;
+  }
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -12,53 +20,94 @@ export default function Menu() {
           <NavLink className="navbar-brand" to="/">
             My rent app
           </NavLink>
+          <div
+            className="collapse navbar-collapse"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <Authorized
+                role="admin"
+                authorized={
+                  <>
+                    <div className="collapse navbar-collapse">
+                      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        <NavLink className="nav-link" to="/category">
+                          Categorii
+                        </NavLink>
+                        <NavLink className="nav-link" to="/items/filter">
+                          Filtreaza item-uri
+                        </NavLink>
+                        <NavLink className="nav-link" to="/items/create">
+                          Adauga un item
+                        </NavLink>
+                        <NavLink className="nav-link" to="/login">
+                          Login
+                        </NavLink>
+                        <NavLink className="nav-link" to="/register">
+                          Creaza un cont
+                        </NavLink>
+                      </ul>
+                    </div>
 
-          <Authorized
-            role="admin"
-            authorized={
-              <>
-                <div className="collapse navbar-collapse">
-                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <NavLink className="nav-link" to="/category">
-                      Categorii
-                    </NavLink>
-                    <NavLink className="nav-link" to="/items/filter">
-                      Filtreaza item-uri
-                    </NavLink>
-                    <NavLink className="nav-link" to="/items/create">
-                      Adauga un item
-                    </NavLink>
-                    <NavLink className="nav-link" to="/login">
-                      Login
-                    </NavLink>
-                  </ul>
-                </div>
+                    <NavDropdown title="Profil" id="basic-nav-dropdown">
+                      <NavDropdown.Item href="#action/3.1">
+                        Contul Meu
+                      </NavDropdown.Item>
+                      <NavDropdown.Item href="#action/3.2">
+                        Imprumuturile mele
+                      </NavDropdown.Item>
+                      <NavDropdown.Item href="#action/3.3">
+                        Something
+                      </NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item href="#action/3.4">
+                        Logout
+                      </NavDropdown.Item>
+                    </NavDropdown>
 
-                <NavDropdown title="Profil" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">
-                    Contul Meu
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                    Imprumuturile mele
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
-                    Something
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>
-                </NavDropdown>
+                    <Form>
+                      <FormControl
+                        type="text"
+                        placeholder="Search"
+                        className="mr-sm-2"
+                      />
+                      <Button variant="outline-success">Search</Button>
+                    </Form>
+                  </>
+                }
+              ></Authorized>
+            </ul>
 
-                <Form>
-                  <FormControl
-                    type="text"
-                    placeholder="Search"
-                    className="mr-sm-2"
-                  />
-                  <Button variant="outline-success">Search</Button>
-                </Form>
-              </>
-            }
-          ></Authorized>
+            <div className="d-flex">
+              <Authorized
+                authorized={
+                  <>
+                    <span className="nav-link">Hello, {getUserEmail()}</span>
+                    <Button
+                      className="nav-link btn btn-link"
+                      onClick={() => {
+                        logout();
+                        update([]);
+                      }}
+                      style={{backgroundColor: "pink"}}
+                    >
+                      Log out
+                    </Button>
+                  </>
+                }
+                notAuthorized={
+                  <>
+                    <Link to={"/register"} className="nav-link btn btn-link">
+                      Inregistreaza-te
+                    </Link>
+                    <Link to={"/login"} className="nav-link btn btn-link">
+                      Intra in cont
+                    </Link>
+                  </>
+                }
+              ></Authorized>
+            </div>
+          </div>
         </div>
       </nav>
     </>

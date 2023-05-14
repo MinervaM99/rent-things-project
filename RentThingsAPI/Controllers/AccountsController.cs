@@ -1,9 +1,13 @@
-﻿using Azure.Identity;
+﻿using AutoMapper;
+using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RentThingsAPI.DTOs;
+using RentThingsAPI.Helpers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -14,33 +18,29 @@ namespace RentThingsAPI.Controllers
 	[Route("api/accounts")]
 	public class AccountsController : ControllerBase
 	{
-		//gestionează operațiunile cu utilizatorii, cum ar fi crearea, citirea, actualizarea și ștergerea
-		public UserManager<IdentityUser> userManager { get; }
-
-		// gestionează autentificarea și deconectarea utilizatorilor
-		public SignInManager<IdentityUser> signInManager { get; }
-		public IConfiguration configuration { get; }
+		private readonly UserManager<IdentityUser> userManager;
+		private readonly SignInManager<IdentityUser> signInManager;
+		private readonly IConfiguration configuration;
 
 		public AccountsController(UserManager<IdentityUser> userManager,
 			SignInManager<IdentityUser> signInManager,
 			IConfiguration configuration)
 		{
-			userManager = userManager;
-			signInManager = signInManager;
-			configuration = configuration;
+			this.userManager = userManager;
+			this.signInManager = signInManager;
+			this.configuration = configuration;
 		}
-
 
 		[HttpPost("create")]
 		public async Task<ActionResult<AuthenticationResponse>> Create(
-		 [FromBody] UserCredentials userCredentials)
+			[FromBody] UserCredentials userCredentials)
 		{
 			var user = new IdentityUser { UserName = userCredentials.Email, Email = userCredentials.Email };
 			var result = await userManager.CreateAsync(user, userCredentials.Password);
 
 			if (result.Succeeded)
 			{
-				return BuildToken(userCredentials);
+				return await BuildToken(userCredentials);
 			}
 			else
 			{
@@ -48,45 +48,48 @@ namespace RentThingsAPI.Controllers
 			}
 		}
 
-
 		[HttpPost("login")]
-		public async Task<ActionResult<AuthenticationResponse>> Login([FromBody] UserCredentials userCredentials)
+		public async Task<ActionResult<AuthenticationResponse>> Login(
+			[FromBody] UserCredentials userCredentials)
 		{
 			var result = await signInManager.PasswordSignInAsync(userCredentials.Email,
 				userCredentials.Password, isPersistent: false, lockoutOnFailure: false);
-			if(result.Succeeded)
+
+			if (result.Succeeded)
 			{
-				return BuildToken(userCredentials);
-			}else
+				return await BuildToken(userCredentials);
+			}
+			else
 			{
-				return BadRequest("Incorrect user or password");
+				return BadRequest("Incorrect Login");
 			}
 		}
-		
-		//Method for building the token returned after registration
-		private AuthenticationResponse BuildToken (UserCredentials userCredentials)
+
+		private async Task<AuthenticationResponse> BuildToken(UserCredentials userCredentials)
 		{
 			var claims = new List<Claim>()
 			{
-				//do not put here sensitive information
 				new Claim("email", userCredentials.Email)
 			};
-			//building the jwb
+
+			var user = await userManager.FindByNameAsync(userCredentials.Email);
+			var claimsDB = await userManager.GetClaimsAsync(user);
+
+			claims.AddRange(claimsDB);
+
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"]));
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-			var expiration = DateTime.UtcNow.AddDays(30);
+			var expiration = DateTime.UtcNow.AddYears(1);
 
-			//create the token
-			var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims, 
+			var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims,
 				expires: expiration, signingCredentials: creds);
 
-			return new AuthenticationResponse
+			return new AuthenticationResponse()
 			{
 				Token = new JwtSecurityTokenHandler().WriteToken(token),
 				Expiration = expiration
 			};
-
 		}
 	}
 }

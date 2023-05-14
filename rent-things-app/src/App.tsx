@@ -3,21 +3,26 @@ import Menu from "./Menu";
 import { Routes, Route } from "react-router-dom";
 import routes from "./route.config";
 import configureValidations from "./Validations";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { claim } from "./security/security.model";
 import AuthenticationContext from "./security/AuthentictionContext";
+import { getClaims } from "./security/handelJWT";
 
 configureValidations();
 
 function App() {
   const [claims, setClaims] = useState<claim[]>([
-    //hardcodated claim
-    {
-      name: "email",
-      value: "minerva@gmail.com",
-    },
-    { name: "role", value: "user" },
+    // //hardcodated claim
+    // {
+    //   name: "email",
+    //   value: "minerva@gmail.com",
+    // },
+    // { name: "role", value: "admin" },
   ]);
+
+  useEffect(() => {
+    setClaims(getClaims());
+  },[]);
 
   function isAdmin() {
     return (

@@ -7,6 +7,8 @@ import FilterItems from "./items/FilterItems";
 import LandingPage from "./home/LandingPage";
 import LoginForm from "./login/LoginForm";
 import NonExistingRoute from "./utils/NonExistingRoute";
+import Register from "./security/Register";
+import Login from "./security/Login";
 
 
 const routes = [
@@ -14,7 +16,8 @@ const routes = [
   {path: '/category/create', component: CreateCategory, isAdmin: true},
   {path: '/category/edit/:id', component: EditCategory, isAdmin: true},
 
-  {path: '/login/lgin', component: LoginForm},
+  {path: '/login', component: Login},
+  {path: '/register', component: Register},
 
   {path: '/items/create', component: CreateItem},
   {path: '/items/edit/:id', component: EditItem},
