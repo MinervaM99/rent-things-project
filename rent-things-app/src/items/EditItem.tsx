@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import ItemForm from "../forms/ItemForm";
+import ItemForm from "./ItemForm";
 
 export default function EditItem() {
   const { id }: any = useParams();
@@ -10,13 +10,16 @@ export default function EditItem() {
       The id is {id}
       <ItemForm
         model={{
-          id: 100,
           title: "Bicicleta",
-          description: "foarte faina, rosie",
-          price: 25,
-          pictureURL:
+          description: "<p>O <strong>Bicicleta</strong></p>",
+          photo:
             "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Hardtail-mountain-bike.jpg/220px-Hardtail-mountain-bike.jpg",
-          categoryIds: 2,
+          categoryId: 2,
+          condition: 1,
+          age: 2,
+          dayPrice: 10,
+          available: true,
+          userId: "0421cd4b-ebaf-4fb5-a903-33e68218f527"
         }}
         onSubmit={(values) => console.log(values)}
         selectedCategory={[

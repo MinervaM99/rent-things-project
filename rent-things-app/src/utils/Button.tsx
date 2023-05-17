@@ -20,7 +20,7 @@ interface buttonProps {
 }
 
 Button.defaultProps = {
-  type: "button",
-  disable: false,
+  type: "button", 
+  disabled: false,
   className: "btn btn-primary"
 };

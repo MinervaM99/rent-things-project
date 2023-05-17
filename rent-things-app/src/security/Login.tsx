@@ -3,10 +3,10 @@ import { authenticationResponse, userCredentials } from "./security.model";
 import { urlAccounts } from "../endpoints";
 import { useContext, useState } from "react";
 import DisplayErrors from "../utils/DisplayErrors";
-import AuthForm from "./AuthForm";
 import { getClaims, saveToken } from "./handelJWT";
 import AuthenticationContext from "./AuthentictionContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AuthFormLogin from "./AuthFormLogin";
 
 export default function Login(props: loginProps) {
   const [errors, setErrors] = useState<string[]>([]);
@@ -30,12 +30,14 @@ export default function Login(props: loginProps) {
 
   return (
     <>
-      <h2>Login page</h2>
+      <h2>Intra in cont</h2>
       <DisplayErrors errors={errors} />
-      <AuthForm
+      <AuthFormLogin
         model={{ email: "", password: "" }}
         onSubmit={async (values) => await login(values)}
       />
+      <p></p>
+      <div className="mb-3">Nu ai un cont? <Link to={"../Register"}>Creaza un cont nou</Link></div>
     </>
   );
 }

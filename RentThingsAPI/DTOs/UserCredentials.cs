@@ -11,5 +11,11 @@ namespace RentThingsAPI.DTOs
 		public string Email { get; set; }
 		[Required]
 		public string Password { get; set; }
+		[Required]
+		[Phone]
+		public string PhoneNumber { get; set; }
+		
+		//public string UserName { get; set; }
+		
 	}
 }

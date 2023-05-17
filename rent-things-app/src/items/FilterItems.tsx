@@ -64,13 +64,17 @@ export default function FilterItems() {
                 <Button
                   className="btn btn-primary"
                   onClick={() => formikProps.submitForm()}
+                  disabled={false}
                 >
                   Filtreaza
                 </Button>
                 <Button
                   className="btn btn-danger ms-3"
                   onClick={() => formikProps.setValues(initialValues)}
-                >Sterge </Button>
+                  disabled={false}
+                >
+                  Sterge{" "}
+                </Button>
               </div>
             </div>
           </Form>

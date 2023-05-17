@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import { claim } from "./security/security.model";
 import AuthenticationContext from "./security/AuthentictionContext";
 import { getClaims } from "./security/handelJWT";
+import configureInterceptor from "./utils/httpInterceptors";
 
 configureValidations();
+configureInterceptor();
 
 function App() {
   const [claims, setClaims] = useState<claim[]>([
@@ -22,12 +24,20 @@ function App() {
 
   useEffect(() => {
     setClaims(getClaims());
-  },[]);
+  }, []);
 
   function isAdmin() {
     return (
       claims.findIndex(
         (claim) => claim.name === "role" && claim.value === "admin"
+      ) > -1
+    );
+  }
+
+  function isUser() {
+    return (
+      claims.findIndex(
+        (claim) => claim.name === "role" && claim.value === "user"
       ) > -1
     );
   }

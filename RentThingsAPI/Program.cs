@@ -12,7 +12,10 @@ using RentThingsAPI.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 var builder = WebApplication.CreateBuilder(args);
 
 // Set up configuration
@@ -23,6 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 var frontendUrl = builder.Configuration.GetValue<string>("frontend-url");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var configuration = builder.Configuration;
+
 
 
 // Add services to the container.
@@ -80,6 +84,8 @@ builder.Services.AddAutoMapper(cfg =>
 	// Add your AutoMapper configuration here
 	cfg.CreateMap<Category, CategoryDTO>().ReverseMap();
 	cfg.CreateMap<CategoryCreationDTO, Category>();
+	cfg.CreateMap<Item, ItemDTO>().ReverseMap();
+	cfg.CreateMap<ItemCreationDTO, Item>();
 });
 
 builder.Services.AddLogging();

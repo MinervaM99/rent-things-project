@@ -5,10 +5,7 @@ import TextField from "../forms/TextField";
 import Button from "../utils/Button";
 import { Link } from "react-router-dom";
 
-export default function AuthForm(props: authFormProps) {
-  const phoneRegexro = /^(07\d{8})$/;
-  const phoneRegexInt = /^\+40\d{9}$/;
-
+export default function AuthFormLogin(props: authFormProps) {
   return (
     <>
       <Formik
@@ -19,25 +16,19 @@ export default function AuthForm(props: authFormProps) {
             .required("Acest camp este obligatoriu")
             .email("You have to insert a valid email"),
           password: Yup.string().required("Acest camp este obligatoriu"),
-          phoneNumber: Yup.string()
-            .matches(phoneRegexInt, "Numarul de telefon trebuie sa includa prefixul +40 urmat de 9 cifre")
-            .required("Acest câmp este obligatoriu"),
-          userName: Yup.string().required("Acest camp este obligatoriu"),
         })}
       >
         {(formikProps) => (
           <Form>
-            {/* <TextField displayName="Nume utilizator" field="userName" /> */}
             <TextField displayName="Email" field="email" />
-            <TextField displayName="Numar de telefon" field="phoneNumber" />
             <TextField
               displayName="Password"
               field="password"
               type="password"
             />
-            
 
-            <Link className="btn btn-secondary" style={{ marginRight: '10px' }} to="/">
+
+            <Link className="btn btn-secondary" to="/" style={{ marginRight: '10px' }}>
               Anuleaza
             </Link>
             <Button disabled={formikProps.isSubmitting} type="submit">
@@ -59,6 +50,6 @@ interface authFormProps {
   ): void;
 }
 
-AuthForm.defaultProps = {
-  textSubmitButton: "Intra in cont",
-};
+AuthFormLogin.defaultProps ={
+  textSubmitButton: "Intra in cont"
+}

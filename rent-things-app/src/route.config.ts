@@ -5,11 +5,9 @@ import CreateItem from "./items/CreateItem";
 import EditItem from "./items/EditItem";
 import FilterItems from "./items/FilterItems";
 import LandingPage from "./home/LandingPage";
-import LoginForm from "./login/LoginForm";
 import NonExistingRoute from "./utils/NonExistingRoute";
 import Register from "./security/Register";
 import Login from "./security/Login";
-
 
 const routes = [
   {path: '/category', component: IndexCategory, isAdmin: true},

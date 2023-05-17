@@ -1,17 +1,37 @@
 export interface itemDTO {
   id: number;
-  title: string;
+  title: string; 
   description?: string;
-  price: number;
   itemImage?: File;
-  pictureURL?: string;
+  photo?: string;
   forSale?: boolean;
-  categoryIds: number;
-  // condition: string;
-  // data
+  categoryId: number;
+  condition?: number;
+  dayPrice?: number;
+  monthPrice?: number;
+  weekPrice?: number;
+  age?: string;
 }
 
-export interface landingPageDTO{
+export interface itemCreationDTO {
+  title: string;
+  userId: string;
+  description: string;
+  condition: number;
+  //picture url
+  photo: string;
+  //add picture
+  picture?: File;
+  age: number;
+  location?: string;
+  dayPrice?: number;
+  monthPrice?: number;
+  weekPrice?: number;
+  available: true;
+  categoryId: number;
+}
+
+export interface landingPageDTO {
   transport?: itemDTO[];
   sportsAndRelax?: itemDTO[];
 }

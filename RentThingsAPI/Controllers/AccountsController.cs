@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using RentThingsAPI.DTOs;
 using RentThingsAPI.Helpers;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -35,12 +36,12 @@ namespace RentThingsAPI.Controllers
 		public async Task<ActionResult<AuthenticationResponse>> Create(
 			[FromBody] UserCredentials userCredentials)
 		{
-			var user = new IdentityUser { UserName = userCredentials.Email, Email = userCredentials.Email };
+			var user = new IdentityUser {  UserName = userCredentials.Email, Email = userCredentials.Email, PhoneNumber = userCredentials.PhoneNumber, EmailConfirmed=false };
 			var result = await userManager.CreateAsync(user, userCredentials.Password);
 
 			if (result.Succeeded)
 			{
-				return await BuildToken(userCredentials);
+				return await BuildToken(user);
 			}
 			else
 			{
@@ -50,14 +51,17 @@ namespace RentThingsAPI.Controllers
 
 		[HttpPost("login")]
 		public async Task<ActionResult<AuthenticationResponse>> Login(
-			[FromBody] UserCredentials userCredentials)
+			[FromBody] LoginCredentials userCredentials)
 		{
+
 			var result = await signInManager.PasswordSignInAsync(userCredentials.Email,
 				userCredentials.Password, isPersistent: false, lockoutOnFailure: false);
 
+
 			if (result.Succeeded)
 			{
-				return await BuildToken(userCredentials);
+				var user = await userManager.FindByNameAsync(userCredentials.Email);
+				return await BuildToken(user);
 			}
 			else
 			{
@@ -65,7 +69,34 @@ namespace RentThingsAPI.Controllers
 			}
 		}
 
-		private async Task<AuthenticationResponse> BuildToken(UserCredentials userCredentials)
+		//private async Task<AuthenticationResponse> BuildToken(UserCredentials userCredentials)
+		//{
+		//	var claims = new List<Claim>()
+		//	{
+		//		new Claim("email", userCredentials.Email)
+		//	};
+
+		//	var userCredentials = await userManager.FindByNameAsync(userCredentials.Email);
+		//	var claimsDB = await userManager.GetClaimsAsync(userCredentials);
+
+		//	claims.AddRange(claimsDB);
+
+		//	var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"]));
+		//	var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+		//	var expiration = DateTime.UtcNow.AddYears(1);
+
+		//	var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims,
+		//		expires: expiration, signingCredentials: creds);
+
+		//	return new AuthenticationResponse()
+		//	{
+		//		Token = new JwtSecurityTokenHandler().WriteToken(token),
+		//		Expiration = expiration
+		//	};
+		//}
+
+		private async Task<AuthenticationResponse> BuildToken(IdentityUser userCredentials)
 		{
 			var claims = new List<Claim>()
 			{
@@ -73,9 +104,8 @@ namespace RentThingsAPI.Controllers
 			};
 
 			var user = await userManager.FindByNameAsync(userCredentials.Email);
-			var claimsDB = await userManager.GetClaimsAsync(user);
-
-			claims.AddRange(claimsDB);
+			var userClaims = await userManager.GetClaimsAsync(user);
+			claims.AddRange(userClaims);
 
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"]));
 			var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

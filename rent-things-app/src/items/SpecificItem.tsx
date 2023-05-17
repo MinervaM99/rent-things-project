@@ -12,7 +12,6 @@ export default function SpecificItem(props: itemDTO) {
       </a>
       <p>
         <a href={buildLink()}>{props.title}</a> <br />
-        Pret: {props.price} RON/zi
       </p>
     </div>
   );

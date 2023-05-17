@@ -34,9 +34,6 @@ namespace RentThingsAPI.Controllers
 			return mapper.Map<List<CategoryDTO>>(categories);
 		}
 
-
-
-
 		[HttpGet("{Id:int}")] //api/categories/example
 		public async Task<ActionResult<CategoryDTO>> GetId(int Id)
 		{
@@ -47,9 +44,6 @@ namespace RentThingsAPI.Controllers
 			return mapper.Map<CategoryDTO>(category);
 
 		}
-
-
-
 
 		[HttpPost] 
 		public async Task<ActionResult> Post([FromBody] CategoryCreationDTO categoryCreationDTO)
@@ -75,7 +69,7 @@ namespace RentThingsAPI.Controllers
 		[HttpDelete("{id:int}")]
 		public async Task<ActionResult> Delete(int id)
 		{
-			var exists = await context.Categories.AnyAsync(x => x.Id == id);
+			var exists = await context.Categories.AnyAsync(x => x.Id == id); 
 
 			if (!exists) { return NotFound(); }
 
