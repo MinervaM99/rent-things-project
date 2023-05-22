@@ -27,7 +27,6 @@ export default function AuthFormLogin(props: authFormProps) {
               type="password"
             />
 
-
             <Link className="btn btn-secondary" to="/" style={{ marginRight: '10px' }}>
               Anuleaza
             </Link>

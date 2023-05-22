@@ -33,10 +33,9 @@ namespace RentThingsAPI.Controllers
 		}
 
 		[HttpPost("create")]
-		public async Task<ActionResult<AuthenticationResponse>> Create(
-			[FromBody] UserCredentials userCredentials)
+		public async Task<ActionResult<AuthenticationResponse>> Create([FromBody] UserCredentials userCredentials)
 		{
-			var user = new IdentityUser {  UserName = userCredentials.Email, Email = userCredentials.Email, PhoneNumber = userCredentials.PhoneNumber, EmailConfirmed=false };
+			var user = new IdentityUser { UserName = userCredentials.UserName, Email = userCredentials.Email, PhoneNumber = userCredentials.PhoneNumber, EmailConfirmed = false };
 			var result = await userManager.CreateAsync(user, userCredentials.Password);
 
 			if (result.Succeeded)
@@ -98,12 +97,20 @@ namespace RentThingsAPI.Controllers
 
 		private async Task<AuthenticationResponse> BuildToken(IdentityUser userCredentials)
 		{
+			var user = await userManager.FindByEmailAsync(userCredentials.Email);
+			if (user == null)
+			{
+				// Tratează cazul în care utilizatorul nu este găsit în baza de date
+				// și ia măsuri corespunzătoare, cum ar fi returnarea unei erori sau a unui mesaj de avertizare.
+				// În acest exemplu, vom returna o valoare nulă pentru token și data de expirare.
+				return null;
+			}
+
 			var claims = new List<Claim>()
 			{
-				new Claim("email", userCredentials.Email)
+				new Claim("email", user.Email)
 			};
 
-			var user = await userManager.FindByNameAsync(userCredentials.Email);
 			var userClaims = await userManager.GetClaimsAsync(user);
 			claims.AddRange(userClaims);
 

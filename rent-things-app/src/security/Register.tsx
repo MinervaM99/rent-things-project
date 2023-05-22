@@ -7,8 +7,9 @@ import AuthForm from "./AuthForm";
 import { getClaims, saveToken } from "./handelJWT";
 import AuthenticationContext from "./AuthentictionContext";
 import { Link, useNavigate } from "react-router-dom";
+import AuthFormLogin from "./AuthFormLogin";
 
-export default function Register(props: registerProps) {
+export default function Register() {
   const [errors, setErrors] = useState<string[]>([]);
   const { update } = useContext(AuthenticationContext);
   const navigate = useNavigate();
@@ -21,8 +22,9 @@ export default function Register(props: registerProps) {
         credentials
       );
       saveToken(response.data);
+      console.log(response.data);
       update(getClaims());
-      navigate("../");
+      navigate("/");
     } catch (error: any) {
       setErrors(error.response.data);
     }
@@ -33,9 +35,9 @@ export default function Register(props: registerProps) {
       <h3>Creaza un cont nou</h3>
       <DisplayErrors errors={errors} />
       <AuthForm
-        model={{ userName: "", email: "", password: "", phoneNumber: "+40" }}
-        textSubmitButton="Creaza contul"
+        model={{email: "", password: "", phoneNumber: ""}}
         onSubmit={async (values) => await register(values)}
+        textSubmitButton="Creaza contul"
       />
       <p></p>
       <div className="mb-3">
@@ -44,5 +46,3 @@ export default function Register(props: registerProps) {
     </>
   );
 }
-
-interface registerProps {}

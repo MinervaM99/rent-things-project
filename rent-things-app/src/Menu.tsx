@@ -66,10 +66,10 @@ export default function Menu() {
                       <NavDropdown.Item href="/myAccount">
                        Contum Meu
                       </NavDropdown.Item>
-                      <NavDropdown.Item href="#action/3.2">
+                      <NavDropdown.Item href="/myAccount">
                         Imprumuturile mele
                       </NavDropdown.Item>
-                      <NavDropdown.Item href="#action/3.3">
+                      <NavDropdown.Item href="/myAccount">
                         Something
                       </NavDropdown.Item>
                       <NavDropdown.Divider />

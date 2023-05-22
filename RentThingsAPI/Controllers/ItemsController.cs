@@ -128,25 +128,6 @@ namespace RentThingsAPI.Controllers
 			return dto;
 		}
 
-		//[HttpGet("edit/{id:int}")]
-		//public async Task<ActionResult<ItemPutGetDTO>> PutGet(int Id)
-		//{
-		//	var itemsActionResult = await GetItemById(Id);
-		//	if (itemsActionResult.Result is NotFoundResult) { return NotFound(); }
-
-		//	var item = itemsActionResult.Value;
-		//	var categoryToSelect = await context.Categories.ToListAsync();
-
-		//	if (categoryToSelect == null) { return NoContent(); }
-
-		//	var categoryToSelectDTO = mapper.Map<List<CategoryDTO>>(categoryToSelect);
-
-		//	var response = new ItemPutGetDTO();
-		//	response.Item = item;
-		//	response.CategoryToSelect = categoryToSelectDTO;
-		//	return response;
-
-		//}
 
 		[HttpPut("{id:int}")]
 		public async Task<ActionResult> EditItem(int Id, [FromForm] ItemCreationDTO itemCreationDTO)
@@ -162,6 +143,19 @@ namespace RentThingsAPI.Controllers
 				item.Photo = await fileStorageService.EditFile(containerName, itemCreationDTO.Photo, item.Photo);
 			}
 
+			await context.SaveChangesAsync();
+			return Ok(item);
+		}
+
+
+		[HttpDelete("{id:int}")]
+		public async Task<ActionResult> DeleteItem(int Id, [FromForm] ItemCreationDTO itemCreationDTO)
+		{
+
+			var item = await context.Items.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == Id);
+			if (item == null) { return NotFound(); };
+
+			context.Remove(item);
 			await context.SaveChangesAsync();
 			return Ok(item);
 		}
