@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-
+using RentThingsAPI.Helpers;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 var builder = WebApplication.CreateBuilder(args);
@@ -79,14 +79,9 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddAutoMapper(cfg =>
-{
-	// Add your AutoMapper configuration here
-	cfg.CreateMap<Category, CategoryDTO>().ReverseMap();
-	cfg.CreateMap<CategoryCreationDTO, Category>();
-	cfg.CreateMap<Item, ItemDTO>().ReverseMap();
-	cfg.CreateMap<ItemCreationDTO, Item>();
-});
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+builder.Services.AddScoped<IFileStorageService, AzureStorageService>();
 
 builder.Services.AddLogging();
 var app = builder.Build();

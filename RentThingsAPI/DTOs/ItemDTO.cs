@@ -6,7 +6,7 @@ namespace RentThingsAPI.DTOs
 	public class ItemDTO
 	{
 		public int Id { get; set; }
-		public string Title { get; set; }
+		public string Name { get; set; }
 		public string Description { get; set; }
 		public int Condition { get; set; }
 		public string Photo { get; set; }
@@ -17,6 +17,6 @@ namespace RentThingsAPI.DTOs
 		public double? WeekPrice { get; set; }
 		public bool Available { get; set; }
 		public string UserId { get; set; }
-		public int CategoryId { get; set; }
+		public CategoryDTO CategoryId { get; set; }
 	}
 }

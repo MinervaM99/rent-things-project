@@ -21,68 +21,69 @@ namespace RentThingsAPI.Controllers
 		private readonly UserManager<IdentityUser> userManager;
 
 		private readonly IMapper mapper;
+		private readonly IFileStorageService fileStorageService;
+		private readonly string containerName = "items";
 
-		public ItemsController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IMapper mapper)
+		public ItemsController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IMapper mapper, IFileStorageService fileStorageService)
 		{
 			this.context = context;
 			this.userManager = userManager;
 			this.mapper = mapper;
-
+			this.fileStorageService = fileStorageService;
 		}
 
 		[HttpPost]
 		//	[Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
-		public async Task<ActionResult> CreateItem([FromBody] ItemCreationDTO itemCreationDTO)
+		public async Task<ActionResult> CreateItem([FromForm] ItemCreationDTO itemCreationDTO)
 		{
 
 			//var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
 			//var user = await userManager.FindByEmailAsync(email);
-			var newItem = new Item
-			{
-				Name = itemCreationDTO.Title,
-				Description = itemCreationDTO.Description,
-				Condition = itemCreationDTO.Condition,
-				Photo = itemCreationDTO.Photo,
-				Location = itemCreationDTO.Location,
-				DayPrice = itemCreationDTO.DayPrice,
-				MonthPrice = itemCreationDTO.MonthPrice,
-				WeekPrice = itemCreationDTO.WeekPrice,
-				Available = itemCreationDTO.Available
-			};
 
-			// Găsiți categoria cu CategoryId specificat
-			var category = await context.Categories.FindAsync(itemCreationDTO.CategoryId);
-			if (category == null)
-			{
-				return BadRequest("Category not found.");
-			}
+			var newItem = mapper.Map<Item>(itemCreationDTO);
 
-			// Găsiți utilizatorul cu UserId specificat
+			// Găsește utilizatorul cu UserId specificat
 			var user = await userManager.FindByIdAsync(itemCreationDTO.UserId);
 			if (user == null)
 			{
-				return BadRequest("User not found.");
+				return BadRequest("Utilizatorul nu a fost găsit.");
 			}
 
-			newItem.Category = category;
 			newItem.User = user;
+
+			if (itemCreationDTO.Photo != null)
+			{
+				newItem.Photo = await fileStorageService.SaveFile(containerName, itemCreationDTO.Photo);
+			}
 
 			context.Items.Add(newItem);
 			await context.SaveChangesAsync();
 
 			return Ok(itemCreationDTO);
+
 		}
 
 
+		//Get all items
 		[HttpGet]
-		public async Task<ActionResult<List<ItemDTO>>> GetItems()
+		public async Task<ActionResult<LandingPage>> GetItems()
 		{
-			var items = await context.Items.ToListAsync();
-			var itemDTOs = mapper.Map<List<ItemDTO>>(items);
-			return itemDTOs;
+			var top = 3;
+
+			var items = await context.Items.Include(x => x.Category).Take(top).ToListAsync();
+			if (items == null)
+			{
+				return NotFound();
+			}
+			var landingPageDTO = new LandingPage();
+			landingPageDTO.LastItemsAdded = mapper.Map<List<ItemDTO>>(items);
+
+			return landingPageDTO;
 		}
 
-		[HttpGet("/items")]
+
+		//Get all items for a certain user
+		[HttpGet("userItems")]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByUser(string userEmail)
 		{
 			var user = await userManager.FindByEmailAsync(userEmail);
@@ -94,6 +95,75 @@ namespace RentThingsAPI.Controllers
 			var items = await context.Items.Where(i => i.UserId == user.Id).ToListAsync();
 			var itemDTOs = mapper.Map<List<ItemDTO>>(items);
 			return itemDTOs;
+		}
+
+
+		//get items by category
+		[HttpGet("category/{category:int}")]
+		public async Task<ActionResult<List<ItemDTO>>> GetItemsByCategory(int category)
+		{
+			var items = await context.Items.Include(x => x.Category).Where(x => x.CategoryId == category).ToListAsync();
+			if (items == null)
+			{
+				return NotFound("User not found");
+			}
+
+			var itemDTOs = mapper.Map<List<ItemDTO>>(items);
+			return itemDTOs;
+		}
+
+
+		//get an item by Id
+		[HttpGet("{id:int}")]
+		public async Task<ActionResult<ItemDTO>> GetItemById(int id)
+		{
+			var item = await context.Items.Include(x => x.Category).SingleOrDefaultAsync(x => x.Id == id);
+
+			if (item == null)
+			{
+				return NotFound();
+			}
+
+			var dto = mapper.Map<ItemDTO>(item);
+			return dto;
+		}
+
+		//[HttpGet("edit/{id:int}")]
+		//public async Task<ActionResult<ItemPutGetDTO>> PutGet(int Id)
+		//{
+		//	var itemsActionResult = await GetItemById(Id);
+		//	if (itemsActionResult.Result is NotFoundResult) { return NotFound(); }
+
+		//	var item = itemsActionResult.Value;
+		//	var categoryToSelect = await context.Categories.ToListAsync();
+
+		//	if (categoryToSelect == null) { return NoContent(); }
+
+		//	var categoryToSelectDTO = mapper.Map<List<CategoryDTO>>(categoryToSelect);
+
+		//	var response = new ItemPutGetDTO();
+		//	response.Item = item;
+		//	response.CategoryToSelect = categoryToSelectDTO;
+		//	return response;
+
+		//}
+
+		[HttpPut("{id:int}")]
+		public async Task<ActionResult> EditItem(int Id, [FromForm] ItemCreationDTO itemCreationDTO)
+		{
+
+			var item = await context.Items.Include(x => x.Category).FirstOrDefaultAsync(x=> x.Id == Id);
+			if (item == null) { return NotFound(); };
+
+			item = mapper.Map(itemCreationDTO, item);
+
+			if (itemCreationDTO.Photo != null)
+			{
+				item.Photo = await fileStorageService.EditFile(containerName, itemCreationDTO.Photo, item.Photo);
+			}
+
+			await context.SaveChangesAsync();
+			return Ok(item);
 		}
 	}
 }
