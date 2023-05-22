@@ -63,8 +63,8 @@ export default function Menu() {
                       title={<span>Hello, {getUserEmail()}</span>}
                       id="basic-nav-dropdown"
                     >
-                      <NavDropdown.Item href="#action/3.1">
-                        Contul Meu
+                      <NavDropdown.Item href="/myAccount">
+                       Contum Meu
                       </NavDropdown.Item>
                       <NavDropdown.Item href="#action/3.2">
                         Imprumuturile mele

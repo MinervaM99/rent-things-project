@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { itemDTO } from "./items.model";
 import css from "./SpecificItem.module.css";
 
@@ -7,11 +8,11 @@ export default function SpecificItem(props: itemDTO) {
   return (
     <div className={css.div}>
       <h4>specific item</h4>
-      <a href={buildLink()}>
-        <img alt="Product" src={props.pictureURL} />
-      </a>
+      <Link to={buildLink()}>
+        <img alt="Product" src={props.photo} />
+      </Link>
       <p>
-        <a href={buildLink()}>{props.title}</a> <br />
+        <Link to={buildLink()}>{props.name}</Link> <br />
       </p>
     </div>
   );

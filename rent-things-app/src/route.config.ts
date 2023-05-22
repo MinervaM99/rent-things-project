@@ -8,6 +8,8 @@ import LandingPage from "./home/LandingPage";
 import NonExistingRoute from "./utils/NonExistingRoute";
 import Register from "./security/Register";
 import Login from "./security/Login";
+import ItemDetails from "./items/ItemDetails";
+import MyAccount from "./myAccount/MyAccount";
 
 const routes = [
   {path: '/category', component: IndexCategory, isAdmin: true},
@@ -20,6 +22,11 @@ const routes = [
   {path: '/items/create', component: CreateItem},
   {path: '/items/edit/:id', component: EditItem},
   {path: '/items/filter', component: FilterItems},
+  {path: '/item/:id', component: ItemDetails},
+
+  {path: '/myAccount', component: MyAccount},
+
+
 
   {path: '/', component: LandingPage},
   {path: '*', component: NonExistingRoute}

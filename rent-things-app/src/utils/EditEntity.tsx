@@ -17,13 +17,25 @@ export default function EditEntity<TCreation, TRead>(
   useEffect(() => {
     axios.get(`${props.url}/${id}`).then((response: AxiosResponse<TRead>) => {
       setEntity(props.transform(response.data));
+      console.log(response.data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   async function edit(entityToEdit: TCreation) {
     try {
-      await axios.put(`${props.url}/${id}`, entityToEdit);
+      if(props.transformFormData){
+        const formData = props.transformFormData(entityToEdit);
+        await axios({
+          method:'put',
+          url: `${props.url}/${id}`,
+          data: formData,
+          headers: {"Content-Type": "multipart/form-data"}
+        })
+      }else{
+        await axios.put(`${props.url}/${id}`, entityToEdit);
+      }
+      
       navigate(props.indexURL);
     } catch (error: any) {
       if (error && error.response) {

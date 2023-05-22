@@ -3,7 +3,6 @@ import { itemCreationDTO } from "../items/items.model";
 import * as Yup from "yup";
 import Button from "../utils/Button";
 import { Link } from "react-router-dom";
-import Map from "../utils/Map";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { categoryDTO } from "../category/category.model";
@@ -58,7 +57,7 @@ export default function ItemForm(props: itemFormProps) {
             props.onSubmit(values, actions);
           }}
           validationSchema={Yup.object({
-            title: Yup.string()
+            name: Yup.string()
               .required("Acest camp este obligatoriu")
               .firstLetterUppercase(),
             description: Yup.string().required("Acest camp este obligatoriu"),
@@ -68,15 +67,7 @@ export default function ItemForm(props: itemFormProps) {
         >
           {(formikProps) => (
             <Form>
-              <TextField field="title" displayName="Titlu" />
-              <ReactQuillField field="description" displayName="Descriere" />
-              <ImageField
-                displayName="Adauga o imagine"
-                field="picture"
-                imgURL={props.model.photo}
-              />
-
-              <div className="mb-3">
+                <div className="mb-3">
                 <label>Selecteaza o categorie</label>
                 <Select
                   menuPlacement="auto"
@@ -88,6 +79,13 @@ export default function ItemForm(props: itemFormProps) {
                   options={categoryOptions}
                 />
               </div>
+              <TextField field="name" displayName="Titlu" />
+              <ReactQuillField field="description" displayName="Descriere" />
+              <ImageField
+                displayName="Adauga o imagine"
+                field="photo"
+                imgURL={props.model.pictureURL}
+              />
 
               <CheckboxGroup
                 options={conditionOptions}

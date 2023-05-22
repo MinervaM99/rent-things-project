@@ -1,37 +1,39 @@
+import { categoryDTO } from "../category/category.model";
+
 export interface itemDTO {
   id: number;
-  title: string; 
-  description?: string;
-  itemImage?: File;
-  photo?: string;
-  forSale?: boolean;
-  categoryId: number;
-  condition?: number;
+  name: string;
+  description: string;
+  //itemImage?: File;
+  photo: string;
+  available?: boolean;
+  categoryName: categoryDTO; //could be CategoryDTO
+  condition: number;
   dayPrice?: number;
-  monthPrice?: number;
+  monthPrice?: numbers;
   weekPrice?: number;
-  age?: string;
+  age: number;
+  userDetails?: string; //information about userName
 }
 
 export interface itemCreationDTO {
-  title: string;
-  userId: string;
+  name: string;
+  userDetails?: string;
   description: string;
   condition: number;
   //picture url
-  photo: string;
-  //add picture
-  picture?: File;
+  pictureURL?: string;
+  //add the photo
+  photo?: File;
   age: number;
   location?: string;
   dayPrice?: number;
   monthPrice?: number;
   weekPrice?: number;
-  available: true;
+  available?: boolean;
   categoryId: number;
 }
 
 export interface landingPageDTO {
-  transport?: itemDTO[];
-  sportsAndRelax?: itemDTO[];
+  lastItemsAdded?: itemDTO[];
 }
