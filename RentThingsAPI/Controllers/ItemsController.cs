@@ -32,18 +32,15 @@ namespace RentThingsAPI.Controllers
 			this.fileStorageService = fileStorageService;
 		}
 
+		//create an item
 		[HttpPost]
-		//	[Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult> CreateItem([FromForm] ItemCreationDTO itemCreationDTO)
 		{
-
-			//var email = HttpContext.User.Claims.FirstOrDefault(x => x.Type == "email").Value;
-			//var user = await userManager.FindByEmailAsync(email);
-
 			var newItem = mapper.Map<Item>(itemCreationDTO);
 
 			// Găsește utilizatorul cu UserId specificat
-			var user = await userManager.FindByIdAsync(itemCreationDTO.UserId);
+			var user = await userManager.FindByEmailAsync(itemCreationDTO.UserId);
 			if (user == null)
 			{
 				return BadRequest("Utilizatorul nu a fost găsit.");
@@ -60,15 +57,16 @@ namespace RentThingsAPI.Controllers
 			await context.SaveChangesAsync();
 
 			return Ok(itemCreationDTO);
-
 		}
+
 
 
 		//Get all items
 		[HttpGet]
+		[AllowAnonymous]
 		public async Task<ActionResult<LandingPage>> GetItems()
 		{
-			var top = 3;
+			var top = 10;
 
 			var items = await context.Items.Include(x => x.Category).Take(top).ToListAsync();
 			if (items == null)
@@ -82,8 +80,9 @@ namespace RentThingsAPI.Controllers
 		}
 
 
-		//Get all items for a certain user
-		[HttpGet("userItems")]
+		//Get all items for a user
+		[HttpGet("userItems/{userEmail}")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByUser(string userEmail)
 		{
 			var user = await userManager.FindByEmailAsync(userEmail);
@@ -100,6 +99,7 @@ namespace RentThingsAPI.Controllers
 
 		//get items by category
 		[HttpGet("category/{category:int}")]
+		[AllowAnonymous]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByCategory(int category)
 		{
 			var items = await context.Items.Include(x => x.Category).Where(x => x.CategoryId == category).ToListAsync();
@@ -115,6 +115,7 @@ namespace RentThingsAPI.Controllers
 
 		//get an item by Id
 		[HttpGet("{id:int}")]
+		[AllowAnonymous]
 		public async Task<ActionResult<ItemDTO>> GetItemById(int id)
 		{
 			var item = await context.Items.Include(x => x.Category).SingleOrDefaultAsync(x => x.Id == id);
@@ -128,8 +129,36 @@ namespace RentThingsAPI.Controllers
 			return dto;
 		}
 
+		//filter items
+		[HttpGet("filter")]
+		[AllowAnonymous]
+		public async Task<ActionResult<List<ItemDTO>>> Filter([FromQuery]  FilterItemsDTO filterItemsDTO) { 
+		
+			//use differ execution to build the querry line by line
+			var itemsQueryable = context.Items.AsQueryable();
 
+			//if (!string.IsNullOrEmpty(filterItemsDTO.Name))
+			//{
+			//	itemsQueryable = itemsQueryable.Where(x=>x.Name.Contains(filterItemsDTO.Name));
+			//}
+			if (filterItemsDTO.CategoryId != 0)
+			{
+				itemsQueryable = itemsQueryable.Where(x => x.CategoryId == filterItemsDTO.CategoryId);
+			}
+			if (filterItemsDTO.Condition != 0)
+			{
+				itemsQueryable = itemsQueryable.Where(x => x.Condition == filterItemsDTO.Condition);
+			}
+
+			await HttpContext.InsertParametersPaginationInHeader(itemsQueryable);
+			var movies = await itemsQueryable.Paginate(filterItemsDTO.PaginationDTO).ToListAsync();
+			return mapper.Map<List<ItemDTO>>(movies);
+		}
+
+
+		//update an item
 		[HttpPut("{id:int}")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult> EditItem(int Id, [FromForm] ItemCreationDTO itemCreationDTO)
 		{
 
@@ -149,6 +178,7 @@ namespace RentThingsAPI.Controllers
 
 
 		[HttpDelete("{id:int}")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult> DeleteItem(int Id, [FromForm] ItemCreationDTO itemCreationDTO)
 		{
 
@@ -159,5 +189,7 @@ namespace RentThingsAPI.Controllers
 			await context.SaveChangesAsync();
 			return Ok(item);
 		}
+
+
 	}
 }
