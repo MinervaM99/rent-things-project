@@ -73,7 +73,7 @@ export default function FilterItems() {
                   onClick={() => formikProps.setValues(initialValues)}
                   disabled={false}
                 >
-                  Sterge{" "}
+                  Sterge
                 </Button>
               </div>
             </div>
