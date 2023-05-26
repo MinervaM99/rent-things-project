@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import ItemForm from "./ItemForm";
@@ -7,12 +7,17 @@ import { itemCreationDTO } from "./items.model";
 import { urlCategorirs, urlItems } from "../endpoints";
 import { convertItemToFormData } from "../utils/formDataUtils";
 import { categoryDTO } from "../category/category.model";
+import AuthenticationContext from "../security/AuthentictionContext";
+import Swal from "sweetalert2";
 
 export default function CreateItem() {
   const [listCategory, setListCategory] = useState<categoryDTO[]>([]);
+  const { claims } = useContext(AuthenticationContext);
+  const [email, setEmail] = useState<string>(getUserEmail());
+
   const navigate = useNavigate();
   const containerStyles = {
-    maxWidth: "600px",
+    maxWidth: "700px",
     marginTop: "50px",
     marginBottom: "30px",
     marginLeft: "auto",
@@ -25,14 +30,20 @@ export default function CreateItem() {
       console.log(item);
       const formData = convertItemToFormData(item);
       
-      console.log(formData);
+      console.log(formData.values());
       await axios({
         method: "post",
         url: urlItems,
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
       });
-      navigate("/");
+      Swal.fire({
+        title: "Confirmare",
+        text: "Anuntul a fost adaugat!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      navigate(`/`); 
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (
@@ -56,13 +67,17 @@ export default function CreateItem() {
       });
   }, []);
 
+  function getUserEmail(): string {
+    return claims.filter((x) => x.name === "email")[0]?.value;
+  }
+
   return (
     <>
       <DisplayErrors errors={errors} />
       <div style={containerStyles}>
         <h3>Inchiriaza un produs</h3>
       </div>
-
+      <span>{getUserEmail()}</span>
       <ItemForm
         model={{
           name: "",
@@ -75,7 +90,7 @@ export default function CreateItem() {
           monthPrice: 0,
           weekPrice: 0,
           available: true,
-          userDetails: "74cf6a22-c2c0-4cc8-8df0-def490b6dbbd",
+          userId: getUserEmail(),
           categoryId: 0,
         }}
         onSubmit={async (value) => {

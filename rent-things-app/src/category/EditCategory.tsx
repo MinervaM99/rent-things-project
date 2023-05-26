@@ -1,4 +1,4 @@
-import CategoryForm from "../forms/CategoryForm";
+import CategoryForm from "./CategoryForm";
 import { urlCategorirs } from "../endpoints";
 import { categoryCreationDTO, categoryDTO } from "./category.model";
 import EditEntity from "../utils/EditEntity";

@@ -1,5 +1,4 @@
 import "./App.css";
-import Menu from "./Menu";
 import { Routes, Route } from "react-router-dom";
 import routes from "./route.config";
 import configureValidations from "./Validations";
@@ -8,19 +7,13 @@ import { claim } from "./security/security.model";
 import AuthenticationContext from "./security/AuthentictionContext";
 import { getClaims } from "./security/handelJWT";
 import configureInterceptor from "./utils/httpInterceptors";
+import NavigationMenu from "./Menu";
 
 configureValidations();
 configureInterceptor();
 
 function App() {
-  const [claims, setClaims] = useState<claim[]>([
-    // //hardcodated claim
-    // {
-    //   name: "email",
-    //   value: "minerva@gmail.com",
-    // },
-    // { name: "role", value: "admin" },
-  ]);
+  const [claims, setClaims] = useState<claim[]>([]);
 
   useEffect(() => {
     setClaims(getClaims());
@@ -45,22 +38,21 @@ function App() {
   return (
     <>
       <AuthenticationContext.Provider value={{ claims, update: setClaims }}>
-        <Menu />
-        <div className="container">
+        <NavigationMenu />
+        <div className="container" style={{maxWidth: 1300}}>
           <Routes>
             {routes.map((route) => (
               <Route
                 key={route.path}
                 path={route.path}
-                // errors?
                 element={
                   route.isAdmin && !isAdmin() ? (
-                    <>Accesul nu e permis</>
+                    <>Accesul nu este permis</>
                   ) : (
                     <route.component />
                   )
                 }
-              ></Route>
+              />
             ))}
           </Routes>
         </div>

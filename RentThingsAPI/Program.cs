@@ -45,6 +45,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 	.AddJwtBearer(options =>
@@ -60,9 +61,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 		};
 	});
 
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("IsAdmin", policy => policy.RequireClaim("role", "admin"));
+});
 //end: add security
 
-builder.Services.AddEndpointsApiExplorer();
+
 
 builder.Services.AddSwaggerGen();
 

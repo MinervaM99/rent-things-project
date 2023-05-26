@@ -17,7 +17,7 @@ export default function AuthForm(props: authFormProps) {
         validationSchema={Yup.object({
           email: Yup.string()
             .required("Acest camp este obligatoriu")
-            .email("You have to insert a valid email"),
+            .email("Email-ul nu este valid"),
           password: Yup.string().required("Acest camp este obligatoriu"),
           phoneNumber: Yup.string()
             .matches(

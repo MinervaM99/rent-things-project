@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,7 @@ namespace RentThingsAPI.Controllers
 {
 	[Route("api/categories")]
 	[ApiController] //don't need explicit validation
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class CategoriesController: ControllerBase
 	{
 		private readonly ILogger<CategoriesController> logger;
@@ -45,7 +48,9 @@ namespace RentThingsAPI.Controllers
 
 		}
 
-		[HttpPost] 
+		[HttpPost]
+		//doar pt admin
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 		public async Task<ActionResult> Post([FromBody] CategoryCreationDTO categoryCreationDTO)
 		{
 			var genere = mapper.Map<Category>(categoryCreationDTO);
@@ -67,6 +72,7 @@ namespace RentThingsAPI.Controllers
 		}
 
 		[HttpDelete("{id:int}")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 		public async Task<ActionResult> Delete(int id)
 		{
 			var exists = await context.Categories.AnyAsync(x => x.Id == id); 

@@ -36,6 +36,7 @@ export function getClaims(): claim[]{
 export function logout(){
     localStorage.removeItem(tokenKey);
     localStorage.removeItem(expirationKey);
+    
 }
 
 export function getToken(){

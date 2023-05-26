@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using RentThingsAPI.DTOs;
 using RentThingsAPI.Entities;
 
@@ -17,8 +18,8 @@ namespace RentThingsAPI.Helpers
 			//.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.IdentityUser));
 
 			//	CreateMap<ItemDTO, Item>().ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId));
-
-			//	
+			CreateMap<IdentityUser, UserDTO>().ReverseMap();
+			CreateMap<IdentityUser, UserInfoDTO>().ReverseMap();
 
 		}
 

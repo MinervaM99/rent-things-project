@@ -14,7 +14,7 @@ export default function EditItem() {
     return {
       name: item.name,
       description: item.description,
-      userDetails: item.userDetails,
+      // userId: item.userId,
       pictureURL: item.photo,
       dayPrice: item.dayPrice,
       age: item.age,

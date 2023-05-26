@@ -10,6 +10,7 @@ import Register from "./security/Register";
 import Login from "./security/Login";
 import ItemDetails from "./items/ItemDetails";
 import MyAccount from "./myAccount/MyAccount";
+import IndexUsers from "./security/IndexUsers";
 
 const routes = [
   {path: '/category', component: IndexCategory, isAdmin: true},
@@ -18,6 +19,8 @@ const routes = [
 
   {path: '/login', component: Login},
   {path: '/register', component: Register},
+  {path: '/users', component: IndexUsers, isAdmin: true},
+
 
   {path: '/items/create', component: CreateItem},
   {path: '/items/edit/:id', component: EditItem},

@@ -31,11 +31,11 @@ namespace RentThingsAPI.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NormalizedName")
+                    b.Property<string>("Title")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -235,7 +235,7 @@ namespace RentThingsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("RentThingsAPI.Entities.Item", b =>
@@ -271,11 +271,11 @@ namespace RentThingsAPI.Migrations
                     b.Property<double?>("MonthPrice")
                         .HasColumnType("float");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Photo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Photo")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -292,7 +292,7 @@ namespace RentThingsAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

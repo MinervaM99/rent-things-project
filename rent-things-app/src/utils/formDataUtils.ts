@@ -9,7 +9,10 @@ export function convertItemToFormData(item: itemCreationDTO): FormData {
   formData.append("available", String(item.available));
   formData.append("categoryId", String(item.categoryId));
   formData.append("age", String(item.age));
-
+  if (item.userId) {
+    formData.append("userId", item.userId);
+  }
+ 
   if (item.photo) {
     formData.append("photo", item.photo);
   }
@@ -28,11 +31,6 @@ export function convertItemToFormData(item: itemCreationDTO): FormData {
 
   if (item.location) {
     formData.append("location", item.location);   
-  }
-
-  //eliminate this after authorization! //to do
-  if (item.userDetails) {
-    formData.append("userId", item.userDetails);
   }
 
   return formData;

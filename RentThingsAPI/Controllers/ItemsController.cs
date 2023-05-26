@@ -85,7 +85,7 @@ namespace RentThingsAPI.Controllers
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByUser(string userEmail)
 		{
-			var user = await userManager.FindByEmailAsync(userEmail);
+			var user = await userManager.FindByIdAsync(userEmail);
 			if (user == null)
 			{
 				return NotFound("User not found");
@@ -137,10 +137,10 @@ namespace RentThingsAPI.Controllers
 			//use differ execution to build the querry line by line
 			var itemsQueryable = context.Items.AsQueryable();
 
-			//if (!string.IsNullOrEmpty(filterItemsDTO.Name))
-			//{
-			//	itemsQueryable = itemsQueryable.Where(x=>x.Name.Contains(filterItemsDTO.Name));
-			//}
+			if (!string.IsNullOrEmpty(filterItemsDTO.Name))
+			{
+				itemsQueryable = itemsQueryable.Where(x=>x.Name.Contains(filterItemsDTO.Name));
+			}
 			if (filterItemsDTO.CategoryId != 0)
 			{
 				itemsQueryable = itemsQueryable.Where(x => x.CategoryId == filterItemsDTO.CategoryId);
@@ -179,10 +179,10 @@ namespace RentThingsAPI.Controllers
 
 		[HttpDelete("{id:int}")]
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		public async Task<ActionResult> DeleteItem(int Id, [FromForm] ItemCreationDTO itemCreationDTO)
+		public async Task<ActionResult> DeleteItem(int Id)
 		{
 
-			var item = await context.Items.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == Id);
+			var item = await context.Items.FirstOrDefaultAsync(x => x.Id == Id);
 			if (item == null) { return NotFound(); };
 
 			context.Remove(item);

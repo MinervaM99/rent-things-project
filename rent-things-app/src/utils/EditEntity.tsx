@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DisplayErrors from "./DisplayErrors";
-import CategoryForm from "../forms/CategoryForm";
+import CategoryForm from "../category/CategoryForm";
 import Loading from "./Loading";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 

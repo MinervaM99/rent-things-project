@@ -13,12 +13,12 @@ export interface itemDTO {
   monthPrice?: numbers;
   weekPrice?: number;
   age: number;
-  userDetails?: string; //information about userName
+  userId?: string; //information about userName
 }
 
 export interface itemCreationDTO {
   name: string;
-  userDetails?: string;
+  userId?: string;
   description: string;
   condition: number;
   //picture url

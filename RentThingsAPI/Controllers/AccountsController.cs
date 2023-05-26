@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RentThingsAPI.DTOs;
+using RentThingsAPI.Entities;
 using RentThingsAPI.Helpers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
 
@@ -22,14 +25,18 @@ namespace RentThingsAPI.Controllers
 		private readonly UserManager<IdentityUser> userManager;
 		private readonly SignInManager<IdentityUser> signInManager;
 		private readonly IConfiguration configuration;
+		private readonly ApplicationDbContext context;
+		private readonly IMapper mapper;
 
 		public AccountsController(UserManager<IdentityUser> userManager,
 			SignInManager<IdentityUser> signInManager,
-			IConfiguration configuration)
+			IConfiguration configuration, ApplicationDbContext context, IMapper mapper)
 		{
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 			this.configuration = configuration;
+			this.context = context;
+			this.mapper = mapper;
 		}
 
 		[HttpPost("create")]
@@ -47,6 +54,46 @@ namespace RentThingsAPI.Controllers
 				return BadRequest(result.Errors);
 			}
 		}
+
+		//get all users
+		[HttpGet("listUsers")]
+		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+		public async Task<ActionResult<List<UserDTO>>> GetListUsers([FromQuery] PaginationDTO paginationDTO)
+		{
+			var queryable = context.Users.AsQueryable();
+			// queryable = queryable.Where(user => !userManager.IsInRoleAsync(user, "admin").Result);
+
+			await HttpContext.InsertParametersPaginationInHeader(queryable);
+			var users = await queryable.OrderBy(x => x.Email).Paginate(paginationDTO).ToListAsync();
+			return mapper.Map<List<UserDTO>>(users);
+		}
+
+		[HttpPost("makeAdmin")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+		public async Task<ActionResult> MakeAdmin([FromBody] string userId)
+		{
+			var user = await userManager.FindByIdAsync(userId);
+
+			// Verificăm dacă utilizatorul are deja drepturi de administrator
+			var isAdmin = await userManager.IsInRoleAsync(user, "admin");
+			if (isAdmin)
+			{
+				return BadRequest("Utilizatorul este deja admin.");
+			}
+
+			await userManager.AddClaimAsync(user, new Claim("role", "admin"));
+			return NoContent();
+		}
+
+		[HttpPost("removeAdmin")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+		public async Task<ActionResult> RemoveAdmin([FromBody] string userId)
+		{
+			var user = await userManager.FindByIdAsync(userId);
+			await userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
+			return NoContent();
+		}
+
 
 		[HttpPost("login")]
 		public async Task<ActionResult<AuthenticationResponse>> Login(
@@ -94,6 +141,19 @@ namespace RentThingsAPI.Controllers
 		//		Expiration = expiration
 		//	};
 		//}
+
+
+		//get info about a user by Id
+		[HttpGet("{id}")]
+		public async Task<ActionResult<UserDTO>> GetUserInfo(string id)
+		{
+			var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+			if (user == null) { return NotFound(); }
+
+			return mapper.Map<UserDTO>(user);
+
+		}
 
 		private async Task<AuthenticationResponse> BuildToken(IdentityUser userCredentials)
 		{
