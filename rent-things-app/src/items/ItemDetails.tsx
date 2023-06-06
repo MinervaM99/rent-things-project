@@ -132,12 +132,11 @@ export default function ItemDetails() {
                 ) : null
               ) : null}
 
-              {item.userId}
 
               <RentForm
                 model={{
-                  startDate: undefined,
-                  endDate: undefined,
+                  startDate: "din data de...",
+                  endDate: "pâna în data de...",
                   itemId: id,
                   borrowerId: `${item.userId}`,
                 }}

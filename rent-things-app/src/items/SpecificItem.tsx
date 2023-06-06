@@ -40,7 +40,7 @@ export default function SpecificItem(props: itemDTO) {
       confirmButtonText: "OK",
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate(`../`); // Navigăm către pagina principală doar dacă butonul "OK" a fost apăsat
+        navigate(`../myAccount`); // Navigăm doar dacă butonul "OK" a fost apăsat
       }
     });
   }

@@ -11,9 +11,9 @@ namespace RentThingsAPI.Entities
 		public string Photo { get; set; }
 		public int Age { get; set; }
 		public string? Location { get; set; }
-		public double? DayPrice { get; set; }
-		public double? MonthPrice { get; set; }
-		public double? WeekPrice { get; set; }
+		public decimal DayPrice { get; set; }
+		public decimal? MonthPrice { get; set; }
+		public decimal? WeekPrice { get; set; }
 		public bool Available { get; set; }
 
 		public string UserId { get; set; }

@@ -9,18 +9,17 @@ namespace RentThingsAPI.Helpers
 	{
 		public AutoMapperProfiles() {
 			// Add your AutoMapper configuration here
+			CreateMap<Transaction, TransactionDTO>().ReverseMap();
+			CreateMap<TransactionDTO, Transaction>().ReverseMap();
 			CreateMap<Category, CategoryDTO>().ReverseMap();
 			CreateMap<CategoryCreationDTO, Category>();
 			CreateMap<Item, ItemDTO>()
 				.ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category)).ReverseMap();
 
 			CreateMap<ItemCreationDTO, Item>().ForMember(x => x.Photo, option => option.Ignore());
-			//.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.IdentityUser));
 
-			//	CreateMap<ItemDTO, Item>().ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId));
 			CreateMap<IdentityUser, UserDTO>().ReverseMap();
 			CreateMap<IdentityUser, UserInfoDTO>().ReverseMap();
-
 		}
 
 	}

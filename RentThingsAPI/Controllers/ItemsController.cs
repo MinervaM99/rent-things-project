@@ -19,7 +19,6 @@ namespace RentThingsAPI.Controllers
 
 		private readonly ApplicationDbContext context;
 		private readonly UserManager<IdentityUser> userManager;
-
 		private readonly IMapper mapper;
 		private readonly IFileStorageService fileStorageService;
 		private readonly string containerName = "items";
@@ -82,13 +81,13 @@ namespace RentThingsAPI.Controllers
 
 		//Get all items for a user
 		[HttpGet("userItems/{userEmail}")]
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByUser(string userEmail)
 		{
-			var user = await userManager.FindByIdAsync(userEmail);
+			var user = await userManager.FindByEmailAsync(userEmail);
 			if (user == null)
 			{
-				return NotFound("User not found");
+				return NotFound("User not found");	
 			}
 
 			var items = await context.Items.Where(i => i.UserId == user.Id).ToListAsync();

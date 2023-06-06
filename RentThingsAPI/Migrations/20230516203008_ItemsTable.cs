@@ -24,9 +24,9 @@ namespace RentThingsAPI.Migrations
                     Photo = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(250)", nullable: true),
-                    DayPrice = table.Column<double>(type: "float", nullable: true),
-                    MonthPrice = table.Column<double>(type: "float", nullable: true),
-                    WeekPrice = table.Column<double>(type: "float", nullable: true),
+                    DayPrice = table.Column<decimal>(type: "decimal", nullable: false),
+                    MonthPrice = table.Column<decimal>(type: "decimal", nullable: true),
+                    WeekPrice = table.Column<decimal>(type: "decimal", nullable: true),
                     Available = table.Column<bool>(type: "bit", nullable: false),
                    
                 },

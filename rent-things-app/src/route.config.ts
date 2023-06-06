@@ -21,15 +21,12 @@ const routes = [
   {path: '/register', component: Register},
   {path: '/users', component: IndexUsers, isAdmin: true},
 
-
   {path: '/items/create', component: CreateItem},
   {path: '/items/edit/:id', component: EditItem},
   {path: '/items/filter', component: FilterItems},
   {path: '/item/:id', component: ItemDetails},
 
   {path: '/myAccount', component: MyAccount},
-
-
 
   {path: '/', component: LandingPage},
   {path: '*', component: NonExistingRoute}

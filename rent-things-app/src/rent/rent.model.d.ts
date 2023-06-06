@@ -1,6 +1,6 @@
 export interface RentDTO{
-  startDate?: Date;
-  endDate?: Date;
+  startDate: Date | string;
+  endDate: Date | string;
   borrowerId?: string;
   itemId?: number;
 }
