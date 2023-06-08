@@ -34,8 +34,7 @@ export default function SpecificItem(props: itemDTO) {
       customAlert();
     });
     Swal.fire({
-      title: "Success",
-      text: "Operation finished correctly",
+      text: "Anunțul a fos șters.",
       icon: "success",
       confirmButtonText: "OK",
     }).then((result) => {

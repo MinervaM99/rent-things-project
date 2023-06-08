@@ -7,7 +7,7 @@ export interface itemDTO {
   //itemImage?: File;
   photo: string;
   available?: boolean;
-  categoryName: categoryDTO; //could be CategoryDTO
+  categoryName: categoryDTO; 
   condition: number;
   dayPrice?: number;
   monthPrice?: numbers;
