@@ -27,13 +27,11 @@ function App() {
     );
   }
 
+ 
   function isUser() {
-    return (
-      claims.findIndex(
-        (claim) => claim.name === "role" && claim.value === "user"
-      ) > -1
-    );
+    return claims.length > 0;
   }
+
 
   return (
     <>
@@ -47,7 +45,11 @@ function App() {
                 path={route.path}
                 element={
                   route.isAdmin && !isAdmin() ? (
-                    <>Accesul nu este permis</>
+                    route.isUser && !isUser() ? (
+                      <>Accesul nu este permis</>
+                    ) : (
+                      <route.component />
+                    )
                   ) : (
                     <route.component />
                   )

@@ -1,5 +1,5 @@
 import { Form, Formik, FormikHelpers } from "formik";
-import { userCredentials } from "./security.model";
+import { userCredentialsLogin } from "./security.model";
 import * as Yup from "yup";
 import TextField from "../forms/TextField";
 import Button from "../utils/Button";
@@ -41,11 +41,11 @@ export default function AuthFormLogin(props: authFormProps) {
 }
 
 interface authFormProps {
-  model: userCredentials;
+  model: userCredentialsLogin;
   textSubmitButton: string;
   onSubmit(
-    values: userCredentials,
-    actions: FormikHelpers<userCredentials>
+    values: userCredentialsLogin,
+    actions: FormikHelpers<userCredentialsLogin>
   ): void;
 }
 

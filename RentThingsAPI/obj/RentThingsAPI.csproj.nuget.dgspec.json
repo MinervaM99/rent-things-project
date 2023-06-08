@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Licenta\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj": {}
+    "D:\\Licenta2\\newBranch\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj": {}
   },
   "projects": {
-    "D:\\Licenta\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj": {
+    "D:\\Licenta2\\newBranch\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Licenta\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj",
+        "projectUniqueName": "D:\\Licenta2\\newBranch\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj",
         "projectName": "RentThingsAPI",
-        "projectPath": "D:\\Licenta\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj",
+        "projectPath": "D:\\Licenta2\\newBranch\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj",
         "packagesPath": "C:\\Users\\Minerva Muresan\\.nuget\\packages\\",
-        "outputPath": "D:\\Licenta\\rent-things-project\\RentThingsAPI\\obj\\",
+        "outputPath": "D:\\Licenta2\\newBranch\\rent-things-project\\RentThingsAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

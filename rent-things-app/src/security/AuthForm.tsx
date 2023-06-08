@@ -1,13 +1,13 @@
 import { Form, Formik, FormikHelpers } from "formik";
-import { userCredentials } from "./security.model";
+import { userCredentialsRegister } from "./security.model";
 import * as Yup from "yup";
 import TextField from "../forms/TextField";
 import Button from "../utils/Button";
 import { Link } from "react-router-dom";
 
 export default function AuthForm(props: authFormProps) {
-  const phoneRegexro = /^(07\d{8})$/;
-  const phoneRegexInt = /^\+40\d{9}$/;
+  const phoneRegexInt = /^(07\d{8})$/;
+  const phoneRegexro = /^\+40\d{9}$/;
 
   return (
     <>
@@ -22,7 +22,7 @@ export default function AuthForm(props: authFormProps) {
           phoneNumber: Yup.string()
             .matches(
               phoneRegexInt,
-              "Numarul de telefon trebuie sa includa prefixul +40 urmat de 9 cifre"
+              "Numarul de telefon trebuie sa includa prefixul 07 urmat de 8 cifre"
             )
             .required("Acest câmp este obligatoriu"),
           userName: Yup.string()
@@ -63,11 +63,11 @@ export default function AuthForm(props: authFormProps) {
 }
 
 interface authFormProps {
-  model: userCredentials;
+  model: userCredentialsRegister;
   textSubmitButton: string;
   onSubmit(
-    values: userCredentials,
-    actions: FormikHelpers<userCredentials>
+    values: userCredentialsRegister,
+    actions: FormikHelpers<userCredentialsRegister>
   ): void;
 }
 

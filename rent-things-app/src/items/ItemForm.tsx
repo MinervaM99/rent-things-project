@@ -38,7 +38,7 @@ export default function ItemForm(props: itemFormProps) {
     { label: "Mai putin de un an", value: 1 },
     { label: "Mai putin de 2 ani", value: 2 },
     { label: "Mai putin de 5 ani", value: 3 },
-    { label: "Mai putin de 5 ani", value: 4 },
+    { label: "Mai putin de 10 ani", value: 4 },
     { label: "Nu stiu", value: 5 },
   ];
 

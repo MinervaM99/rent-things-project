@@ -1,5 +1,5 @@
 import axios from "axios";
-import { authenticationResponse, userCredentials } from "./security.model";
+import { authenticationResponse, userCredentialsLogin } from "./security.model";
 import { urlAccounts } from "../endpoints";
 import { useContext, useState } from "react";
 import DisplayErrors from "../utils/DisplayErrors";
@@ -13,7 +13,7 @@ export default function Login(props: loginProps) {
   const { update } = useContext(AuthenticationContext);
   const navigate = useNavigate();
   
-  async function login(credentials: userCredentials) {
+  async function login(credentials: userCredentialsLogin) {
     try {
       setErrors([]);
       const response = await axios.post<authenticationResponse>(

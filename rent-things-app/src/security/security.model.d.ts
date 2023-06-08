@@ -3,11 +3,15 @@ export interface claim {
   value: string;
 }
 
-export interface userCredentials {
+export interface userCredentialsRegister {
   email: string;
   password: string;
-  phoneNumber?: string;
-  userName?: string
+  phoneNumber: string;
+  userName: string
+}
+export interface userCredentialsLogin {
+  email: string;
+  password: string;
 }
 
 export interface authenticationResponse{

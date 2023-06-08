@@ -1,4 +1,6 @@
+import moment from "moment";
 import { itemCreationDTO } from "../items/items.model";
+import { transactionDTO } from "../transactions/transactions.model";
 
 export function convertItemToFormData(item: itemCreationDTO): FormData {
   const formData = new FormData();
@@ -34,4 +36,8 @@ export function convertItemToFormData(item: itemCreationDTO): FormData {
   }
 
   return formData;
+}
+export function formatDateToBackendFormat(date: any) {
+  const selectedDateTime = moment(date.target.value).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+  return selectedDateTime;
 }

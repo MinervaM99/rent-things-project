@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fKUvmNV62GzUazhdb2OAzSTXHHJ0Eqz0oPUW/Kvf9E8sKG7KSMm3ZbEBK+avqci3f8u038xGPZ240YrSfk1+2Q==",
+  "dgSpecHash": "HnwElEVhJLRrgBDjK9ULt0YNGTkqUgVdm4IU431iJiagvHyyD1PZ83pjFuICck9KKH6TTeaASEWAmLAbvv/n+A==",
   "success": true,
-  "projectFilePath": "D:\\Licenta\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj",
+  "projectFilePath": "D:\\Licenta2\\newBranch\\rent-things-project\\RentThingsAPI\\RentThingsAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Minerva Muresan\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Minerva Muresan\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

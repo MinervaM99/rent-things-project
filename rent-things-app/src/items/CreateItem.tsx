@@ -77,7 +77,6 @@ export default function CreateItem() {
       <div style={containerStyles}>
         <h3>Inchiriaza un produs</h3>
       </div>
-      <span>{getUserEmail()}</span>
       <ItemForm
         model={{
           name: "",

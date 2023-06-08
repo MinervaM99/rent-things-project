@@ -155,6 +155,26 @@ namespace RentThingsAPI.Controllers
 
 		}
 
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteUser(string id)
+		{
+			var user = await userManager.FindByIdAsync(id);
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			var result = await userManager.DeleteAsync(user);
+			if (result.Succeeded)
+			{
+				return NoContent();
+			}
+			else
+			{
+				return BadRequest(result.Errors);
+			}
+		}
+
 		private async Task<AuthenticationResponse> BuildToken(IdentityUser userCredentials)
 		{
 			var user = await userManager.FindByEmailAsync(userCredentials.Email);

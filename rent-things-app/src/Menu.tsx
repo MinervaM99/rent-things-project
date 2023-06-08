@@ -7,6 +7,8 @@ import { logout } from "./security/handelJWT";
 import { useContext } from "react";
 import AuthenticationContext from "./security/AuthentictionContext";
 import { Avatar } from "@mui/material";
+import styled from "styled-components";
+
 
 export default function Menu() {
   const { update, claims } = useContext(AuthenticationContext);
@@ -17,13 +19,12 @@ export default function Menu() {
   }
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light shadow">
+      <nav  className="navbar navbar-expand-lg navbar-light bg-light shadow">
         <div className="container-fluid">
           <NavLink className="navbar-brand" to="/">
             My rent app
           </NavLink>
-          <div
-            className="collapse navbar-collapse"
+          <div  className="collapse navbar-collapse"
             style={{ display: "flex", justifyContent: "space-between" }}
           >
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -65,7 +66,7 @@ export default function Menu() {
                         <li className="nav-item mr-auto">
                           <NavDropdown
                             // title={<Avatar sx={{ bgcolor: randomColor }}>{getUserEmail()?.charAt(0).toUpperCase()}</Avatar>}
-                            title={<span>Hello, {getUserEmail()}</span>}
+                            title={<span>Bună, {getUserEmail()}</span>}
                             id="basic-nav-dropdown"
                           >
                             <NavDropdown.Item>
@@ -108,7 +109,7 @@ export default function Menu() {
             </div>
           </div>
         </div>
-      </nav>
+    </nav>
       {/* <div
         className="container"
         style={{

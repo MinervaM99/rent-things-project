@@ -2,17 +2,21 @@ import { Formik, Form, Field, FormikHelpers, ErrorMessage } from "formik";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import * as Yup from "yup";
-import { RentDTO } from "./rent.model";
 import { useState } from "react";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import styled from "styled-components";
 import Button from "../utils/Button";
+import { transactionCreationDTO } from "../transactions/transactions.model";
+import { differenceInDays } from "date-fns";
 
 const DatePickerInput = styled(DatePicker)`
   font-size: 1.5rem;
   padding: 0.5rem;
   cursor: pointer;
   max-width: 150px;
+  .react-datepicker__month-container {
+  width: 500px; /* Ajustează dimensiunea calendarului în funcție de nevoile tale */
+}
 `;
 
 const CalendarIcon = styled(CalendarMonthOutlinedIcon)`
@@ -24,6 +28,7 @@ const CalendarIcon = styled(CalendarMonthOutlinedIcon)`
   color: #555;
   cursor: pointer;
 `;
+
 const DatePickerWrapper = styled.div`
   position: relative;
 `;
@@ -35,15 +40,44 @@ const DatePickerContainer = styled.div`
   max-width: fit-content;
 `;
 
-export default function RentForm(props: categoryFormProps) {
+export default function RentForm(props: rentFormProps) {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [numDays, setNumDays] = useState<number>(0);
 
+  const handleSubmit = (
+    values: transactionCreationDTO,
+    action: FormikHelpers<transactionCreationDTO>
+  ) => {
+    const { startDate, endDate } = values;
+    if (startDate && endDate && props.dayPrice) {
+      if (props.weekPrice && numDays >= 7) {
+        const numWeeks = Math.floor(numDays / 7);
+        const remainingDays = numDays % 7;
+        const earnings =
+          numWeeks * props.weekPrice + remainingDays * props.dayPrice;
+        values.earnings = earnings; // Set the earnings field in the values object
+      } else if (props.monthPrice && numDays >= 30) {
+        const numMonths = Math.floor(numDays / 30);
+        const remainingDays = numDays % 30;
+        const earnings =
+          numMonths * props.monthPrice + remainingDays * props.dayPrice;
+        values.earnings = earnings; // Set the earnings field in the values object
+      } else {
+        const earnings = numDays * props.dayPrice;
+        values.earnings = earnings; // Set the earnings field in the values object
+      }
+    }
+
+    props.onSubmit(values, action);
+  };
+
+  const today = new Date();
   return (
     <>
       <Formik
         initialValues={props.model}
-        onSubmit={props.onSubmit}
+        onSubmit={(values, action) => handleSubmit(values, action)}
         validationSchema={Yup.object({
           startDate: Yup.date()
             .nullable()
@@ -58,19 +92,20 @@ export default function RentForm(props: categoryFormProps) {
         {(formikProps) => (
           <Form>
             <DatePickerContainer>
-              <DatePickerWrapper> 
+              <DatePickerWrapper>
                 din data de
                 <DatePickerInput
+                  dateFormat="dd/MM/yyyy"
                   selected={startDate}
                   selectsStart
                   startDate={startDate}
+                  minDate ={today}
                   endDate={endDate}
                   onChange={(date: Date | null) => {
                     setStartDate(date);
                     formikProps.setFieldValue("startDate", date);
                   }}
-                >
-                </DatePickerInput>
+                ></DatePickerInput>
                 <CalendarIcon />
               </DatePickerWrapper>
               <DatePickerWrapper>
@@ -84,6 +119,12 @@ export default function RentForm(props: categoryFormProps) {
                   onChange={(date: Date) => {
                     setEndDate(date);
                     formikProps.setFieldValue("endDate", date); // Actualizează valoarea câmpului invizibil "endDate"
+                    if (startDate && date) {
+                      const days = differenceInDays(date, startDate) + 1;
+                      setNumDays(days);
+                    } else {
+                      setNumDays(0);
+                    }
                   }}
                 />
                 <CalendarIcon />
@@ -102,12 +143,14 @@ export default function RentForm(props: categoryFormProps) {
               />
             ) : null}
 
+            <p>{numDays} zile = </p>
+
             {/* Câmpurile invizibile pentru a reține valorile startDate și endDate */}
             <Field type="hidden" name="startDate" />
             <Field type="hidden" name="endDate" />
 
-            <Button disabled={formikProps.isSubmitting} type="submit">
-              Inchiriază
+            <Button type="submit" onClick={() => formikProps.isSubmitting}>
+              Salveaza
             </Button>
           </Form>
         )}
@@ -115,7 +158,14 @@ export default function RentForm(props: categoryFormProps) {
     </>
   );
 }
-interface categoryFormProps {
-  model: RentDTO;
-  onSubmit(values: RentDTO, action: FormikHelpers<RentDTO>): void;
+
+interface rentFormProps {
+  dayPrice: number | undefined;
+  weekPrice: number | undefined;
+  monthPrice: number | undefined;
+  model: transactionCreationDTO;
+  onSubmit(
+    values: transactionCreationDTO,
+    action: FormikHelpers<transactionCreationDTO>
+  ): void;
 }
