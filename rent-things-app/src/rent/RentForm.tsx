@@ -7,7 +7,7 @@ import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined
 import styled from "styled-components";
 import Button from "../utils/Button";
 import { transactionCreationDTO } from "../transactions/transactions.model";
-import { differenceInDays } from "date-fns";
+import { differenceInDays, isTomorrow, nextDay } from "date-fns";
 
 const DatePickerInput = styled(DatePicker)`
   font-size: 1.5rem;
@@ -15,8 +15,8 @@ const DatePickerInput = styled(DatePicker)`
   cursor: pointer;
   max-width: 150px;
   .react-datepicker__month-container {
-  width: 500px; /* Ajustează dimensiunea calendarului în funcție de nevoile tale */
-}
+    width: 500px; /* Ajustează dimensiunea calendarului în funcție de nevoile tale */
+  }
 `;
 
 const CalendarIcon = styled(CalendarMonthOutlinedIcon)`
@@ -99,7 +99,7 @@ export default function RentForm(props: rentFormProps) {
                   selected={startDate}
                   selectsStart
                   startDate={startDate}
-                  minDate ={today}
+                  minDate={today}
                   endDate={endDate}
                   onChange={(date: Date | null) => {
                     setStartDate(date);
@@ -111,6 +111,7 @@ export default function RentForm(props: rentFormProps) {
               <DatePickerWrapper>
                 pana in data de
                 <DatePickerInput
+                  dateFormat="dd/MM/yyyy"
                   selected={endDate}
                   selectsEnd
                   startDate={startDate}
@@ -143,14 +144,22 @@ export default function RentForm(props: rentFormProps) {
               />
             ) : null}
 
-            <p>{numDays} zile = </p>
+            <p>
+              {numDays == 0 ? (
+                <></>
+              ) : numDays == 1 ? (
+                <>1 zi selectată</>
+              ) : (
+                <p>{numDays} zile selectate</p>
+              )}
+            </p>
 
             {/* Câmpurile invizibile pentru a reține valorile startDate și endDate */}
             <Field type="hidden" name="startDate" />
             <Field type="hidden" name="endDate" />
 
             <Button type="submit" onClick={() => formikProps.isSubmitting}>
-              Salveaza
+              Trimite cererea de împrumut
             </Button>
           </Form>
         )}

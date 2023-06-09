@@ -8,7 +8,10 @@ import DisplayErrors from "../utils/DisplayErrors";
 import { Avatar, Box, CardMedia, Paper, Typography } from "@mui/material";
 import RentForm from "../rent/RentForm";
 import { userDTO } from "../security/security.model";
-import { transactionCreationDTO, transactionDTO } from "../transactions/transactions.model";
+import {
+  transactionCreationDTO,
+  transactionDTO,
+} from "../transactions/transactions.model";
 import Swal from "sweetalert2";
 
 export default function ItemDetails() {
@@ -43,6 +46,7 @@ export default function ItemDetails() {
         .get(`${urlTransactions}/${id}`)
         .then((response: AxiosResponse<transactionDTO[]>) => {
           setTransactions(response.data);
+          console.log(response.data)
         });
     } catch (error: any) {
       setErrors(error.response.data);
@@ -74,7 +78,6 @@ export default function ItemDetails() {
       const startDate = new Date(values.startDate);
       const endDate = new Date(values.endDate);
       const confirmResult = await Swal.fire({
-        title: "Confirmare",
         html: `
           <h3>Doriti sa imprumutai acest produs?</h3>
           <p><strong>Din data de:</strong> ${startDate.toISOString()}</p>
@@ -83,17 +86,17 @@ export default function ItemDetails() {
         `,
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "Send",
+        confirmButtonText: "Trimite cererea",
         cancelButtonText: "Cancel",
       });
-  
+
       if (confirmResult.isConfirmed) {
         await axios.post(urlTransactions, values);
         console.log(values);
-        Swal.fire("Success", "Cererea de împrumut a fost trimisă!", "success");
+        Swal.fire( "Cererea de împrumut a fost trimisă!", "success");
       }
     } catch (error) {
-      Swal.fire("Error","", "error");
+      Swal.fire("Error", "", "error");
     }
   }
 
@@ -115,6 +118,7 @@ export default function ItemDetails() {
               },
             }}
           >
+            {/* Item detalis */}
             <Paper
               elevation={2}
               sx={{ width: "600px", height: "450px", padding: "20px" }}
@@ -139,6 +143,7 @@ export default function ItemDetails() {
             </Paper>
           </Box>
 
+          {/* Rent details */}
           <Box
             sx={{
               // flexWrap: "wrap",
@@ -150,7 +155,7 @@ export default function ItemDetails() {
               sx={{ width: 350, height: 350, padding: "20px" }}
             >
               <Typography gutterBottom variant="h5" component="div">
-                Inchiriaza produsl pentru
+                Împrumută produsul
               </Typography>
               {item?.dayPrice != null ? (
                 item?.dayPrice > 0 ? (
@@ -178,7 +183,7 @@ export default function ItemDetails() {
                 model={{
                   userId: `${item.userId}`, //borrowerId
                   itemId: id,
-                  startDate: "", 
+                  startDate: "",
                   endDate: "",
                   earnings: 0,
                   status: 1,
@@ -186,20 +191,30 @@ export default function ItemDetails() {
                 dayPrice={item.dayPrice}
                 weekPrice={item.weekPrice}
                 monthPrice={item.monthPrice}
-                onSubmit={(values) =>  sendRequest(values)}
+                onSubmit={(values) => sendRequest(values)}
               />
 
               <Typography>
-                {transactions.map((transaction, index) => (
-                  <div key={index}>
-                    <p>
-                      Acest produs nu este disponibil in intervalul
-                      {transaction.startDate.toString()} -
-                      {transaction.endDate.toString()}
-                    </p>
-                  </div>
-                ))}
-              </Typography> 
+              <span>Acest produs nu este disponibil intervalul:</span>
+                {transactions.map((transaction, index) => {
+                  const unavailableStartDate = new Date(transaction.startDate);
+                  const unavailableEndDate = new Date(transaction.endDate);
+
+                  const itemDetails = (
+                    <div key={index}>
+                      <span>
+                        {unavailableStartDate.getUTCDate()}/
+                        {unavailableStartDate.getMonth()+1}/
+                        {unavailableStartDate.getUTCFullYear()} -  {unavailableEndDate.getUTCDate()}/
+                        {unavailableEndDate.getUTCMonth()+1}/
+                        {unavailableEndDate.getUTCFullYear()}
+                      </span>
+                    </div>
+                  );
+
+                  return itemDetails;
+                })}
+              </Typography>
             </Paper>
             <Paper
               elevation={2}
