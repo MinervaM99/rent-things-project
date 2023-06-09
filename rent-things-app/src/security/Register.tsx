@@ -8,6 +8,7 @@ import { getClaims, saveToken } from "./handelJWT";
 import AuthenticationContext from "./AuthentictionContext";
 import { Link, useNavigate } from "react-router-dom";
 import AuthFormLogin from "./AuthFormLogin";
+import Swal from "sweetalert2";
 
 export default function Register() {
   const [errors, setErrors] = useState<string[]>([]);
@@ -24,9 +25,22 @@ export default function Register() {
       saveToken(response.data);
       console.log(response.data);
       update(getClaims());
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Contul tău a fost creat!',
+        showConfirmButton: false,
+        timer: 1500
+      })
       navigate("/");
     } catch (error: any) {
-      setErrors(error.response.data);
+      // setErrors(error.response.data);
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'A apărut o eroare!',
+        showConfirmButton: true
+      })
     }
   }
 

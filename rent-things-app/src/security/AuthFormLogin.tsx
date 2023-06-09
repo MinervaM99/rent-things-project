@@ -12,15 +12,14 @@ export default function AuthFormLogin(props: authFormProps) {
         initialValues={props.model}
         onSubmit={props.onSubmit}
         validationSchema={Yup.object({
-          email: Yup.string()
-            .required("Acest camp este obligatoriu")
-            .email("You have to insert a valid email"),
+          userName: Yup.string()
+            .required("Acest camp este obligatoriu"),
           password: Yup.string().required("Acest camp este obligatoriu"),
         })}
       >
         {(formikProps) => (
           <Form>
-            <TextField displayName="Email" field="email" />
+            <TextField displayName="Nume utilizator" field="userName" />
             <TextField
               displayName="Password"
               field="password"

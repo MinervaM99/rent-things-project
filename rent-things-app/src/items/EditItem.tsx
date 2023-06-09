@@ -22,7 +22,7 @@ export default function EditItem() {
       monthPrice: item.monthPrice,
       condition: item.condition,
       available: item.available,
-      categoryId: 2,
+      categoryId: item.categoryName?  item.categoryName.id : 0,
     };
   }
   //to do - categoryId?

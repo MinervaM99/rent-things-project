@@ -1,4 +1,5 @@
 import { categoryDTO } from "../category/category.model";
+import { userInfoDTO } from "../security/security.model";
 
 export interface itemDTO {
   id: number;
@@ -13,7 +14,7 @@ export interface itemDTO {
   monthPrice?: numbers;
   weekPrice?: number;
   age: number;
-  userId?: string; //information about userName
+  userId?: userInfoDTO; //information about userName
 }
 
 export interface itemCreationDTO {

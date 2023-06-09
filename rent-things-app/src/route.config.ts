@@ -11,6 +11,7 @@ import Login from "./security/Login";
 import ItemDetails from "./items/ItemDetails";
 import MyAccount from "./myAccount/MyAccount";
 import IndexUsers from "./security/IndexUsers";
+import UserProfile from "./myAccount/UserProfile";
 
 const routes = [
   {path: '/category', component: IndexCategory, isAdmin: true},
@@ -20,6 +21,8 @@ const routes = [
   {path: '/login', component: Login},
   {path: '/register', component: Register},
   {path: '/users', component: IndexUsers, isAdmin: true},
+ 
+
 
   {path: '/items/create', component: CreateItem,isUser: true},
   {path: '/items/edit/:id', component: EditItem,isUser: true},
@@ -27,6 +30,7 @@ const routes = [
   {path: '/item/:id', component: ItemDetails},
 
   {path: '/myAccount', component: MyAccount,isUser: true},
+  {path: '/account/:userName', component: UserProfile},
 
   {path: '/', component: LandingPage},
   {path: '*', component: NonExistingRoute}

@@ -13,7 +13,6 @@ import Swal from "sweetalert2";
 export default function CreateItem() {
   const [listCategory, setListCategory] = useState<categoryDTO[]>([]);
   const { claims } = useContext(AuthenticationContext);
-  const [email, setEmail] = useState<string>(getUserEmail());
 
   const navigate = useNavigate();
   const containerStyles = {
@@ -29,7 +28,7 @@ export default function CreateItem() {
     try {
       console.log(item);
       const formData = convertItemToFormData(item);
-      
+
       console.log(formData.values());
       await axios({
         method: "post",
@@ -43,19 +42,11 @@ export default function CreateItem() {
         icon: "success",
         confirmButtonText: "OK",
       });
-      navigate(`/`); 
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        if (
-          error.response?.status === 400 &&
-          error.response?.data.code === 'ITEM_ALREADY_EXIST'
-        ) {
-          setErrors(error.response.data);
-          console.log('Item already exists');
-        }
-      } else {
-        console.log('Unexpected error', error);
-      }
+      navigate(`/`);
+    } catch (error: any) {
+      console.log("Unexpected error", error);
+      Swal.fire("", "A aparut o eroare. Incearcă din nou.", "error");
+      navigate(`items/create`);
     }
   }
 
@@ -67,9 +58,10 @@ export default function CreateItem() {
       });
   }, []);
 
-  function getUserEmail(): string {
-    return claims.filter((x) => x.name === "email")[0]?.value;
+  function getUserName(): string {
+    return claims.filter((x) => x.name === "userName")[0]?.value.toString();
   }
+  console.log(getUserName());
 
   return (
     <>
@@ -89,7 +81,7 @@ export default function CreateItem() {
           monthPrice: 0,
           weekPrice: 0,
           available: true,
-          userId: getUserEmail(),
+          userId: getUserName(),
           categoryId: 0,
         }}
         onSubmit={async (value) => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useField } from "formik";
+import { ErrorMessage, useField } from "formik";
 import { FormCheck, InputGroup, FormControl } from "react-bootstrap";
 
 interface Option {
@@ -13,22 +13,18 @@ interface Props {
   displayName?: string;
 }
 
-const CheckBoxWithInput: React.FC<Props> = ({
-  options,
-  field,
-  displayName,
-}) => {
-  //const { setFieldValue } = useFormikContext();
+const CheckBoxWithInput: React.FC<Props> = (props) => {
+  const { options, field, displayName } = props;
   const [fieldInput, , fieldHelpers] = useField(field);
   const [isChecked, setIsChecked] = useState(fieldInput.value === "");
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-
+  
     if (!isChecked) {
       fieldHelpers.setValue("");
     } else {
-      fieldHelpers.setValue("");
+      fieldHelpers.setValue(undefined); // setează câmpul dayPrice ca fiind nevalid
     }
   };
 
@@ -44,36 +40,41 @@ const CheckBoxWithInput: React.FC<Props> = ({
   };
 
   return (
-    <div style={{ marginLeft: "80px" }}>
-      <label>{displayName}</label>
-      {options.map((option) => (
-        <div key={option.value}>
-          <div style={{ display: "inline-flex", alignItems: "center" }}>
-            <FormCheck
-              type="checkbox"
-              id={option.value}
-              label={option.label}
-              checked={isChecked}
-              onChange={handleCheckboxChange}
-              inline
-              style={{ marginLeft: "10px", marginTop: "0px" }}
-            />
+    <>
+      <div style={{ marginLeft: "80px" }}>
+        <label>{displayName}</label>
+        {options.map((option) => (
+          <div key={option.value}>
+            <div style={{ display: "inline-flex", alignItems: "center" }}>
+              <FormCheck
+                type="checkbox"
+                id={option.value}
+                label={option.label}
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+                inline
+                style={{ marginLeft: "10px", marginTop: "0px" }}
+              />
+            </div>
+            <InputGroup>
+              <FormControl
+                type="number" // schimbare type de la text la number
+                step="0.01" // permite numere cu două zecimale
+                disabled={!isChecked}
+                placeholder="00.00"
+                id={option.value}
+                value={fieldInput.value || ""}
+                onChange={handleInputChange}
+              />
+              <InputGroup.Text>Ron</InputGroup.Text>
+            </InputGroup>
           </div>
-          <InputGroup>
-            <FormControl
-              type="number" // schimbare type de la text la number
-              step="0.01" // permite numere cu două zecimale
-              disabled={!isChecked}
-              placeholder="00.00"
-              id={option.value}
-              value={fieldInput.value || ""}
-              onChange={handleInputChange}
-            />
-            <InputGroup.Text>Ron</InputGroup.Text>
-          </InputGroup>
-        </div>
-      ))}
-    </div>
+        ))}
+         <ErrorMessage name={props.field}>
+          {(msg) => <div className="text-danger">{msg}</div>}
+        </ErrorMessage>
+      </div>
+    </>
   );
 };
 

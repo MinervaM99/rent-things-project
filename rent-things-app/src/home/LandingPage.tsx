@@ -15,8 +15,8 @@ export default function LandingPage() {
     loadData();
   }, []);
 
-  function getUserEmail(){
-    return claims.filter((x) => x.name === "email")[0]?.value;
+  function getUserName(){
+    return claims.filter((x) => x.name === "userName")[0]?.value;
   }
 
   function loadData() {

@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import customConfirm from "../utils/customConfirm";
 import { useContext } from "react";
 import AlertContext from "../utils/AlertContext";
+import styled from "styled-components";
 
 export default function SpecificItem(props: itemDTO) {
   const buildLink = () => `/item/${props.id}`;
@@ -45,13 +46,14 @@ export default function SpecificItem(props: itemDTO) {
   }
 
   return (
+    <Container>
     <Box
       sx={{
-        display: "flex",
+        // display: "flex",
         // flexWrap: "wrap",
         "& > :not(style)": {
           width: 750,
-          height: 300,
+          height: 290,
         },
       }}
     >
@@ -80,31 +82,42 @@ export default function SpecificItem(props: itemDTO) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        {isSpecificRoute && (
-          <CardActions>
-            <Button
-              size="medium"
-              color="error"
-              onClick={() =>
-                customConfirm(
-                  () => deleteItem(),
-                  `Doresti sa stergi acest anunt?`,
-                  "Sterge"
-                )
-              }
-            >
-              Șterge
-            </Button>
-            <Button
-              size="medium"
-              color="inherit"
-              onClick={handleOnClickEdit}
-            >
-              Editează
-            </Button>
-          </CardActions>
-        )}
       </Card>
+
     </Box>
+    
+    {isSpecificRoute && (
+      <Card sx={{ maxWidth: 270, margin: 1, height: 40}}>
+        <CardActions>
+          <Button
+            size="medium"
+            color="error"
+            onClick={() =>
+              customConfirm(
+                () => deleteItem(),
+                `Doresti sa stergi acest anunt?`,
+                "Sterge"
+              )
+            }
+          >
+            Șterge
+          </Button>
+          <Button
+            size="medium"
+            color="inherit"
+            onClick={handleOnClickEdit}
+          >
+            Editează
+          </Button>
+        </CardActions> </Card>
+      )}
+     
+    </Container>
+    
   );
 }
+
+const Container = styled.div`
+  display: block;
+  padding: 0;
+`;

@@ -6,7 +6,7 @@ import { useState } from "react";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import styled from "styled-components";
 import Button from "../utils/Button";
-import { transactionCreationDTO } from "../transactions/transactions.model";
+import { transactionCreationDTO } from "./transactions.model";
 import { differenceInDays, isTomorrow, nextDay } from "date-fns";
 
 const DatePickerInput = styled(DatePicker)`

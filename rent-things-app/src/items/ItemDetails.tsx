@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { urlAccounts, urlItems, urlTransactions } from "../endpoints";
+import { Link, useParams } from "react-router-dom";
+import { urlItems, urlTransactions } from "../endpoints";
 import { itemDTO } from "./items.model";
 import Loading from "../utils/Loading";
 import DisplayErrors from "../utils/DisplayErrors";
 import { Avatar, Box, CardMedia, Paper, Typography } from "@mui/material";
-import RentForm from "../rent/RentForm";
+import RentForm from "../transactions/RentForm";
 import { userDTO } from "../security/security.model";
 import {
   transactionCreationDTO,
@@ -15,10 +15,12 @@ import {
 import Swal from "sweetalert2";
 
 export default function ItemDetails() {
+  //itemId
   const { id }: any = useParams();
+  //built the link for user details page using user name
+  const buildLink = () => `/account/${item?.userId?.userName}`;
   const [item, setItem] = useState<itemDTO>();
   const [errors, setErrors] = useState<string[]>([]);
-  const [userInfo, setUserInfo] = useState<userDTO>();
   const [transactions, setTransactions] = useState<transactionDTO[]>([]);
 
   useEffect(() => {
@@ -36,7 +38,6 @@ export default function ItemDetails() {
   useEffect(() => {
     if (item && item.userId) {
       getUnavailableDates();
-      getUserInfo();
     }
   }, [item]);
 
@@ -46,18 +47,7 @@ export default function ItemDetails() {
         .get(`${urlTransactions}/${id}`)
         .then((response: AxiosResponse<transactionDTO[]>) => {
           setTransactions(response.data);
-          console.log(response.data)
-        });
-    } catch (error: any) {
-      setErrors(error.response.data);
-    }
-  }
-  function getUserInfo() {
-    try {
-      axios
-        .get(`${urlAccounts}/${item?.userId}`)
-        .then((response: AxiosResponse<userDTO>) => {
-          setUserInfo(response.data);
+          console.log(response.data);
         });
     } catch (error: any) {
       setErrors(error.response.data);
@@ -77,6 +67,7 @@ export default function ItemDetails() {
     try {
       const startDate = new Date(values.startDate);
       const endDate = new Date(values.endDate);
+      console.log(values);
       const confirmResult = await Swal.fire({
         html: `
           <h3>Doriti sa imprumutai acest produs?</h3>
@@ -93,7 +84,7 @@ export default function ItemDetails() {
       if (confirmResult.isConfirmed) {
         await axios.post(urlTransactions, values);
         console.log(values);
-        Swal.fire( "Cererea de împrumut a fost trimisă!", "success");
+        Swal.fire("Cererea de împrumut a fost trimisă!", "success");
       }
     } catch (error) {
       Swal.fire("Error", "", "error");
@@ -181,7 +172,7 @@ export default function ItemDetails() {
 
               <RentForm
                 model={{
-                  userId: `${item.userId}`, //borrowerId
+                  userId: `${item.userId?.id}`, //borrowerId
                   itemId: id,
                   startDate: "",
                   endDate: "",
@@ -195,27 +186,36 @@ export default function ItemDetails() {
               />
 
               <Typography>
-              <span>Acest produs nu este disponibil intervalul:</span>
-                {transactions.map((transaction, index) => {
-                  const unavailableStartDate = new Date(transaction.startDate);
-                  const unavailableEndDate = new Date(transaction.endDate);
+                {transactions.length === 0 ? null : (
+                  <>
+                    <span>Acest produs nu este disponibil intervalul:</span>
+                    {transactions.map((transaction, index) => {
+                      const unavailableStartDate = new Date(
+                        transaction.startDate
+                      );
+                      const unavailableEndDate = new Date(transaction.endDate);
 
-                  const itemDetails = (
-                    <div key={index}>
-                      <span>
-                        {unavailableStartDate.getUTCDate()}/
-                        {unavailableStartDate.getMonth()+1}/
-                        {unavailableStartDate.getUTCFullYear()} -  {unavailableEndDate.getUTCDate()}/
-                        {unavailableEndDate.getUTCMonth()+1}/
-                        {unavailableEndDate.getUTCFullYear()}
-                      </span>
-                    </div>
-                  );
+                      const itemDetails = (
+                        <div key={index}>
+                          <span>
+                            {unavailableStartDate.getUTCDate()}/
+                            {unavailableStartDate.getMonth() + 1}/
+                            {unavailableStartDate.getUTCFullYear()} -{" "}
+                            {unavailableEndDate.getUTCDate()}/
+                            {unavailableEndDate.getUTCMonth() + 1}/
+                            {unavailableEndDate.getUTCFullYear()}
+                          </span>
+                        </div>
+                      );
 
-                  return itemDetails;
-                })}
+                      return itemDetails;
+                    })}
+                  </>
+                )}
               </Typography>
             </Paper>
+
+            {/* User Details */}
             <Paper
               elevation={2}
               sx={{
@@ -232,11 +232,12 @@ export default function ItemDetails() {
                 display={"flex"}
               >
                 <Avatar sx={{ bgcolor: randomColor }}>
-                  {userInfo?.userName &&
-                    userInfo.userName.charAt(0).toUpperCase()}
-                </Avatar>
-                <p style={{ margin: "8px" }}> Detalii </p>
+                  {item?.userId?.userName &&
+                    item.userId.userName.charAt(0).toUpperCase()}
+                </Avatar>       
+                <Link style={{ margin: "8px" }} to={buildLink()}>{item?.userId?.userName} </Link>
               </Typography>
+              <p style={{ margin: "8px" }}> {item?.userId?.phoneNumber} </p>
             </Paper>
           </Box>
         </div>

@@ -33,7 +33,7 @@ export default function Login(props: loginProps) {
       <h2>Intra in cont</h2>
       <DisplayErrors errors={errors} />
       <AuthFormLogin
-        model={{ email: "", password: "" }}
+        model={{ userName: "", password: "" }}
         onSubmit={async (values) => await login(values)}
       />
       <p></p>

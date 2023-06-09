@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { NavDropdown, Form, FormControl, Button } from "react-bootstrap";
+import { NavDropdown, Form, FormControl, Button, Navbar } from "react-bootstrap";
 import "./home/home.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Authorized from "./security/Authorized";
@@ -14,12 +14,14 @@ export default function Menu() {
   const { update, claims } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
-  function getUserEmail(): string {
-    return claims.filter((x) => x.name === "email")[0]?.value;
+  function getUserName(): string {
+    return claims.filter((x) => x.name === "userName")[0]?.value;
   }
+  const buildUserAccountLink = () => `/account/${getUserName()}`;
+
   return (
     <>
-      <nav  className="navbar navbar-expand-lg navbar-light bg-light shadow">
+      <Navbar  className="navbar navbar-expand-lg navbar-light bg-light shadow">
         <div className="container-fluid">
           <NavLink className="navbar-brand" to="/">
             My rent app
@@ -66,11 +68,12 @@ export default function Menu() {
                         <li className="nav-item mr-auto">
                           <NavDropdown
                             // title={<Avatar sx={{ bgcolor: randomColor }}>{getUserEmail()?.charAt(0).toUpperCase()}</Avatar>}
-                            title={<span>Bună, {getUserEmail()}</span>}
+                            title={<span>Bună, {getUserName()}</span>}
                             id="basic-nav-dropdown"
                           >
                             <NavDropdown.Item>
-                              <Link to="/myAccount">Contul Meu</Link>
+                              {/* <Link to={buildUserAccountLink()}>Contul Meu</Link> */}
+                              <Link to="/MyAccount">Contul Meu</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Item>
                               <Link to="/myAccount">Împrumuturile mele</Link>
@@ -109,7 +112,7 @@ export default function Menu() {
             </div>
           </div>
         </div>
-    </nav>
+    </Navbar>
       {/* <div
         className="container"
         style={{

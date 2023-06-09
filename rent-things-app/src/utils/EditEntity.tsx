@@ -19,11 +19,11 @@ export default function EditEntity<TCreation, TRead>(
     axios.get(`${props.url}/${id}`).then((response: AxiosResponse<TRead>) => {
       setEntity(props.transform(response.data));
       console.log(response.data);
-      Swal.fire("Success", "Anunțul a fost editat.", "success");
+      // 
     });
     } catch(error: any){
       setErrors(error.response.data);
-      Swal.fire("Error","Ceva nu a funcționat. Încercați din nou", "error");
+      Swal.fire("Error","Ceva nu a funcționat. Încercați din nou.", "error");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
@@ -40,19 +40,21 @@ export default function EditEntity<TCreation, TRead>(
         })
       }else{
         await axios.put(`${props.url}/${id}`, entityToEdit);
+        Swal.fire( "Editat cu succes!");
       }
       
       navigate(props.indexURL);
     } catch (error: any) {
       if (error && error.response) {
-        setErrors(error.response.data);
+        // setErrors(error.response.data);
+        Swal.fire("Error","Ceva nu a funcționat. Încercați din nou", "error");
       }
     }
   }
 
   return (
     <>
-      <h3>Editeaza {props.entityName}</h3>
+      <h3>Editează {props.entityName}</h3>
 
       <DisplayErrors errors={errors} />
       {entity ? props.children(entity, edit) : <Loading />}

@@ -7,27 +7,28 @@ import { itemDTO } from "../items/items.model";
 import { Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
-//to do - ceva nu merge bine deoarece se da rerender si apare eroarea 404, dar tot merge
+import { Avatar } from "@mui/material";
+import { generateRandomColor } from "../utils/utils";
+import IndexTransaction from "../transactions/IndexTransaction";
 
 export default function MyAccount() {
   const { claims } = useContext(AuthenticationContext);
   const [items, setItems] = useState<itemDTO[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>("");
 
-  function getUserEmail(): string {
-    return claims.filter((x) => x.name === "email")[0]?.value;
+  function getUserName(): string {
+    return claims.filter((x) => x.name === "userName")[0]?.value;
   }
-  const userEmail = getUserEmail();
+  const userName = getUserName();
 
   useEffect(() => {
     loadData();
-  }, [userEmail]);
+  }, [userName]);
 
   function loadData() {
     try {
       axios
-        .get(`${urlItems}/userItems/${userEmail}`)
+        .get(`${urlItems}/userItems/${userName}`)
         .then((response: AxiosResponse<itemDTO[]>) => {
           setItems(response.data);
         });
@@ -41,67 +42,113 @@ export default function MyAccount() {
     setSelectedOption(option);
   }
 
+  const randomColor = generateRandomColor();
   return (
-    <>
-      <FixedMenu>
-        <h3>Meniu</h3>
-        <FixedMenu>
-          <h3>Meniu</h3>
-          <Nav variant="pills" className="flex-column">
-            <Link
-              to="/myAccount"
-              onClick={() => handleOptionSelect("optiunea1")}
-            >
-              Optiunea 1
-            </Link>
-            <Link to="#" onClick={() => handleOptionSelect("optiunea2")}>
-              Optiunea 2
-            </Link>
-            <Link to="#" onClick={() => handleOptionSelect("optiunea3")}>
-              Optiunea 3
-            </Link>
-          </Nav>
-        </FixedMenu>
-      </FixedMenu>
+    <Container>
+      <Menu>
+        <Avatar
+          sx={{
+            bgcolor: randomColor,
+            width: 70,
+            height: 70,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {items && items.length > 0 && items[0].userId?.userName && (
+            <StyledLetter>
+              {items[0].userId.userName.charAt(0).toUpperCase()}
+            </StyledLetter>
+          )}
+        </Avatar>
+        <h3>Contul meu</h3>
+        <ContainerLinks>
+        <NavLinks>
+          <StyledLink
+            to="/myAccount"
+            onClick={() => handleOptionSelect("optiunea1")}
+          >
+            Produsele mele
+          </StyledLink>
+          <Divider />
+          <StyledLink to="#" onClick={() => handleOptionSelect("optiunea2")}>
+            Tranzacțiiel mele
+          </StyledLink>
+          <Divider />
+          <StyledLink to="#" onClick={() => handleOptionSelect("optiunea3")}>
+            Editeaza contul
+          </StyledLink>
+        </NavLinks>
+        </ContainerLinks>
+      </Menu>
       <Content>
-        <div style={{ width: "70%" }}>
-          {selectedOption === "optiunea1" && (
-            <>
-              <h2>Produsele mele</h2>
-
-              <div className="mb-3">
-                <h3>Produsele publicate de mine:</h3>
-                <ItemsList listOfItems={items} />
-              </div>
-            </>
-          )}
-          {selectedOption === "optiunea2" && (
-            <>
-              <h2>Imprumuturile mele</h2>
-            </>
-          )}
-          {selectedOption === "optiunea3" && (
-            <>
-              <h2>Cui ai dat</h2>
-            </>
-          )}
-        </div>
+        {selectedOption === "optiunea1" && (
+          <>
+            <h2>Produsele mele</h2>
+            <div className="mb-3">
+              <h3>Produsele publicate de mine:</h3>
+              <ItemsList listOfItems={items} />
+            </div>
+          </>
+        )}
+        {selectedOption === "optiunea2" && (
+          <>
+            <h2>Imprumuturile mele</h2>
+            <IndexTransaction/>
+          </>
+        )}
+        {selectedOption === "optiunea3" && (
+          <>
+            <h2>Cui ai dat</h2>
+          </>
+        )}
       </Content>
-    </>
+    </Container>
   );
 }
 
-const FixedMenu = styled.div`
-  /* position: fixed;
-  top: 0;
-  left: 0;
-  width: 30%;
+const Container = styled.div`
+  display: flex;
   height: 100vh;
+`;
+const ContainerLinks= styled.div`
+  padding-top: 35px;
+`;
+const Menu = styled.div`
+  width: 25%;
   padding: 20px;
   background-color: #f5f5f5;
-  z-index: 1; */
 `;
+
+const NavLinks = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: #333;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding-block: 10px;
+
+  &:hover {
+    color: #7918c9;
+  }
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background-color: #ccc;
+`;
+
 const Content = styled.div`
-  /* margin-left: 30%;
-  padding: 20px; */
+  flex: 1;
+  padding: 20px;
+`;
+
+const StyledLetter = styled.span`
+  font-size: 34px;
 `;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormCheck, FormGroup } from "react-bootstrap";
-import { useField } from "formik";
+import { ErrorMessage, useField } from "formik";
 
 interface CheckboxGroupProps {
   options: { label: string; value: number }[];
@@ -39,6 +39,9 @@ export default function CheckboxGroup(props: CheckboxGroupProps) {
         ))}
       </FormGroup>
       {meta.touched && meta.error && <div className="error">{meta.error}</div>}
+      <ErrorMessage name={props.field}>
+          {(msg) => <div className="text-danger">{msg}</div>}
+        </ErrorMessage>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Form, Formik, FormikHelpers } from "formik";
+import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
 import { itemCreationDTO } from "../items/items.model";
 import * as Yup from "yup";
 import Button from "../utils/Button";
@@ -14,6 +14,7 @@ import ReactQuillField from "../forms/ReactQuillField";
 import CheckboxGroup from "../utils/CheckboxGroup";
 import CheckBoxWithInput from "../utils/CheckBoxWithInput";
 import SelectGroup from "../utils/SelectGroup";
+import Map from "../utils/Map";
 
 export default function ItemForm(props: itemFormProps) {
   const [selectedOption, setSelectedOption] =
@@ -53,22 +54,43 @@ export default function ItemForm(props: itemFormProps) {
         <Formik
           initialValues={props.model}
           onSubmit={(values, actions) => {
-            values.categoryId = selectedOption?.value;
-            props.onSubmit(values, actions);
+            if (!selectedOption) {
+              actions.setFieldError("categoryId", "Selectează o categorie.");
+              actions.setSubmitting(false);
+            } else {
+              values.categoryId = selectedOption.value;
+              props.onSubmit(values, actions);
+            }
           }}
           validationSchema={Yup.object({
+            
+            description: Yup.string()
+              .required("Adaugă o descriere pentru produsul tău.")
+              .firstLetterUppercase(),
             name: Yup.string()
               .required("Acest camp este obligatoriu")
               .firstLetterUppercase(),
-            description: Yup.string().required("Acest camp este obligatoriu"),
             condition: Yup.string().required("Acest camp este obligatoriu"),
             age: Yup.string().required("Acest camp este obligatoriu"),
+            dayPrice: Yup.string().test({
+              name: "dayPrice",
+              message: "Acest camp este obligatoriu",
+              test: function (value) {
+                return value !== undefined && value !== null && value !== "";
+              },
+            }),
           })}
         >
           {(formikProps) => (
             <Form>
-                <div className="mb-3">
-                <label>Selecteaza o categorie</label>
+              <div className="mb-3">
+                <label>
+                  Selecteaza categoria care se potrivește cel mai bine
+                  produsului tău
+                </label>
+                <ErrorMessage name="categoryId">
+                  {(msg) => <div className="text-danger">{msg}</div>}
+                </ErrorMessage>
                 <Select
                   menuPlacement="auto"
                   className="basic-single"
@@ -100,7 +122,7 @@ export default function ItemForm(props: itemFormProps) {
               />
 
               {/* <div>
-              <Map />
+          <Map/>
             </div> */}
 
               <div className="mb-3">
@@ -124,7 +146,7 @@ export default function ItemForm(props: itemFormProps) {
                 </div>
               </div>
 
-              <Button type="submit" disabled={formikProps.isSubmitting}>
+              <Button type="submit" onClick={() =>formikProps.isSubmitting}>
                 Salveaza
               </Button>
               <Link className="btn btn-secondary" to="../">

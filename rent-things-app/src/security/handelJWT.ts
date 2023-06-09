@@ -24,7 +24,7 @@ export function getClaims(): claim[]{
         return []; // the token has expired
     }
 
-    const dataToken = JSON.parse(atob(token.split('.')[1]));
+    const dataToken = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
     const response: claim[] = [];
     for (const property in dataToken){
         response.push({name: property, value: dataToken[property]});

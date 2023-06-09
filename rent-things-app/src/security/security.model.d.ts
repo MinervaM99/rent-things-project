@@ -7,10 +7,10 @@ export interface userCredentialsRegister {
   email: string;
   password: string;
   phoneNumber: string;
-  userName: string
+  userName: string;
 }
 export interface userCredentialsLogin {
-  email: string;
+  userName: string;
   password: string;
 }
 
@@ -25,4 +25,11 @@ export interface userDTO{
   role?: string;
   userName?: string;
   phoneNumber?: string; 
+}
+
+export interface userInfoDTO{
+  id: string;
+  email:string;
+  userName: string;
+  phoneNumber: string; 
 }
