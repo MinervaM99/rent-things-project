@@ -46,7 +46,7 @@ export default function CreateItem() {
     } catch (error: any) {
       console.log("Unexpected error", error);
       Swal.fire("", "A aparut o eroare. Incearcă din nou.", "error");
-      navigate(`items/create`);
+      navigate(`/`);
     }
   }
 

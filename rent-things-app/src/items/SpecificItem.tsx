@@ -26,94 +26,93 @@ export default function SpecificItem(props: itemDTO) {
   const location = useLocation();
   const isSpecificRoute = location.pathname === "/myAccount";
 
-  const handleOnClickEdit = () =>{
+  const handleOnClickEdit = () => {
     navigate(`/items/edit/${props.id}`);
-  }
+  };
 
   async function deleteItem() {
-    axios.delete(`${urlItems}/${props.id}`).then(() => {
-      customAlert();
-    });
-    Swal.fire({
-      text: "Anunțul a fos șters.",
-      icon: "success",
-      confirmButtonText: "OK",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate(`../myAccount`); // Navigăm doar dacă butonul "OK" a fost apăsat
-      }
-    });
+    try {
+      axios.delete(`${urlItems}/${props.id}`).then(() => {
+        customAlert();
+      });
+      Swal.fire({
+        text: "Anunțul a fos șters.",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate(`../myAccount`); // Navigăm doar dacă butonul "OK" a fost apăsat
+        }
+      });
+    } catch (error) {
+      Swal.fire("Eroare", "error");
+      navigate(`../myAccount`);
+    }
   }
 
   return (
     <Container>
-    <Box
-      sx={{
-        // display: "flex",
-        // flexWrap: "wrap",
-        "& > :not(style)": {
-          width: 750,
-          height: 290,
-        },
-      }}
-    >
-      <Card sx={{ maxWidth: 270, margin: 1, height: 200 }}>
-        <CardActionArea>
-          <CardContent>
-            <Link to={buildLink()}>
-              <CardMedia
-                component="img"
-                image={props.photo}
-                alt="Product"
-                style={{
-                  objectFit: "cover",
-                  height: "170px",
-                  width: 'auto',
-                }}
-              />
-            </Link>
-          </CardContent>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              <Link to={buildLink()}>{props.name}</Link>
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              <Link to={buildLink()}>{props.dayPrice}</Link>
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
+      <Box
+        sx={{
+          // display: "flex",
+          // flexWrap: "wrap",
+          "& > :not(style)": {
+            width: 750,
+            height: 290,
+          },
+        }}
+      >
+        <Card sx={{ maxWidth: 270, margin: 1, height: 200 }}>
+          <CardActionArea>
+            <CardContent>
+              <Link to={buildLink()}>
+                <CardMedia
+                  component="img"
+                  image={props.photo}
+                  alt="Product"
+                  style={{
+                    objectFit: "cover",
+                    height: "170px",
+                    width: "auto",
+                  }}
+                />
+              </Link>
+            </CardContent>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                <Link to={buildLink()}>{props.name}</Link>
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <Link to={buildLink()}>{props.dayPrice}</Link>
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Box>
 
-    </Box>
-    
-    {isSpecificRoute && (
-      <Card sx={{ maxWidth: 270, margin: 1, height: 40}}>
-        <CardActions>
-          <Button
-            size="medium"
-            color="error"
-            onClick={() =>
-              customConfirm(
-                () => deleteItem(),
-                `Doresti sa stergi acest anunt?`,
-                "Sterge"
-              )
-            }
-          >
-            Șterge
-          </Button>
-          <Button
-            size="medium"
-            color="inherit"
-            onClick={handleOnClickEdit}
-          >
-            Editează
-          </Button>
-        </CardActions> </Card>
+      {isSpecificRoute && (
+        <Card sx={{ maxWidth: 270, margin: 1, height: 40 }}>
+          <CardActions>
+            <Button
+              size="medium"
+              color="error"
+              onClick={() =>
+                customConfirm(
+                  () => deleteItem(),
+                  `Dorești să ștergi acest anunț?`,
+                  "Șterge"
+                )
+              }
+            >
+              Șterge
+            </Button>
+            <Button size="medium" color="inherit" onClick={handleOnClickEdit}>
+              Editează
+            </Button>
+          </CardActions>
+        </Card>
       )}
-     
     </Container>
-    
   );
 }
 

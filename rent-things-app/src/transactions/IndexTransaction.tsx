@@ -11,10 +11,10 @@ export default function IndexTransaction(props: IndexTransactionProps) {
           <>
             <thead>
               <tr>
-                <th>nume Produs</th>
-                <>Data de inceput</>
-                <th>Data de sfarsit</th>
-                <th>Pret</th>
+                <th>Numele produsului</th>
+                <th>Data de început</th>
+                <th>Data de sfârșit</th>
+                <th>Cost</th>
               </tr>
             </thead>
             <tbody>

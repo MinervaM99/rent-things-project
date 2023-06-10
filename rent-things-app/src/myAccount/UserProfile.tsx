@@ -1,21 +1,32 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { itemDTO } from "../items/items.model";
 import ItemsList from "../items/ItemsList";
 import axios, { AxiosResponse } from "axios";
 import { urlAccounts, urlItems } from "../endpoints";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { userInfoDTO } from "../security/security.model";
 import MyAccount from "./MyAccount";
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { generateRandomColor } from "../utils/utils";
+import styled from "styled-components";
+import React from "react";
+import AuthenticationContext from "../security/AuthentictionContext";
 
-export default function UserProfile(props: userProfileProps) {
+export default function UserProfile() {
   //user name
+  const { claims } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
   const { userName }: any = useParams();
   const [items, setItems] = useState<itemDTO[]>([]);
   const [userInfo, setUserInfo] = useState<userInfoDTO>();
   const [errors, setErrors] = useState();
+  
+  function getUserName(): string {
+    return claims.filter((x) => x.name === "userName")[0]?.value;
+  }
+  const userNameClaim = getUserName();
   const randomColor = generateRandomColor();
+
   console.log(userName);
   useEffect(() => {
     loadInfoUser();
@@ -51,39 +62,52 @@ export default function UserProfile(props: userProfileProps) {
   }
   console.log(userInfo?.email);
   return (
-    <>
-      <p></p>
-      <div className="mb-3" >
-        <div style={{display: "flex"}}>
-        <Avatar
-          sx={{
-            bgcolor: randomColor,
-            width: 70,
-            height: 70,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-            <span style={{fontSize: "34px"}}>
+    <div style={{ paddingLeft: 0, marginLeft: 0 }}>
+      <StyledDiv>
+        <div style={{ display: "flex", paddingTop: "50px" }}>
+          <Avatar
+            sx={{
+              bgcolor: randomColor,
+              width: 70,
+              height: 70,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "50px",
+            }}
+          >
+            <span style={{ fontSize: "34px" }}>
               {userName.charAt(0).toUpperCase()}
             </span>
-        </Avatar>
-        Nume de utilizator: {userInfo?.userName}
-        <br />
-        Email: {userInfo?.email}
-        <br />
-        Numar de telefon: {userInfo?.phoneNumber}
-        <br />
+          </Avatar>
+
+          <span> {userInfo?.userName}</span>
         </div>
-        <h3>Anunțuri publicate: </h3>
-        <ItemsList listOfItems={items} />
-      </div>
-    </>
+        <span>
+          Email: {userInfo?.email}
+          <br />
+          Numar de telefon: {userInfo?.phoneNumber}
+        </span>
+        {userNameClaim == userName ? (
+          <Button
+            size="medium"
+            color="inherit"
+            onClick={() => navigate(`/account/edit`)}
+          >
+            Editează
+          </Button>
+        ) : null}
+      </StyledDiv>
+
+      <h3>Anunțuri publicate: </h3>
+      <ItemsList listOfItems={items} />
+    </div>
   );
 }
 //to do cand apas pe buton, sa ma duca la ruta myAccount dar care sa aiba /user email astfel incat sa stie de la cine ia datele
 
-interface userProfileProps {
-  userEmail: string;
-}
+const StyledDiv = styled.div`
+  background-color: lightgreen;
+  height: 50vh;
+  width: 100%;
+`;

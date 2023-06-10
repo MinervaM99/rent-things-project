@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 
 export default function customConfirm(
     onConfirm: any,
-    title: string = "Sigur doresti sa stergi aceasta categorie?",
+    title: string = "Dorești să ștergi această categorie?",
     confirmButtonText: string = "Sterge"
 ){
     Swal.fire({

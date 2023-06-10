@@ -33,3 +33,4 @@ export interface userInfoDTO{
   userName: string;
   phoneNumber: string; 
 }
+

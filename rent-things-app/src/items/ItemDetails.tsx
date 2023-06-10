@@ -237,7 +237,6 @@ export default function ItemDetails() {
                 </Avatar>       
                 <Link style={{ margin: "8px" }} to={buildLink()}>{item?.userId?.userName} </Link>
               </Typography>
-              <p style={{ margin: "8px" }}> {item?.userId?.phoneNumber} </p>
             </Paper>
           </Box>
         </div>

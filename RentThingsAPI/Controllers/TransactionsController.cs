@@ -69,7 +69,7 @@ namespace RentThingsAPI.Controllers
 
 
 		//get all transaction by LenderId
-		[HttpGet("{lenderId}")]
+		[HttpGet("lend/{lenderId}")]
 		public async Task<ActionResult<List<TransactionDTO>>> GetAllByLender([FromQuery] PaginationDTO paginationDTO, string lenderId)
 		{
 			logger.LogInformation("Getting all for the lender");
@@ -86,17 +86,21 @@ namespace RentThingsAPI.Controllers
 
 
 		////get all transaction by BorroweId
-		//[HttpGet("{borrowerId}")]
-		//public async Task<ActionResult<List<TransactionDTO>>> GetAllByBorrower([FromQuery] PaginationDTO paginationDTO, string borrowerId)
-		//{
-		//	logger.LogInformation("Getting all for the lender");
-		//	var queryable = context.Transactions.Where(t => t.UserId == borrowerId)
-		//						.AsQueryable();
-		//	await HttpContext.InsertParametersPaginationInHeader(queryable);
+		[HttpGet("borrow/{borrowerId}")]
+		public async Task<ActionResult<List<TransactionDTO>>> GetAllByBorrower([FromQuery] PaginationDTO paginationDTO, string borrowerId)
+		{
+			logger.LogInformation("Getting all for the lender");
+			var queryable = context.Transactions
+								.Include(x => x.User)
+								.Include(t => t.Item)
+								.Where(t => t.User.Id == borrowerId)
+								.AsQueryable(); 
+			
+			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
-		//	var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
-		//	return mapper.Map<List<TransactionDTO>>(transactions);
-		//}
+			var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
+			return mapper.Map<List<TransactionDTO>>(transactions);
+		}
 
 	}
 }

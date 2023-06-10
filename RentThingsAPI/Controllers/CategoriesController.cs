@@ -47,6 +47,7 @@ namespace RentThingsAPI.Controllers
 
 		}
 
+
 		[HttpPost]
 		//doar pt admin
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]

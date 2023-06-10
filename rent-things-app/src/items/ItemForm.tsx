@@ -146,7 +146,7 @@ export default function ItemForm(props: itemFormProps) {
                 </div>
               </div>
 
-              <Button type="submit" onClick={() =>formikProps.isSubmitting}>
+              <Button type="submit" disabled={formikProps.isSubmitting}>
                 Salveaza
               </Button>
               <Link className="btn btn-secondary" to="../">

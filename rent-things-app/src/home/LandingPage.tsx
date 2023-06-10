@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { itemDTO, landingPageDTO } from "../items/items.model";
+import { landingPageDTO } from "../items/items.model";
 import ItemsList from "../items/ItemsList";
-import Authorized from "../security/Authorized";
 import axios, { AxiosResponse } from "axios";
 import { urlItems } from "../endpoints";
 import AlertContext from "../utils/AlertContext";
@@ -20,9 +19,14 @@ export default function LandingPage() {
   }
 
   function loadData() {
-    axios.get(urlItems).then((response: AxiosResponse<landingPageDTO>) => {
-      setItems(response.data);
-    });
+    try{
+      axios.get(urlItems).then((response: AxiosResponse<landingPageDTO>) => {
+        setItems(response.data);
+      });
+    }catch(error: any){
+      console.log(error.response.data)
+    }
+    
   }
 
   return (

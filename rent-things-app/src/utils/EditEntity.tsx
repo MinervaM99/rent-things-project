@@ -19,7 +19,6 @@ export default function EditEntity<TCreation, TRead>(
     axios.get(`${props.url}/${id}`).then((response: AxiosResponse<TRead>) => {
       setEntity(props.transform(response.data));
       console.log(response.data);
-      // 
     });
     } catch(error: any){
       setErrors(error.response.data);

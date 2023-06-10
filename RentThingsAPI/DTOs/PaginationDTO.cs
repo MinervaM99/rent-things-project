@@ -11,7 +11,6 @@
 		{
 			get
 			{
-
 				return recordsPerPage;
 			}
 			set

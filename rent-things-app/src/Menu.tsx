@@ -6,7 +6,6 @@ import Authorized from "./security/Authorized";
 import { logout } from "./security/handelJWT";
 import { useContext } from "react";
 import AuthenticationContext from "./security/AuthentictionContext";
-import { Avatar } from "@mui/material";
 import styled from "styled-components";
 
 
@@ -17,7 +16,6 @@ export default function Menu() {
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
   }
-  const buildUserAccountLink = () => `/account/${getUserName()}`;
 
   return (
     <>
@@ -67,7 +65,6 @@ export default function Menu() {
                         </li>
                         <li className="nav-item mr-auto">
                           <NavDropdown
-                            // title={<Avatar sx={{ bgcolor: randomColor }}>{getUserEmail()?.charAt(0).toUpperCase()}</Avatar>}
                             title={<span>Bună, {getUserName()}</span>}
                             id="basic-nav-dropdown"
                           >
@@ -77,9 +74,6 @@ export default function Menu() {
                             </NavDropdown.Item>
                             <NavDropdown.Item>
                               <Link to="/myAccount">Împrumuturile mele</Link>
-                            </NavDropdown.Item>
-                            <NavDropdown.Item>
-                              <Link to="/myAccount"> Something</Link>
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item>

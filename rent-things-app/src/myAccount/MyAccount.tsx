@@ -14,12 +14,12 @@ import IndexTransaction from "../transactions/IndexTransaction";
 export default function MyAccount() {
   const { claims } = useContext(AuthenticationContext);
   const [items, setItems] = useState<itemDTO[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string>("");
-
+  const [selectedOption, setSelectedOption] = useState<string>();
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
   }
   const userName = getUserName();
+  const buildAvatarLink = () => `/account/${userName}`;
 
   useEffect(() => {
     loadData();
@@ -49,37 +49,43 @@ export default function MyAccount() {
         <Avatar
           sx={{
             bgcolor: randomColor,
-            width: 70,
-            height: 70,
+            width: 60,
+            height: 60,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            border: "2px solid yourColorHere",
+            borderRadius: "50%",
           }}
         >
-          {items && items.length > 0 && items[0].userId?.userName && (
-            <StyledLetter>
-              {items[0].userId.userName.charAt(0).toUpperCase()}
-            </StyledLetter>
-          )}
+          <Link to={buildAvatarLink()}>{userName ? userName.charAt(0).toUpperCase() : null}</Link>
         </Avatar>
-        <h3>Contul meu</h3>
         <ContainerLinks>
-        <NavLinks>
-          <StyledLink
-            to="/myAccount"
-            onClick={() => handleOptionSelect("optiunea1")}
-          >
-            Produsele mele
-          </StyledLink>
-          <Divider />
-          <StyledLink to="#" onClick={() => handleOptionSelect("optiunea2")}>
-            Tranzacțiiel mele
-          </StyledLink>
-          <Divider />
-          <StyledLink to="#" onClick={() => handleOptionSelect("optiunea3")}>
-            Editeaza contul
-          </StyledLink>
-        </NavLinks>
+          <NavLinks>
+            <StyledLink
+              to="/myAccount"
+              onClick={() => handleOptionSelect("optiunea1")}
+              selected={selectedOption === "optiunea1"}
+            >
+              Produsele mele
+            </StyledLink>
+            <Divider />
+            <StyledLink
+              to="#"
+              onClick={() => handleOptionSelect("optiunea2")}
+              selected={selectedOption === "optiunea2"}
+            >
+              Tranzacțiiel mele
+            </StyledLink>
+            <Divider />
+            <StyledLink
+              to="#"
+              onClick={() => handleOptionSelect("optiunea3")}
+              selected={selectedOption === "optiunea3"}
+            >
+              Editeaza contul
+            </StyledLink>
+          </NavLinks>
         </ContainerLinks>
       </Menu>
       <Content>
@@ -87,15 +93,15 @@ export default function MyAccount() {
           <>
             <h2>Produsele mele</h2>
             <div className="mb-3">
-              <h3>Produsele publicate de mine:</h3>
               <ItemsList listOfItems={items} />
             </div>
           </>
         )}
         {selectedOption === "optiunea2" && (
           <>
-            <h2>Imprumuturile mele</h2>
-            <IndexTransaction/>
+          {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
+            Am împrumutat prosele mele:
+            <IndexTransaction  />
           </>
         )}
         {selectedOption === "optiunea3" && (
@@ -112,13 +118,14 @@ const Container = styled.div`
   display: flex;
   height: 100vh;
 `;
-const ContainerLinks= styled.div`
+const ContainerLinks = styled.div`
   padding-top: 35px;
 `;
 const Menu = styled.div`
   width: 25%;
   padding: 20px;
   background-color: #f5f5f5;
+  justify-content: center;
 `;
 
 const NavLinks = styled.div`
@@ -127,15 +134,15 @@ const NavLinks = styled.div`
   gap: 10px;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link)<{ selected: boolean }>`
   text-decoration: none;
-  color: #333;
+  color: ${({ selected }) => (selected ? "#7918c9" : "#333")};
   text-transform: uppercase;
   font-weight: bold;
   padding-block: 10px;
 
   &:hover {
-    color: #7918c9;
+    color: #a967df;
   }
 `;
 
