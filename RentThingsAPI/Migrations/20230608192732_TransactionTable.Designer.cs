@@ -12,8 +12,8 @@ using RentThingsAPI;
 namespace RentThingsAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230606070951_AddNameAndSurnameToUsers")]
-    partial class AddNameAndSurnameToUsers
+    [Migration("20230608192732_TransactionTable")]
+    partial class TransactionTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

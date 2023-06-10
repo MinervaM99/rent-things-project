@@ -39,7 +39,7 @@ namespace RentThingsAPI.Controllers
 			var newItem = mapper.Map<Item>(itemCreationDTO);
 
 			// Găsește utilizatorul cu UserId specificat
-			var user = await userManager.FindByEmailAsync(itemCreationDTO.UserId);
+			var user = await userManager.FindByNameAsync(itemCreationDTO.UserId);
 			if (user == null)
 			{
 				return BadRequest("Utilizatorul nu a fost găsit.");
@@ -59,7 +59,6 @@ namespace RentThingsAPI.Controllers
 		}
 
 
-
 		//Get all items
 		[HttpGet]
 		[AllowAnonymous]
@@ -67,7 +66,7 @@ namespace RentThingsAPI.Controllers
 		{
 			var top = 10;
 
-			var items = await context.Items.Include(x => x.Category).Take(top).ToListAsync();
+			var items = await context.Items.Include(x=>x.User).Include(x => x.Category).Take(top).ToListAsync();
 			if (items == null)
 			{
 				return NotFound();
@@ -79,21 +78,23 @@ namespace RentThingsAPI.Controllers
 		}
 
 
-		//Get all items for a user
-		[HttpGet("userItems/{userEmail}")]
+		//Get all items for a user  =>> userName
+		[HttpGet("userItems/{userName}")]
 		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-		public async Task<ActionResult<List<ItemDTO>>> GetItemsByUser(string userEmail)
+		public async Task<ActionResult<List<ItemDTO>>> GetItemsByUser(string userName)
 		{
-			var user = await userManager.FindByEmailAsync(userEmail);
+			var user = await userManager.FindByNameAsync(userName);
 			if (user == null)
 			{
 				return NotFound("User not found");	
 			}
 
-			var items = await context.Items.Where(i => i.UserId == user.Id).ToListAsync();
+			var items = await context.Items.Include(x=>x.User).Include(x=>x.Category).Where(i => i.User.Id == user.Id).ToListAsync();
 			var itemDTOs = mapper.Map<List<ItemDTO>>(items);
 			return itemDTOs;
 		}
+
+
 
 
 		//get items by category
@@ -101,7 +102,7 @@ namespace RentThingsAPI.Controllers
 		[AllowAnonymous]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByCategory(int category)
 		{
-			var items = await context.Items.Include(x => x.Category).Where(x => x.CategoryId == category).ToListAsync();
+			var items = await context.Items.Include(x => x.User).Include(x => x.Category).Where(x => x.CategoryId == category).ToListAsync();
 			if (items == null)
 			{
 				return NotFound("User not found");
@@ -117,7 +118,7 @@ namespace RentThingsAPI.Controllers
 		[AllowAnonymous]
 		public async Task<ActionResult<ItemDTO>> GetItemById(int id)
 		{
-			var item = await context.Items.Include(x => x.Category).SingleOrDefaultAsync(x => x.Id == id);
+			var item = await context.Items.Include(x => x.User).Include(x => x.Category).SingleOrDefaultAsync(x => x.Id == id);
 
 			if (item == null)
 			{

@@ -9,6 +9,7 @@ namespace RentThingsAPI.Entities
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public string Id { get; set; }
+
 		[Required]
 		public int ItemId { get; set; }
 		public Item Item { get; set; }

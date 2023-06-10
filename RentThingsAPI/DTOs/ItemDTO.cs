@@ -16,7 +16,7 @@ namespace RentThingsAPI.DTOs
 		public double? MonthPrice { get; set; }
 		public double? WeekPrice { get; set; }
 		public bool Available { get; set; }
-		public string UserId { get; set; }
+		public UserInfoDTO UserId { get; set; }
 		public CategoryDTO CategoryId { get; set; }
 	}
 }

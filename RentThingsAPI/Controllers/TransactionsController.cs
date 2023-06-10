@@ -30,34 +30,41 @@ namespace RentThingsAPI.Controllers
 			this.logger = logger;
 		}
 		[HttpPost]
-		public async Task<ActionResult> Post([FromForm] TransactionDTO transactionDTO)
+		public async Task<ActionResult> Post([FromBody] TransactionCreationDTO transactionDTO)
 		{
 			var newTransaction = mapper.Map<Transaction>(transactionDTO);
 			context.Add(newTransaction);
 			await context.SaveChangesAsync();
 			return NoContent();
-
 		}
 
+		//get all transactions
 		[HttpGet]
 		public async Task<ActionResult<List<TransactionDTO>>> GetAllTransactuins([FromQuery] PaginationDTO paginationDTO)
 		{
 			logger.LogInformation("Getting all the transactions");
-			var queryable = context.Transactions.AsQueryable();
+			var queryable = context.Transactions
+					.Include(x => x.User)
+					.Include(x => x.Item)
+					.AsQueryable();
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
 			var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<TransactionDTO>>(transactions);
 		}
 
-		//get one transaction by BorrowerId
-		[HttpGet("borrow/{borrowerId}")]
-		public async Task<ActionResult<TransactionDTO>> GetTransaction(string lenderId)
+		//get transaction by ItemId
+		[HttpGet("{itemId:int}")]
+		public async Task<ActionResult<List<TransactionDTO>>> GetTransaction(int itemId)
 		{
-			var transaction = await context.Transactions.Where(t => t.UserId == lenderId)
-								.FirstOrDefaultAsync();
+			var today = DateTime.Now;
+			var transaction = await context.Transactions
+				.Include(x=> x.User)
+				.Include(x=>x.Item)
+				.Where(t => t.Item.Id == itemId && t.EndDate >today && t.Status != 2)
+				.ToListAsync();
 
-			return mapper.Map<TransactionDTO>(transaction);
+			return mapper.Map<List<TransactionDTO>>(transaction);
 		}
 
 
@@ -66,7 +73,10 @@ namespace RentThingsAPI.Controllers
 		public async Task<ActionResult<List<TransactionDTO>>> GetAllByLender([FromQuery] PaginationDTO paginationDTO, string lenderId)
 		{
 			logger.LogInformation("Getting all for the lender");
-			var queryable = context.Transactions.Include(t => t.Item).Where(t => t.Item.UserId == lenderId)
+			var queryable = context.Transactions
+								.Include(x => x.User)
+								.Include(t => t.Item)
+								.Where(t => t.Item.UserId == lenderId)
 								.AsQueryable();
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
 

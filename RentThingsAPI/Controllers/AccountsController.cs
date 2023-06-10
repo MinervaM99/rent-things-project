@@ -100,13 +100,13 @@ namespace RentThingsAPI.Controllers
 			[FromBody] LoginCredentials userCredentials)
 		{
 
-			var result = await signInManager.PasswordSignInAsync(userCredentials.Email,
+			var result = await signInManager.PasswordSignInAsync(userCredentials.Username,
 				userCredentials.Password, isPersistent: false, lockoutOnFailure: false);
 
 
 			if (result.Succeeded)
 			{
-				var user = await userManager.FindByNameAsync(userCredentials.Email);
+				var user = await userManager.FindByNameAsync(userCredentials.Username);
 				return await BuildToken(user);
 			}
 			else
@@ -144,10 +144,12 @@ namespace RentThingsAPI.Controllers
 
 
 		//get info about a user by Id
-		[HttpGet("{id}")]
-		public async Task<ActionResult<UserDTO>> GetUserInfo(string id)
+		
+		
+		[HttpGet("{username}")]
+		public async Task<ActionResult<UserDTO>> GetUserInfo(string username)
 		{
-			var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+			var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == username);
 
 			if (user == null) { return NotFound(); }
 
@@ -188,7 +190,7 @@ namespace RentThingsAPI.Controllers
 
 			var claims = new List<Claim>()
 			{
-				new Claim("email", user.Email)
+				new Claim("userName", user.UserName)
 			};
 
 			var userClaims = await userManager.GetClaimsAsync(user);

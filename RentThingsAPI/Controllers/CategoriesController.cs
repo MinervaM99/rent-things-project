@@ -12,7 +12,6 @@ namespace RentThingsAPI.Controllers
 {
 	[Route("api/categories")]
 	[ApiController] //don't need explicit validation
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class CategoriesController: ControllerBase
 	{
 		private readonly ILogger<CategoriesController> logger;
@@ -60,6 +59,7 @@ namespace RentThingsAPI.Controllers
 		}
 
 		[HttpPut("{id:int}")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 		public async Task<ActionResult> Put(int id, [FromBody] CategoryCreationDTO categoryCreationDTO)
 		{
 			var category = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
