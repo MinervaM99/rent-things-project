@@ -22,7 +22,7 @@ export default function EditUser() {
     loadInfoUser();
   }, [userName]);
 
-  function loadInfoUser() {
+   function loadInfoUser() {
     try {
       axios
         .get(`${urlAccounts}/${userName}`)

@@ -13,6 +13,7 @@ import MyAccount from "./myAccount/MyAccount";
 import IndexUsers from "./security/IndexUsers";
 import UserProfile from "./myAccount/UserProfile";
 import EditUser from "./myAccount/EditUser";
+import IndexTransactionStatus from "./transactions/TransactionStatus";
 
 const routes = [
   {path: '/category', component: IndexCategory, isAdmin: true},
@@ -31,6 +32,7 @@ const routes = [
   {path: '/myAccount', component: MyAccount,isUser: true},
   {path: '/account/:userName', component: UserProfile},
   {path: '/account/edit', component: EditUser},
+  {path: '/account/transactions', component: IndexTransactionStatus},
 
   {path: '/', component: LandingPage},
   {path: '*', component: NonExistingRoute}

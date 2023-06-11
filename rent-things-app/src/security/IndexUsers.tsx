@@ -16,15 +16,23 @@ export default function IndexUsers() {
   }
 
   async function doAdmin(url: string, id: string) {
-    await axios.post(url, JSON.stringify(id), {
-      headers: { "Content-Type": "application/json" },
-    });
-
-    Swal.fire({
-      title: "Success",
-      text: "Operation finished correctly",
-      icon: "success",
-    });
+    try{
+      await axios.post(url, JSON.stringify(id), {
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      Swal.fire({
+        title: "Success",
+        text: "Operation finished correctly",
+        icon: "success",
+      });
+    }catch(error:any){
+      Swal.fire({
+        title: "Eroare",
+        text: "A apărut o eroare. Încercați din nou.",
+        icon: "error",
+      });
+    } 
   }
 
   return (

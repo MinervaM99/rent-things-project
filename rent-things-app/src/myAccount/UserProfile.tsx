@@ -38,7 +38,7 @@ export default function UserProfile() {
 
   function loadInfoUser() {
     try {
-      axios
+       axios
         .get(`${urlAccounts}/${userName}`)
         .then((response: AxiosResponse<userInfoDTO>) => {
           setUserInfo(response.data);

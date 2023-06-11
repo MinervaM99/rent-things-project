@@ -101,8 +101,11 @@ export default function RentForm(props: rentFormProps) {
                   startDate={startDate}
                   minDate={today}
                   endDate={endDate}
-                  onChange={(date: Date | null) => {
+                  onChange={(date: Date) => {
                     setStartDate(date);
+                    date.setHours(0);
+                    date.setMinutes(0);
+                    date.setMilliseconds(0);
                     formikProps.setFieldValue("startDate", date);
                   }}
                 ></DatePickerInput>
@@ -119,7 +122,10 @@ export default function RentForm(props: rentFormProps) {
                   minDate={startDate}
                   onChange={(date: Date) => {
                     setEndDate(date);
-                    formikProps.setFieldValue("endDate", date); // Actualizează valoarea câmpului invizibil "endDate"
+                    formikProps.setFieldValue(
+                      "endDate",
+                      new Date(date.setHours(23, 59, 59, 999))
+                    ); // Actualizează valoarea câmpului invizibil "endDate"
                     if (startDate && date) {
                       const days = differenceInDays(date, startDate) + 1;
                       setNumDays(days);

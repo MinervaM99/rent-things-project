@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { urlItems, urlTransactions } from "../endpoints";
 import { itemDTO } from "./items.model";
 import Loading from "../utils/Loading";
@@ -22,6 +22,19 @@ export default function ItemDetails() {
   const [item, setItem] = useState<itemDTO>();
   const [errors, setErrors] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<transactionDTO[]>([]);
+  const navigate = useNavigate();
+
+  const formatDate = (date: Date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    // Adaugă un zero în fața zecilor dacă este cazul
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedMonth = month < 10 ? `0${month}` : month;
+
+    return `${formattedDay}/${formattedMonth}/${year}`;
+  };
 
   useEffect(() => {
     try {
@@ -67,12 +80,15 @@ export default function ItemDetails() {
     try {
       const startDate = new Date(values.startDate);
       const endDate = new Date(values.endDate);
-      console.log(values);
       const confirmResult = await Swal.fire({
         html: `
           <h3>Doriti sa imprumutai acest produs?</h3>
-          <p><strong>Din data de:</strong> ${startDate.toISOString()}</p>
-          <p><strong>Pâna în data de:</strong> ${endDate.toISOString()}</p>
+          <p><strong>Din data de:</strong> ${formatDate(
+            startDate
+          )}, ora ${startDate.toLocaleTimeString()}</p>
+          <p><strong>Pâna în data de:</strong> ${formatDate(
+            endDate
+          )}, ora ${endDate.toLocaleTimeString()}</p>
           <p>Datorați proprietarului ${values.earnings} Ron</p>
         `,
         icon: "question",
@@ -80,14 +96,14 @@ export default function ItemDetails() {
         confirmButtonText: "Trimite cererea",
         cancelButtonText: "Cancel",
       });
-
       if (confirmResult.isConfirmed) {
         await axios.post(urlTransactions, values);
         console.log(values);
         Swal.fire("Cererea de împrumut a fost trimisă!", "success");
+        navigate(`/item/${id}`);
       }
-    } catch (error) {
-      Swal.fire("Error", "", "error");
+    } catch (error: any) {
+      Swal.fire("Error", `${error.response.data}`, "error");
     }
   }
 
@@ -198,12 +214,8 @@ export default function ItemDetails() {
                       const itemDetails = (
                         <div key={index}>
                           <span>
-                            {unavailableStartDate.getUTCDate()}/
-                            {unavailableStartDate.getMonth() + 1}/
-                            {unavailableStartDate.getUTCFullYear()} -{" "}
-                            {unavailableEndDate.getUTCDate()}/
-                            {unavailableEndDate.getUTCMonth() + 1}/
-                            {unavailableEndDate.getUTCFullYear()}
+                            {formatDate(unavailableStartDate)} -
+                            {formatDate(unavailableEndDate)}
                           </span>
                         </div>
                       );
@@ -234,8 +246,10 @@ export default function ItemDetails() {
                 <Avatar sx={{ bgcolor: randomColor }}>
                   {item?.userId?.userName &&
                     item.userId.userName.charAt(0).toUpperCase()}
-                </Avatar>       
-                <Link style={{ margin: "8px" }} to={buildLink()}>{item?.userId?.userName} </Link>
+                </Avatar>
+                <Link style={{ margin: "8px" }} to={buildLink()}>
+                  {item?.userId?.userName}{" "}
+                </Link>
               </Typography>
             </Paper>
           </Box>

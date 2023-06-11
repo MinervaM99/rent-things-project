@@ -86,7 +86,7 @@ namespace RentThingsAPI.Controllers
 		}
 
 		[HttpPost("edit")]
-		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<IActionResult> UpdateUserFields([FromBody] UserEditDTO userEditDTO)
 		{
 			// Verificați identitatea utilizatorului

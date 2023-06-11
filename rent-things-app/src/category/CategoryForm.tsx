@@ -25,7 +25,7 @@ export default function CategoryForm(props: categoryFormProps) {
           <Form>
             <TextField field="name" displayName="Name" />
 
-            <Button type="submit" onClick={() =>formikProps.isSubmitting}>
+            <Button type="submit" disabled={formikProps.isSubmitting}>
               Salveaza
             </Button>
             <Link className="btn btn-secondary" to="/category">
