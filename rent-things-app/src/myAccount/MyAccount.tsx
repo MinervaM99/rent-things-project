@@ -58,7 +58,9 @@ export default function MyAccount() {
             borderRadius: "50%",
           }}
         >
-          <Link to={buildAvatarLink()}>{userName ? userName.charAt(0).toUpperCase() : null}</Link>
+          <Link to={buildAvatarLink()}>
+            {userName ? userName.charAt(0).toUpperCase() : null}
+          </Link>
         </Avatar>
         <ContainerLinks>
           <NavLinks>
@@ -99,9 +101,23 @@ export default function MyAccount() {
         )}
         {selectedOption === "optiunea2" && (
           <>
-          {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
-            Am împrumutat prosele mele:
-            <IndexTransaction  />
+            {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
+            <h3>Cerereri de împrumut în așteptare</h3>
+            <IndexTransaction
+              urlTransactionParam={`borrow/${userName}`}
+              statusParam={1}
+            />
+
+            <h3>Cereri de imprumut acceptate</h3>
+            <IndexTransaction
+              urlTransactionParam={`borrow/${userName}`}
+              statusParam={2}
+            />
+            <h3>Cereri de imprumut respinse</h3>
+            <IndexTransaction
+              urlTransactionParam={`borrow/${userName}`}
+              statusParam={3}
+            />
           </>
         )}
         {selectedOption === "optiunea3" && (

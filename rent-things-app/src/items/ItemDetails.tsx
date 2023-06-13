@@ -1,44 +1,62 @@
 import axios, { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { urlItems, urlTransactions } from "../endpoints";
+import { urlAccounts, urlItems, urlTransactions } from "../endpoints";
 import { itemDTO } from "./items.model";
 import Loading from "../utils/Loading";
 import DisplayErrors from "../utils/DisplayErrors";
 import { Avatar, Box, CardMedia, Paper, Typography } from "@mui/material";
 import RentForm from "../transactions/RentForm";
-import { userDTO } from "../security/security.model";
+import { userDTO, userInfoDTO } from "../security/security.model";
 import {
   transactionCreationDTO,
   transactionDTO,
 } from "../transactions/transactions.model";
 import Swal from "sweetalert2";
+import AuthenticationContext from "../security/AuthentictionContext";
+import { formatDate } from "../utils/utils";
 
 export default function ItemDetails() {
+  const { claims } = useContext(AuthenticationContext);
   //itemId
   const { id }: any = useParams();
   //built the link for user details page using user name
   const buildLink = () => `/account/${item?.userId?.userName}`;
   const [item, setItem] = useState<itemDTO>();
+  const [userInfo, setUserInfo] = useState<userInfoDTO>();
   const [errors, setErrors] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<transactionDTO[]>([]);
   const navigate = useNavigate();
 
-  const formatDate = (date: Date) => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
+  //obtine username din claims
+  function getUserName(): string {
+    return claims.find((x) => x.name === "userName")?.value || "";
+  }
+  const userName = getUserName();
+  useEffect(() => {
+    loadInfoUser();
+  }, [userName]);
 
-    // Adaugă un zero în fața zecilor dacă este cazul
-    const formattedDay = day < 10 ? `0${day}` : day;
-    const formattedMonth = month < 10 ? `0${month}` : month;
-
-    return `${formattedDay}/${formattedMonth}/${year}`;
-  };
+ async function loadInfoUser() {
+    try {
+      await axios
+        .get(`${urlAccounts}/${userName}`)
+        .then((response: AxiosResponse<userInfoDTO>) => {
+          setUserInfo(response.data);
+          console.log(response.data);
+        });
+    } catch (error: any) {
+      setErrors(error.response.data);
+    }
+  }
 
   useEffect(() => {
+    loadItemDetails();
+  }, [id]);
+
+  async function loadItemDetails(){
     try {
-      axios
+      await axios
         .get(`${urlItems}/${id}`)
         .then((response: AxiosResponse<itemDTO>) => {
           setItem(response.data);
@@ -46,7 +64,7 @@ export default function ItemDetails() {
     } catch (error: any) {
       setErrors(error.response.data);
     }
-  }, [id]);
+  }
 
   useEffect(() => {
     if (item && item.userId) {
@@ -78,6 +96,7 @@ export default function ItemDetails() {
 
   async function sendRequest(values: transactionCreationDTO) {
     try {
+      console.log(values);
       const startDate = new Date(values.startDate);
       const endDate = new Date(values.endDate);
       const confirmResult = await Swal.fire({
@@ -106,7 +125,9 @@ export default function ItemDetails() {
       Swal.fire("Error", `${error.response.data}`, "error");
     }
   }
-
+  {
+    console.log("userID ---" + userInfo?.id);
+  }
   const randomColor = generateRandomColor();
   return (
     <>
@@ -188,7 +209,7 @@ export default function ItemDetails() {
 
               <RentForm
                 model={{
-                  userId: `${item.userId?.id}`, //borrowerId
+                  userId: `${userInfo?.id}`, //borrowerId (me)
                   itemId: id,
                   startDate: "",
                   endDate: "",

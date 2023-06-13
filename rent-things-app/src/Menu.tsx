@@ -59,6 +59,9 @@ export default function Menu() {
                     <div className="collapse navbar-collapse">
                       <ul className="navbar-nav">
                         <li className="nav-item">
+                        <NavLink className="nav-link" to="/account/transactions">
+                           Tranzactii
+                          </NavLink>
                           <NavLink className="nav-link" to="/items/create">
                             Adaugă un item
                           </NavLink>

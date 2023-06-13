@@ -47,9 +47,9 @@ namespace RentThingsAPI.Controllers
 			return NoContent();
 		}
 
-		//edit status of transaction
+		//edit status of transaction //to do inafara de statusul curent
 		[HttpPost]
-		[Route("edit/{id}")]
+		[Route("editStatus/{id}")]
 		public async Task<ActionResult> UpdateStatus(string id, [FromBody] int newStatus)
 		{
 			var transaction = await context.Transactions.FirstOrDefaultAsync(t => t.Id == id);
@@ -58,11 +58,28 @@ namespace RentThingsAPI.Controllers
 			{
 				return NotFound();
 			}
+
 			transaction.Status = newStatus;
+			await context.SaveChangesAsync();
 
-			await context.SaveChangesAsync(); 
+			if (newStatus == 2)
+			{
+				var overlappingTransactions = await context.Transactions
+					.Where(t => t.ItemId == transaction.ItemId &&
+								t.StartDate <= transaction.EndDate &&
+								t.EndDate >= transaction.StartDate &&
+								t.Status == 1)
+					.ToListAsync();
 
-			return NoContent(); 
+				foreach (var overlappingTransaction in overlappingTransactions)
+				{
+					overlappingTransaction.Status = 3;
+				}
+
+				await context.SaveChangesAsync();
+			}
+
+			return NoContent();
 		}
 
 
@@ -71,7 +88,6 @@ namespace RentThingsAPI.Controllers
 		[HttpGet]
 		public async Task<ActionResult<List<TransactionDTO>>> GetAllTransactuins([FromQuery] PaginationDTO paginationDTO)
 		{
-			logger.LogInformation("Getting all the transactions");
 			var queryable = context.Transactions
 					.Include(x => x.User)
 					.Include(x => x.Item)
@@ -98,13 +114,17 @@ namespace RentThingsAPI.Controllers
 
 		//get all transaction by LenderId
 		[HttpGet("lend/{lenderId}")]
-		public async Task<ActionResult<List<TransactionDTO>>> GetAllByLender([FromQuery] PaginationDTO paginationDTO, string lenderId)
+		public async Task<ActionResult<List<TransactionDTO>>> GetAllByLender([FromQuery] PaginationDTO paginationDTO, string lenderId, [FromQuery]  int status)
 		{
-			logger.LogInformation("Getting all for the lender");
+			if (status < 1 || status > 3)
+			{
+				return BadRequest("Invalid status value. Status should be between 1 and 3.");
+			}
+			var userIdLend = await userManager.FindByNameAsync(lenderId);
+			if(userIdLend == null) { return NotFound(); }
 			var queryable = context.Transactions
-								.Include(x => x.User)
 								.Include(t => t.Item)
-								.Where(t => t.Item.UserId == lenderId)
+								.Where(t => t.Item.UserId == userIdLend.Id && t.Status == status)
 								.AsQueryable();
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
@@ -113,21 +133,33 @@ namespace RentThingsAPI.Controllers
 		}
 
 
-		////get all transaction by BorroweId 
+		////get all transaction by borrower UserName 
 		[HttpGet("borrow/{borrowerId}")]
 		public async Task<ActionResult<List<TransactionDTO>>> GetAllByBorrower([FromQuery] PaginationDTO paginationDTO, string borrowerId)
 		{
-			logger.LogInformation("Getting all for the lender");
+			var userIdBorrower = await userManager.FindByNameAsync(borrowerId);
+			if (userIdBorrower == null) { return NotFound(); }
 			var queryable = context.Transactions
-								.Include(x => x.User)
-								.Include(t => t.Item)
-								.Where(t => t.User.UserName == borrowerId)
+								.Where(t => t.UserId == userIdBorrower.Id)
 								.AsQueryable(); 
 			
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
 			var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<TransactionDTO>>(transactions);
+		}
+
+		//delete a transaction by Id
+		[HttpDelete("{id}")]
+		public async Task<ActionResult> DeleteItem(string Id)
+		{
+
+			var transaction = await context.Transactions.FirstOrDefaultAsync(x => x.Id == Id);
+			if (transaction == null) { return NotFound(); };
+
+			context.Remove(transaction);
+			await context.SaveChangesAsync();
+			return Ok(transaction);
 		}
 
 

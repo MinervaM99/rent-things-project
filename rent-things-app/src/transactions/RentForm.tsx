@@ -68,7 +68,6 @@ export default function RentForm(props: rentFormProps) {
         values.earnings = earnings; // Set the earnings field in the values object
       }
     }
-
     props.onSubmit(values, action);
   };
 

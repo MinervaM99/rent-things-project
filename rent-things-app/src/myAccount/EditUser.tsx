@@ -12,7 +12,6 @@ export default function EditUser() {
   const { claims } = useContext(AuthenticationContext);
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<userInfoDTO>();
-  const [errors, setErrors] = useState<string[]>([]);
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
   }
@@ -31,7 +30,7 @@ export default function EditUser() {
           console.log(response.data);
         });
     } catch (error: any) {
-      setErrors(error.response.data);
+      console.log(error.response.data);
     }
   }
 

@@ -6,6 +6,7 @@ import GenericListComponent from "./GenericListComponent";
 import RecordsPerPageSelect from "./RecordsPerPageSelect";
 import customConfirm from "./customConfirm";
 import Swal from "sweetalert2";
+import { Paper, Table, TableContainer } from "@mui/material";
 
 export default function IndexEntity<T>(props: indexEntityProps<T>) {
   const [entities, setEntities] = useState<T[]>([]);
@@ -17,7 +18,7 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
   useEffect(() => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, recordsPerPage, props.loadDataTime]);
+  }, [page, recordsPerPage, props.reload]);
 
   async function loadData() {
     try {
@@ -32,9 +33,9 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
       const totalPages = Math.ceil(totalAmountOfRecords / recordsPerPage);
       setHasMoreData(page < totalPages);
       setEntities((prevEntities) => [...prevEntities, ...response.data]);
-    } catch (error) {
-      Swal.fire("", "Eroare", "error");
-      navigate("/");
+    } catch (error: any) {
+      Swal.fire("", `${error.response.data}`, "error");
+      // navigate("/");
     }
   }
 
@@ -74,7 +75,7 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
           {props.entityName}
         </Link>
       ) : null}
-{/* 
+      {/* 
       <RecordsPerPageSelect
         onChange={(amountOfRecords) => {
           setPage(1);
@@ -83,9 +84,11 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
       /> */}
 
       <GenericListComponent list={entities}>
-        <table className="table table-striped">
-          {props.children(entities, buttons)}
-        </table>
+        <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+            {props.children(entities, buttons)}
+          </Table>
+        </TableContainer>
       </GenericListComponent>
 
       {hasMoreData && (
@@ -101,10 +104,10 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
 
 interface indexEntityProps<T> {
   url: string;
-  title: string;
+  title?: string;
   createURL?: string;
   entityName?: string;
-  loadDataTime?: any;
+  reload?: any;
   children(
     entities: T[],
     buttons: (editURL: string, id: number) => ReactElement
