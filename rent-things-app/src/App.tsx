@@ -8,6 +8,7 @@ import AuthenticationContext from "./security/AuthentictionContext";
 import { getClaims } from "./security/handelJWT";
 import configureInterceptor from "./utils/httpInterceptors";
 import NavigationMenu from "./Menu";
+import { Box } from "@mui/material";
 
 configureValidations();
 configureInterceptor();
@@ -37,7 +38,12 @@ function App() {
     <>
       <AuthenticationContext.Provider value={{ claims, update: setClaims }}>
         <NavigationMenu />
-        <div className="container" style={{maxWidth: 1300}}>
+        <Box
+        sx={{
+          flexDirection: 'column',
+          minHeight: '70vh',
+        }}
+      >
           <Routes>
             {routes.map((route) => (
               <Route
@@ -57,7 +63,7 @@ function App() {
               />
             ))}
           </Routes>
-        </div>
+          </Box>
         <footer className="bd-footer py-5 mt-5 bg-light">
           <div className="container">
             Rent things app {new Date().getFullYear().toString()}

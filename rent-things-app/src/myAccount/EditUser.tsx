@@ -7,6 +7,7 @@ import AuthenticationContext from "../security/AuthentictionContext";
 import Loading from "../utils/Loading";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function EditUser() {
   const { claims } = useContext(AuthenticationContext);
@@ -21,7 +22,7 @@ export default function EditUser() {
     loadInfoUser();
   }, [userName]);
 
-   function loadInfoUser() {
+  function loadInfoUser() {
     try {
       axios
         .get(`${urlAccounts}/${userName}`)
@@ -47,13 +48,22 @@ export default function EditUser() {
   };
 
   return (
-    <>
-      <h3>Editeaza profilul</h3>
+    <Container maxWidth="sm">
+      <Box my={5} textAlign="center">
+        <Typography
+          variant="h4"
+          component="div"
+          fontWeight="bold"
+          color="text.secondary"
+        >
+          Editeaza profilul
+        </Typography>
+      </Box>
       {userInfo?.userName ? (
         <EditUserForm model={userInfo} onSubmit={handleSubmit} />
       ) : (
         <Loading />
       )}
-    </>
+    </Container>
   );
 }

@@ -37,7 +37,7 @@ export default function ItemDetails() {
     loadInfoUser();
   }, [userName]);
 
- async function loadInfoUser() {
+  async function loadInfoUser() {
     try {
       await axios
         .get(`${urlAccounts}/${userName}`)
@@ -54,7 +54,7 @@ export default function ItemDetails() {
     loadItemDetails();
   }, [id]);
 
-  async function loadItemDetails(){
+  async function loadItemDetails() {
     try {
       await axios
         .get(`${urlItems}/${id}`)
@@ -125,9 +125,6 @@ export default function ItemDetails() {
       Swal.fire("Error", `${error.response.data}`, "error");
     }
   }
-  {
-    console.log("userID ---" + userInfo?.id);
-  }
   const randomColor = generateRandomColor();
   return (
     <>
@@ -162,12 +159,16 @@ export default function ItemDetails() {
                   marginBottom: "20px",
                 }}
               />
-              <Typography gutterBottom variant="h5" component="div">
-                {item?.description}
-              </Typography>
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                dangerouslySetInnerHTML={{ __html: item?.description }}
+              ></Typography>
               <Typography variant="body2" color="text.secondary">
                 {item?.dayPrice}
               </Typography>
+              <Typography>Locatia produdului: {item?.location}</Typography>
             </Paper>
           </Box>
 

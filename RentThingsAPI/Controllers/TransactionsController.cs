@@ -6,12 +6,15 @@ using RentThingsAPI.Helpers;
 using RentThingsAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentThingsAPI.Controllers
 {
 
 	[ApiController]
 	[Route("api/transactions")]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 	public class TransactionsController : ControllerBase
 	{
 		private readonly ApplicationDbContext context;
@@ -47,9 +50,8 @@ namespace RentThingsAPI.Controllers
 			return NoContent();
 		}
 
-		//edit status of transaction //to do inafara de statusul curent
-		[HttpPost]
-		[Route("editStatus/{id}")]
+		//edit status of transaction
+		[HttpPost("editStatus/{id}")]
 		public async Task<ActionResult> UpdateStatus(string id, [FromBody] int newStatus)
 		{
 			var transaction = await context.Transactions.FirstOrDefaultAsync(t => t.Id == id);
@@ -103,7 +105,7 @@ namespace RentThingsAPI.Controllers
 		public async Task<ActionResult<List<TransactionDTO>>> GetTransaction(int itemId)
 		{
 			var today = DateTime.Now;
-			var transaction = await context.Transactions
+			var transaction = await context.Transactions.Include(x => x.User).Include(x => x.Item)
 				.Where(t => t.ItemId == itemId && t.StartDate > today)
 				.ToListAsync();
 
@@ -123,7 +125,7 @@ namespace RentThingsAPI.Controllers
 			var userIdLend = await userManager.FindByNameAsync(lenderId);
 			if(userIdLend == null) { return NotFound(); }
 			var queryable = context.Transactions
-								.Include(t => t.Item)
+								.Include(t => t.Item).Include(x => x.User).Include(x => x.Item)
 								.Where(t => t.Item.UserId == userIdLend.Id && t.Status == status)
 								.AsQueryable();
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
@@ -139,7 +141,7 @@ namespace RentThingsAPI.Controllers
 		{
 			var userIdBorrower = await userManager.FindByNameAsync(borrowerId);
 			if (userIdBorrower == null) { return NotFound(); }
-			var queryable = context.Transactions
+			var queryable = context.Transactions.Include(x=>x.User).Include(x=>x.Item)
 								.Where(t => t.UserId == userIdBorrower.Id)
 								.AsQueryable(); 
 			

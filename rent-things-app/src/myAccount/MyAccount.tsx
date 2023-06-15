@@ -4,7 +4,6 @@ import ItemsList from "../items/ItemsList";
 import axios, { AxiosResponse } from "axios";
 import { urlItems } from "../endpoints";
 import { itemDTO } from "../items/items.model";
-import { Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Avatar } from "@mui/material";
@@ -14,7 +13,7 @@ import IndexTransaction from "../transactions/IndexTransaction";
 export default function MyAccount() {
   const { claims } = useContext(AuthenticationContext);
   const [items, setItems] = useState<itemDTO[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string>();
+  const [selectedOption, setSelectedOption] = useState<string>("optiunea1");
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
   }
@@ -58,14 +57,12 @@ export default function MyAccount() {
             borderRadius: "50%",
           }}
         >
-          <Link to={buildAvatarLink()}>
-            {userName ? userName.charAt(0).toUpperCase() : null}
-          </Link>
+          <Link to={buildAvatarLink()}>{userName ? userName.charAt(0).toUpperCase() : null}</Link>
         </Avatar>
         <ContainerLinks>
           <NavLinks>
             <StyledLink
-              to="/myAccount"
+              to="/myAccount/1"
               onClick={() => handleOptionSelect("optiunea1")}
               selected={selectedOption === "optiunea1"}
             >
@@ -73,7 +70,7 @@ export default function MyAccount() {
             </StyledLink>
             <Divider />
             <StyledLink
-              to="#"
+               to="/myAccount/2"
               onClick={() => handleOptionSelect("optiunea2")}
               selected={selectedOption === "optiunea2"}
             >
@@ -101,23 +98,14 @@ export default function MyAccount() {
         )}
         {selectedOption === "optiunea2" && (
           <>
-            {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
+          {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
             <h3>Cerereri de împrumut în așteptare</h3>
-            <IndexTransaction
-              urlTransactionParam={`borrow/${userName}`}
-              statusParam={1}
-            />
+            <IndexTransaction urlTransactionParam={`borrow/${userName}`} statusParam={1}/>
 
             <h3>Cereri de imprumut acceptate</h3>
-            <IndexTransaction
-              urlTransactionParam={`borrow/${userName}`}
-              statusParam={2}
-            />
+            <IndexTransaction urlTransactionParam={`borrow/${userName}`} statusParam={2}/>
             <h3>Cereri de imprumut respinse</h3>
-            <IndexTransaction
-              urlTransactionParam={`borrow/${userName}`}
-              statusParam={3}
-            />
+            <IndexTransaction urlTransactionParam={`borrow/${userName}`} statusParam={3}/>
           </>
         )}
         {selectedOption === "optiunea3" && (

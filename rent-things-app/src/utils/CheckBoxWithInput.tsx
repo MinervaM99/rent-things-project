@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ErrorMessage, useField } from "formik";
 import { FormCheck, InputGroup, FormControl } from "react-bootstrap";
+import { InputLabel } from "@mui/material";
 
 interface Option {
   label: string;
@@ -42,7 +43,7 @@ const CheckBoxWithInput: React.FC<Props> = (props) => {
   return (
     <>
       <div style={{ marginLeft: "80px" }}>
-        <label>{displayName}</label>
+        <InputLabel>{displayName}</InputLabel>
         {options.map((option) => (
           <div key={option.value}>
             <div style={{ display: "inline-flex", alignItems: "center" }}>

@@ -6,10 +6,13 @@ import GenericListComponent from "./GenericListComponent";
 import RecordsPerPageSelect from "./RecordsPerPageSelect";
 import customConfirm from "./customConfirm";
 import Swal from "sweetalert2";
-import { Paper, Table, TableContainer } from "@mui/material";
+import { Box, Paper, Table, TableContainer, Typography } from "@mui/material";
+import Pagination from "./Pagination";
 
 export default function IndexEntity<T>(props: indexEntityProps<T>) {
   const [entities, setEntities] = useState<T[]>([]);
+
+  const [totalAmountOfPages, setTotalAmountOfPages] = useState(0);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [hasMoreData, setHasMoreData] = useState(true);
@@ -22,17 +25,28 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
 
   async function loadData() {
     try {
-      const response = await axios.get(props.url, {
-        params: { page, recordsPerPage },
-      });
+      const response = await axios
+        .get(props.url, {
+          params: { page, recordsPerPage },
+        })
+        .then((response: AxiosResponse<T[]>) => {
+          const totalAmountOfRecords = parseInt(
+            response.headers["totalamountofrecords"],
+            10
+          );
+          setTotalAmountOfPages(
+            Math.ceil(totalAmountOfRecords / recordsPerPage)
+          );
+          setEntities(response.data);
+        });
 
-      const totalAmountOfRecords = parseInt(
-        response.headers["totalamountofrecords"],
-        10
-      );
-      const totalPages = Math.ceil(totalAmountOfRecords / recordsPerPage);
-      setHasMoreData(page < totalPages);
-      setEntities((prevEntities) => [...prevEntities, ...response.data]);
+      // const totalAmountOfRecords = parseInt(
+      //   response.headers["totalamountofrecords"],
+      //   10
+      // );
+      // const totalPages = Math.ceil(totalAmountOfRecords / recordsPerPage);
+      // setHasMoreData(page < totalPages);
+      // setEntities((prevEntities) => [...prevEntities, ...response.data]);
     } catch (error: any) {
       Swal.fire("", `${error.response.data}`, "error");
       // navigate("/");
@@ -69,35 +83,52 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
 
   return (
     <>
-      <h1>{props.title}</h1>
+      <Box my={5} textAlign="center">
+        <Typography
+          variant="h4"
+          component="div"
+          fontWeight="bold"
+          color="text.secondary"
+        >
+          {props.title}
+        </Typography>
+      </Box>
+
       {props.createURL ? (
         <Link className="btn btn-primary" to={props.createURL}>
           {props.entityName}
         </Link>
       ) : null}
-      {/* 
-      <RecordsPerPageSelect
-        onChange={(amountOfRecords) => {
-          setPage(1);
-          setRecordsPerPage(amountOfRecords);
-        }}
-      /> */}
+      {
+        <RecordsPerPageSelect
+          onChange={(amountOfRecords) => {
+            setPage(1);
+            setRecordsPerPage(amountOfRecords);
+          }}
+        />
+      }
+
+      <Pagination
+        currentPage={page}
+        totalAmountOfPages={totalAmountOfPages}
+        onChange={(newPage) => setPage(newPage)}
+      />
 
       <GenericListComponent list={entities}>
         <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
             {props.children(entities, buttons)}
           </Table>
         </TableContainer>
       </GenericListComponent>
 
-      {hasMoreData && (
+      {/* {hasMoreData && (
         <div style={{ marginTop: "20px" }}>
           <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
             Încarcă următoarele
           </Button>
         </div>
-      )}
+      )} */}
     </>
   );
 }

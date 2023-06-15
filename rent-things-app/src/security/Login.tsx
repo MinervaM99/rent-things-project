@@ -7,6 +7,7 @@ import { getClaims, saveToken } from "./handelJWT";
 import AuthenticationContext from "./AuthentictionContext";
 import { Link, useNavigate } from "react-router-dom";
 import AuthFormLogin from "./AuthFormLogin";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function Login(props: loginProps) {
   const [errors, setErrors] = useState<string[]>([]);
@@ -29,8 +30,17 @@ export default function Login(props: loginProps) {
   }
 
   return (
-    <>
-      <h2>Intra in cont</h2>
+      <Container maxWidth="sm">
+      <Box my={3} textAlign="center">
+        <Typography
+          variant="h4"
+          component="div"
+          fontWeight="bold"
+          color="text.secondary"
+        >
+          Autentifică-te
+        </Typography>
+      </Box>
       <DisplayErrors errors={errors} />
       <AuthFormLogin
         model={{ userName: "", password: "" }}
@@ -38,7 +48,7 @@ export default function Login(props: loginProps) {
       />
       <p></p>
       <div className="mb-3">Nu ai un cont? <Link to={"../Register"}>Creaza un cont nou</Link></div>
-    </>
+    </Container>
   );
 }
 

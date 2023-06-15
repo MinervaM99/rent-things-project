@@ -23,7 +23,7 @@ export default function CategoryForm(props: categoryFormProps) {
 
         {(formikProps) => (
           <Form>
-            <TextField field="name" displayName="Name" />
+            <TextField field="name" displayName="Nume" />
 
             <Button type="submit" disabled={formikProps.isSubmitting}>
               Salveaza

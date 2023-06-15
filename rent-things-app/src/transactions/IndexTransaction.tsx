@@ -10,10 +10,12 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { userInfoDTO } from "../security/security.model";
 //to do
 export default function IndexTransaction(props: IndexTransactionProps) {
   const { claims } = useContext(AuthenticationContext);
   const [reload, setReload] = useState<Boolean>(false);
+  const [lenderInfo, setLenderInfo] = useState<userInfoDTO>();
   //obtine username din claims
   function getUserName(): string {
     return claims.find((x) => x.name === "userName")?.value || "";
@@ -34,7 +36,6 @@ export default function IndexTransaction(props: IndexTransactionProps) {
       Swal.fire("Eroare. Ceva nu a funcționat", "error");
     }
   }
-  
 
   return (
     <>
@@ -47,7 +48,7 @@ export default function IndexTransaction(props: IndexTransactionProps) {
             <TableHead>
               <TableRow style={{ backgroundColor: '#d5aff5ae', color: 'white' }}>
                 <TableCell></TableCell>
-                <TableCell align="left">Comunitate</TableCell>
+                <TableCell align="left">Proprietar</TableCell>
                 <TableCell align="left">Produs</TableCell>
                 <TableCell align="left">Data de început</TableCell>
                 <TableCell align="left">Data de sfârșit</TableCell>
@@ -84,7 +85,7 @@ export default function IndexTransaction(props: IndexTransactionProps) {
                       </TableCell>
                     )}
                     <TableCell align="left">
-                      <Link to={`/account/${userName}`}>
+                      <Link to={`/account/${transaction.itemId.id}`}>
                         Detalii Proprietar
                       </Link>
                     </TableCell>

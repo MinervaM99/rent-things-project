@@ -4,6 +4,7 @@ import Button from "../utils/Button";
 import TextField from "../forms/TextField";
 import * as Yup from "yup";
 import { userInfoDTO } from "../security/security.model";
+import { Container } from "@mui/material";
 
 export default function EditUserForm(props: userFormProps) {
   const phoneRegexInt = /^(07\d{8})$/; 
@@ -28,7 +29,8 @@ export default function EditUserForm(props: userFormProps) {
 
         {(formikProps) => (
           <Form>
-            <label>Numele de utilizator: {props.model.userName}</label>
+           
+
             <TextField field="email" displayName="Email" />
             <TextField field="phoneNumber" displayName="Numar de telefon" />
 

@@ -2,10 +2,11 @@ import CategoryForm from "./CategoryForm";
 import { urlCategorirs } from "../endpoints";
 import { categoryCreationDTO, categoryDTO } from "./category.model";
 import EditEntity from "../utils/EditEntity";
+import { Container } from "@mui/material";
 
 export default function EditCategory() {
   return (
-    <>
+    <Container maxWidth="sm">
       <EditEntity<categoryCreationDTO, categoryDTO>
         url={urlCategorirs}
         entityName="o categorie"
@@ -20,6 +21,6 @@ export default function EditCategory() {
           />
         )}
       </EditEntity>
-    </>
+    </Container>
   );
 }

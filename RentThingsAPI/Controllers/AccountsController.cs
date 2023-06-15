@@ -57,7 +57,7 @@ namespace RentThingsAPI.Controllers
 
 		//get all users
 		[HttpGet("listUsers")]
-		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 		public async Task<ActionResult<List<UserDTO>>> GetListUsers([FromQuery] PaginationDTO paginationDTO)
 		{
 			var queryable = context.Users.AsQueryable();
@@ -73,9 +73,12 @@ namespace RentThingsAPI.Controllers
 		public async Task<ActionResult> MakeAdmin([FromBody] string userId)
 		{
 			var user = await userManager.FindByIdAsync(userId);
+			if (user == null)
+			{
+				return BadRequest("Utilizatorul nu a fost găsit.");
+			}
 
-			// Verificăm dacă utilizatorul are deja drepturi de administrator
-			var isAdmin = await userManager.IsInRoleAsync(user, "admin");
+			var isAdmin = (await userManager.GetClaimsAsync(user)).Any(c => c.Type == "role" && c.Value == "admin");
 			if (isAdmin)
 			{
 				return BadRequest("Utilizatorul este deja admin.");
@@ -124,48 +127,34 @@ namespace RentThingsAPI.Controllers
 			}
 		}
 
-		//private async Task<AuthenticationResponse> BuildToken(UserCredentials userCredentials)
-		//{
-		//	var claims = new List<Claim>()
-		//	{
-		//		new Claim("email", userCredentials.Email)
-		//	};
-
-		//	var userCredentials = await userManager.FindByNameAsync(userCredentials.Email);
-		//	var claimsDB = await userManager.GetClaimsAsync(userCredentials);
-
-		//	claims.AddRange(claimsDB);
-
-		//	var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"]));
-		//	var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-		//	var expiration = DateTime.UtcNow.AddYears(1);
-
-		//	var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims,
-		//		expires: expiration, signingCredentials: creds);
-
-		//	return new AuthenticationResponse()
-		//	{
-		//		Token = new JwtSecurityTokenHandler().WriteToken(token),
-		//		Expiration = expiration
-		//	};
-		//}
-
-
-		//get info about a user by Id
-
-
+		//get info about a user by Username
 		[HttpGet("{username}")]
 		public async Task<ActionResult<UserDTO>> GetUserInfo(string username)
 		{
 			var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == username);
 
-			if (user == null) { return NotFound(); }
+			if (user == null) { 
+				return NotFound(); }
 
 			return mapper.Map<UserDTO>(user);
 
 		}
 
+		[HttpGet("info/{userId}")]
+		public async Task<ActionResult<UserDTO>> GetUserInfoById(string userId)
+		{
+			var user = await context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			return mapper.Map<UserDTO>(user);
+
+		}
+
+		//Delete user by Id
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteUser(string id)
 		{

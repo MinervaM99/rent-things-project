@@ -88,8 +88,6 @@ D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net7.0\Microsoft.AspNetCo
 D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net7.0\Azure.Storage.Blobs.dll
 D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net7.0\Azure.Storage.Common.dll
 D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net7.0\System.IO.Hashing.dll
-D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net7.0\Newtonsoft.Json.dll
-D:\Licenta\rent-things-project\RentThingsAPI\bin\Debug\net7.0\Twilio.dll
 D:\Licenta2\rent-things-project\RentThingsAPI\bin\Debug\net7.0\appsettings.json
 D:\Licenta2\rent-things-project\RentThingsAPI\bin\Debug\net7.0\appsettings.Development.json
 D:\Licenta2\rent-things-project\RentThingsAPI\bin\Debug\net7.0\RentThingsAPI.exe

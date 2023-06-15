@@ -6,6 +6,7 @@ import { itemCreationDTO, itemDTO } from "./items.model";
 import { convertItemToFormData } from "../utils/formDataUtils";
 import EditEntity from "../utils/EditEntity";
 import { categoryDTO } from "../category/category.model";
+import { Container } from "@mui/material";
 
 export default function EditItem() {
   const [listCategory, setListCategory] = useState<categoryDTO[]>([]);
@@ -36,11 +37,11 @@ export default function EditItem() {
   }, []);
 
   return (
-    <>
+    <Container maxWidth="sm">
       <EditEntity<itemCreationDTO, itemDTO>
         url={urlItems}
         indexURL="../"
-        entityName="Item"
+        entityName="anunțul"
         transformFormData={convertItemToFormData}
         transform={transform}
       >
@@ -54,7 +55,7 @@ export default function EditItem() {
             }))}
           ></ItemForm>
         )}
-      </EditEntity>
+      </EditEntity>     
       {/* The id is {id}
       {item && itemEdit ? (
         <ItemForm
@@ -65,6 +66,6 @@ export default function EditItem() {
       ) : (
         <Loading />
       )} */}
-    </>
+    </Container>
   );
 }

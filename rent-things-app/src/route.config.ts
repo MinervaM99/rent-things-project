@@ -26,10 +26,10 @@ const routes = [
 
   {path: '/items/create', component: CreateItem,isUser: true},
   {path: '/items/edit/:id', component: EditItem,isUser: true},
-  {path: '/items/filter', component: FilterItems},
+  {path: '/items/filter/:itemName?', component: FilterItems},
   {path: '/item/:id', component: ItemDetails},
 
-  {path: '/myAccount', component: MyAccount,isUser: true},
+  {path: '/myAccount/:id', component: MyAccount},
   {path: '/account/:userName', component: UserProfile},
   {path: '/account/edit', component: EditUser},
   {path: '/account/transactions', component: IndexTransactionStatus},

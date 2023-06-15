@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FormCheck, FormGroup } from "react-bootstrap";
 import { ErrorMessage, useField } from "formik";
+import { InputLabel } from "@mui/material";
 
 interface CheckboxGroupProps {
   options: { label: string; value: number }[];
@@ -23,8 +24,8 @@ export default function CheckboxGroup(props: CheckboxGroupProps) {
   };
 
   return (
-    <div className="mb-3">
-      <label>{props.displayName}</label>
+    <div className="mb-5">
+      <InputLabel>{props.displayName}</InputLabel>
       <FormGroup>
         {props.options.map((option) => (
           <FormCheck

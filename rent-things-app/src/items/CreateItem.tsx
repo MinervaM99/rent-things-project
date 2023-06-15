@@ -9,19 +9,13 @@ import { convertItemToFormData } from "../utils/formDataUtils";
 import { categoryDTO } from "../category/category.model";
 import AuthenticationContext from "../security/AuthentictionContext";
 import Swal from "sweetalert2";
+import { Box, Container, InputLabel, Typography } from "@mui/material";
 
 export default function CreateItem() {
   const [listCategory, setListCategory] = useState<categoryDTO[]>([]);
   const { claims } = useContext(AuthenticationContext);
 
   const navigate = useNavigate();
-  const containerStyles = {
-    maxWidth: "700px",
-    marginTop: "50px",
-    marginBottom: "30px",
-    marginLeft: "auto",
-    marginRight: "auto",
-  };
   const [errors, setErrors] = useState<string[]>([]);
 
   async function create(item: itemCreationDTO) {
@@ -64,11 +58,18 @@ export default function CreateItem() {
   console.log(getUserName());
 
   return (
-    <>
+    <Container maxWidth="sm">
       <DisplayErrors errors={errors} />
-      <div style={containerStyles}>
-        <h3>Inchiriaza un produs</h3>
-      </div>
+      <Box my={5} textAlign="center">
+        <Typography
+          variant="h4"
+          component="div"
+          fontWeight="bold"
+          color="text.secondary"
+        >
+          Adaugă un anunț
+        </Typography>
+      </Box>
       <ItemForm
         model={{
           name: "",
@@ -92,6 +93,6 @@ export default function CreateItem() {
           name: object.name,
         }))}
       />
-    </>
+    </Container>
   );
 }

@@ -24,7 +24,7 @@ export default function SpecificItem(props: itemDTO) {
   const navigate = useNavigate();
   const customAlert = useContext(AlertContext);
   const location = useLocation();
-  const isSpecificRoute = location.pathname === "/myAccount";
+  const isSpecificRoute = location.pathname === "/myAccount/1";
 
   const handleOnClickEdit = () => {
     navigate(`/items/edit/${props.id}`);

@@ -1,6 +1,7 @@
 import { FormGroup } from "react-bootstrap";
 import Select from "react-select";
 import { ErrorMessage, useField } from "formik";
+import { InputLabel } from "@mui/material";
 
 interface SelectGroupProps {
   options: { label: string; value: number }[];
@@ -17,8 +18,8 @@ export default function SelectGroup(props: SelectGroupProps) {
   };
 
   return (
-    <div className="mb-3">
-      <label>{props.displayName}</label>
+    <div className="mb-5">
+      <InputLabel>{props.displayName}</InputLabel>
       <ErrorMessage name={props.field}>
         {(msg) => <div className="text-danger">{msg}</div>}
       </ErrorMessage>

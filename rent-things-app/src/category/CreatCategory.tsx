@@ -6,6 +6,7 @@ import { urlCategorirs } from "../endpoints";
 import { useState } from "react";
 import DisplayErrors from "../utils/DisplayErrors";
 import Swal from "sweetalert2";
+import { Container, Typography, Box } from "@mui/material";
 
 export default function CreateCategory() {
   const navigate = useNavigate();
@@ -23,23 +24,32 @@ export default function CreateCategory() {
           navigate("../category"); // Navigăm către pagina principală doar dacă butonul "OK" a fost apăsat
         }
       });
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        if (
-          error.response?.status === 400 &&
-          error.response?.data.code === "CATEGORY_ALREADY_EXIST"
-        )
-          setErrors(error.response.data);
-        console.log("Category exists");
-      } else {
-        console.log("Unexpected error", error);
-      }
+    } catch (error: any) {
+      setErrors(error.response.data);
+      Swal.fire({
+        title: `${error.response.data}`,
+        icon: "error",
+        confirmButtonText: "OK",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("../category"); 
+        }
+      });
     }
   }
 
   return (
-    <>
-      <h3>Adauga o categorie</h3>
+    <Container maxWidth="sm">
+      <Box my={5} textAlign="center">
+        <Typography
+          variant="h4"
+          component="div"
+          fontWeight="bold"
+          color="text.secondary"
+        >
+          Adaugă o categorie nouă
+        </Typography>
+      </Box>
       <DisplayErrors errors={errors} />
       <CategoryForm
         model={{ name: "" }}
@@ -47,6 +57,6 @@ export default function CreateCategory() {
           await create(value);
         }}
       />
-    </>
+    </Container>
   );
 }

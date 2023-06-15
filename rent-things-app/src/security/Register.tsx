@@ -7,8 +7,8 @@ import AuthForm from "./AuthForm";
 import { getClaims, saveToken } from "./handelJWT";
 import AuthenticationContext from "./AuthentictionContext";
 import { Link, useNavigate } from "react-router-dom";
-import AuthFormLogin from "./AuthFormLogin";
 import Swal from "sweetalert2";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function Register() {
   const [errors, setErrors] = useState<string[]>([]);
@@ -38,15 +38,24 @@ export default function Register() {
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: 'A apărut o eroare!',
+        title: `${error.response.data}`,
         showConfirmButton: true
       })
     }
   }
 
   return (
-    <>
-      <h3>Creaza un cont nou</h3>
+    <Container maxWidth="sm">
+      <Box my={3} textAlign="center">
+        <Typography
+          variant="h4"
+          component="div"
+          fontWeight="bold"
+          color="text.secondary"
+        >
+          Crează un cont nou
+        </Typography>
+      </Box>
       <DisplayErrors errors={errors} />
       <AuthForm
         model={{email: "", password: "", phoneNumber: "", userName: ""}}
@@ -57,6 +66,6 @@ export default function Register() {
       <div className="mb-3">
         Ai deja un cont? <Link to={"../Login"}>Conecteaza-te</Link>
       </div>
-    </>
+    </Container>
   );
 }

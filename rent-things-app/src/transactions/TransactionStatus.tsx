@@ -117,11 +117,7 @@ export default function IndexTransactionStatus() {
   return (
     <>
       <h3>Raspunde cererilor de imprumut</h3>
-      <h6 style={{ color: "red" }}>
-        *Acceptarea unei cereri de imprumut care se suprapune ca timp cu o altă
-        cerere de împrumut pentru același produs, va determina respingerea
-        tuturor celorlalte cereri de împrumut!
-      </h6>
+      
 
       <GenericListComponent
         list={inProcessTransactions}
@@ -131,6 +127,12 @@ export default function IndexTransactionStatus() {
           {inProcessTransactions?.length == 0 ? (
             <h1>Nu exista detalii de afisat</h1>
           ) : (
+            <div>
+            <h6 style={{ color: "red" }}>
+        *Acceptarea unei cereri de imprumut care se suprapune ca interval de
+        timp cu o altă cerere de împrumut pentru același produs, va determina
+        respingerea tuturor celorlalte cereri de împrumut!
+      </h6>
             <table className="table table-striped">
               <thead>
                 <tr>
@@ -172,7 +174,9 @@ export default function IndexTransactionStatus() {
                     </td>
 
                     <td>
-                      <Link to={`/account/${userName}`}>{userName}</Link>
+                      <Link to={`/account/${transaction.userId.userName}`}>
+                        {transaction.userId.userName}
+                      </Link>
                     </td>
                     <td>
                       <Link to={`/item/${transaction.itemId.id}`}>
@@ -187,6 +191,7 @@ export default function IndexTransactionStatus() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       </GenericListComponent>
@@ -203,6 +208,9 @@ export default function IndexTransactionStatus() {
         list={confirmedTransactions}
         loadingUI={<Loading />}
       >
+          {confirmedTransactions?.length == 0 ? (
+            <h1>Nu exista detalii de afisat</h1>
+          ) : (
         <table className="table table-striped">
           <thead>
             <tr>
@@ -218,8 +226,9 @@ export default function IndexTransactionStatus() {
             {confirmedTransactions?.map((transaction) => (
               <tr key={transaction.id}>
                 <td>
-                  {/* todo - load user Data */}
-                  <Link to={`/account/${userName}`}>Detalii Debitor</Link>
+                  <Link to={`/account/${transaction.userId.userName}`}>
+                    {transaction.userId.userName}
+                  </Link>
                 </td>
                 <td>
                   <Link to={`/item/${transaction.itemId.id}`}>
@@ -233,7 +242,7 @@ export default function IndexTransactionStatus() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>)}
       </GenericListComponent>
 
       {hasMoreData2 && (

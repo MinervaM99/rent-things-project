@@ -80,7 +80,7 @@ namespace RentThingsAPI.Controllers
 
 		//Get all items for a user  =>> userName
 		[HttpGet("userItems/{userName}")]
-		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByUser(string userName)
 		{
 			var user = await userManager.FindByNameAsync(userName);
@@ -97,7 +97,7 @@ namespace RentThingsAPI.Controllers
 
 
 
-		//get items by category
+		//get items by category id
 		[HttpGet("category/{category:int}")]
 		[AllowAnonymous]
 		public async Task<ActionResult<List<ItemDTO>>> GetItemsByCategory(int category)

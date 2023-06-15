@@ -1,6 +1,8 @@
 import { useFormikContext } from "formik";
 import { ChangeEvent, useState } from "react";
 
+import { InputLabel } from "@mui/material";
+
 export default function ImageField(props: imageFieldProps) {
   const [imgBase64, setImgBase64] = useState("");
   const [imgURL, setImgURL] = useState(props.imgURL);
@@ -34,8 +36,8 @@ export default function ImageField(props: imageFieldProps) {
   };
 
   return (
-    <div className="mb-3">
-      <label>{props.displayName}</label>
+    <div className="mb-5">
+      <InputLabel>{props.displayName}</InputLabel>
       <div>
         <input type="file" accept=".jpg,.jpeg,.png" onChange={handleOnChange} />
       </div>

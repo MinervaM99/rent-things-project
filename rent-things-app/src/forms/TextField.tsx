@@ -1,10 +1,11 @@
+import { InputLabel } from "@mui/material";
 import { ErrorMessage, Field } from "formik";
 
-export default function TextField(props: textFieldProps) {
+export default function MyTextField(props: textFieldProps) {
   return (
     <>
       <div className="mb-3">
-        <label htmlFor={props.field}>{props.displayName} </label>
+        <InputLabel htmlFor={props.field}>{props.displayName} </InputLabel>
         <Field name={props.field} id={props.field} className="form-control" type={props.type} />
         <ErrorMessage name={props.field}>
           {(msg) => <div className="text-danger">{msg}</div>}
@@ -20,6 +21,6 @@ interface textFieldProps {
   type: "text" | "password";
 }
 
-TextField.defaultProps = {
+MyTextField.defaultProps = {
   type: "text",
 };

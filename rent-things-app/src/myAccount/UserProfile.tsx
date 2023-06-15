@@ -19,7 +19,6 @@ export default function UserProfile() {
   const { userName }: any = useParams();
   const [items, setItems] = useState<itemDTO[]>([]);
   const [userInfo, setUserInfo] = useState<userInfoDTO>();
-  const [errors, setErrors] = useState();
   
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
@@ -45,7 +44,6 @@ export default function UserProfile() {
           console.log(response.data);
         });
     } catch (error: any) {
-      setErrors(error.response.data);
     }
   }
 
@@ -57,7 +55,7 @@ export default function UserProfile() {
           setItems(response.data);
         });
     } catch (error: any) {
-      setErrors(error.response.data);
+     
     }
   }
   console.log(userInfo?.email);

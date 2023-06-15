@@ -1,15 +1,28 @@
 import { Field, Form, Formik } from "formik";
 import { categoryDTO } from "../category/category.model";
 import Button from "../utils/Button";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { urlCategorirs, urlItems } from "../endpoints";
 import { itemDTO } from "./items.model";
 import ItemsList from "./ItemsList";
+import { conditionOptions } from "../utils/SemanticNumberStorage";
+import {
+  MenuItem,
+  Select,
+  Box,
+  Container,
+  TextField,
+  Typography,
+  InputLabel,
+} from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function FilterItems() {
+  const { itemName } = useParams();
   const [categories, setCategories] = useState<categoryDTO[]>([]);
   const [items, setItems] = useState<itemDTO[]>([]);
+  const navigate = useNavigate();
 
   // to do - show all items on  the page, and continue with filter part 1 and 2
   const initialValues: filterItemsForm = {
@@ -33,11 +46,19 @@ export default function FilterItems() {
   }, []);
 
   useEffect(() => {
-    searchItems(initialValues);
+    if (itemName) {
+      searchItems(initialValues, itemName);
+    } else {
+      searchItems(initialValues);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [itemName]);
 
-  function searchItems(values: filterItemsForm) {
+  function searchItems(values: filterItemsForm, searchParam?: string) {
+    if (searchParam) {
+      values.name = searchParam;
+      navigate(`/items/filter/${searchParam}`);
+    }
     axios
       .get(`${urlItems}/filter`, { params: values })
       .then((response: AxiosResponse<itemDTO[]>) => {
@@ -46,8 +67,17 @@ export default function FilterItems() {
   }
 
   return (
-    <>
-      <h3>Filter Items</h3>
+    <Container maxWidth="lg">
+      <Box my={3} textAlign="center">
+        <Typography
+          variant="h4"
+          component="div"
+          fontWeight="bold"
+          color="text.secondary"
+        >
+          Găsește obiectul de care ai nevoie
+        </Typography>
+      </Box>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -61,64 +91,54 @@ export default function FilterItems() {
             <Form>
               <div className="row gx-3 align-items-center">
                 <div className="col-auto">
-                  <input
+                  <TextField
                     type="text"
+                    sx={{ width: "300px" }}
                     className="form-control"
                     id="name"
                     placeholder="Numele produsului"
                     {...formikProps.getFieldProps("name")}
                   />
                 </div>
+
                 <div className="col-auto">
-                  <select
+                  <Select
                     className="from-select"
+                    id="category"
+                    sx={{ width: "200px", height: "40px" }}
+                    placeholder="categorie"
                     {...formikProps.getFieldProps("categoryId")}
                   >
-                    <option value="0">--- Alege o categorie ---</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
+                    <MenuItem sx={{ color: "gray" }} value={0}>
+                      <InputLabel>Categoria</InputLabel>
+                    </MenuItem>
+                    {categories.map((option) => (
+                      <MenuItem key={option.id} value={option.id}>
+                        {option.name}
+                      </MenuItem>
                     ))}
-                  </select>
+                  </Select>
                 </div>
 
                 <div className="col-auto">
-                  <select
+                  <Select
                     className="form-select"
                     id="condition"
                     placeholder="conditie"
+                    sx={{ width: "200px", height: "40px" }}
                     {...formikProps.getFieldProps("condition")}
                   >
-                    <option value="0">---Conditia---</option>
-                    <option key={1} value={1}>
-                      Nou{" "}
-                    </option>
-                    <option key={2} value={2}>
-                      Aproape nou{" "}
-                    </option>
-                    <option key={3} value={3}>
-                      In stare Buna{" "}
-                    </option>
-                    <option key={4} value={4}>
-                      Utilizat{" "}
-                    </option>
-                  </select>
+                    <MenuItem sx={{ color: "gray" }} value={0}>
+                      <InputLabel>Condiția</InputLabel>
+                    </MenuItem>
+                    {conditionOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </div>
 
-                <div className="col-auto">
-                  <div className="from-check">
-                    <Field
-                      className="from-check-input"
-                      id="forSale"
-                      name="forSale"
-                      type="checkbox"
-                    />
-                    <label className="from-check-label" htmlFor="forSale">
-                      For sale
-                    </label>
-                  </div>
-                </div>
                 <div className="col-auto">
                   <Button
                     className="btn btn-primary"
@@ -132,20 +152,24 @@ export default function FilterItems() {
                     onClick={() => {
                       formikProps.setValues(initialValues);
                       searchItems(initialValues);
+                      navigate("/items/filter");
                     }}
                     disabled={false}
                   >
-                    Sterge{" "}
+                    Sterge
                   </Button>
                 </div>
               </div>
             </Form>
-
-            <ItemsList listOfItems={items} />
+            {items.length == 0 ? (
+              <InputLabel>Nu am găsit niciun obiect. </InputLabel>
+            ) : (
+              <ItemsList listOfItems={items} />
+            )}
           </>
         )}
       </Formik>
-    </>
+    </Container>
   );
 }
 

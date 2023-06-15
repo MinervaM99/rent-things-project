@@ -12,7 +12,7 @@ namespace RentThingsAPI.DTOs
 		public string Photo { get; set; }
 		public int Age { get; set; }
 		public string? Location { get; set; }
-		public double? DayPrice { get; set; }
+		public double DayPrice { get; set; }
 		public double? MonthPrice { get; set; }
 		public double? WeekPrice { get; set; }
 		public bool Available { get; set; }

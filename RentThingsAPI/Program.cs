@@ -18,15 +18,9 @@ using RentThingsAPI.Helpers;
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 var builder = WebApplication.CreateBuilder(args);
 
-// Set up configuration
-//builder.Configuration.AddJsonFile("appsettings.json", optional: false);
-//builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
-//builder.Configuration.AddEnvironmentVariables();
-
 var frontendUrl = builder.Configuration.GetValue<string>("frontend-url");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var configuration = builder.Configuration;
-
 
 
 // Add services to the container.

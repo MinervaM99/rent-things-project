@@ -4,21 +4,20 @@ const TransactionStatus = {
   3: "rejected",
 };
 
-const ItemAge = {
-  1: "more than one year",
-  2:  "more than 2 years",
-  3: "more than 5 years",
-  4: "more than 10 years",
-  5: "dont know"
-}
+export const conditionOptions = [
+  { label: "Nou", value: 1 },
+  { label: "Aproape nou", value: 2 },
+  { label: "In stare bună", value: 3 },
+  { label: "Utilizat", value: 4 },
+];
 
-const ItemCondition = {
-  1: "new (nou)",
-  2:  "like new (aproape nou)",
-  3: "good (in stare buna)",
-  4: "average (utilizat)",
-  // 5: "poor"
-}
+export const ageOptions = [
+  { label: "Mai putin de un an", value: 1 },
+  { label: "Mai putin de 2 ani", value: 2 },
+  { label: "Mai putin de 5 ani", value: 3 },
+  { label: "Mai putin de 10 ani", value: 4 },
+  { label: "Nu stiu", value: 5 },
+];
 
 const ItemAvailability ={
   1: "yes",

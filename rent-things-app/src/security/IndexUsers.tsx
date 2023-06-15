@@ -29,7 +29,7 @@ export default function IndexUsers() {
     }catch(error:any){
       Swal.fire({
         title: "Eroare",
-        text: "A apărut o eroare. Încercați din nou.",
+        text: `${error.response.data}`,
         icon: "error",
       });
     } 

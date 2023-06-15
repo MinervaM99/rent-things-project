@@ -25,6 +25,7 @@ namespace RentThingsAPI.Controllers
 			this.mapper = mapper;
 		}
 
+		//get all categories
 		[HttpGet]
 		public async Task<ActionResult<List<CategoryDTO>>> Get([FromQuery] PaginationDTO paginationDTO)
 		{
@@ -36,6 +37,8 @@ namespace RentThingsAPI.Controllers
 			return mapper.Map<List<CategoryDTO>>(categories);
 		}
 
+
+		//get one category by Id
 		[HttpGet("{Id:int}")] //api/categories/example
 		public async Task<ActionResult<CategoryDTO>> GetId(int Id)
 		{
@@ -48,8 +51,8 @@ namespace RentThingsAPI.Controllers
 		}
 
 
+		//add category
 		[HttpPost]
-		//doar pt admin
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 		public async Task<ActionResult> Post([FromBody] CategoryCreationDTO categoryCreationDTO)
 		{
@@ -59,6 +62,7 @@ namespace RentThingsAPI.Controllers
 			return NoContent();
 		}
 
+		//edit category
 		[HttpPut("{id:int}")]
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 		public async Task<ActionResult> Put(int id, [FromBody] CategoryCreationDTO categoryCreationDTO)
@@ -72,6 +76,7 @@ namespace RentThingsAPI.Controllers
 			return NoContent();
 		}
 
+		//delete category
 		[HttpDelete("{id:int}")]
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 		public async Task<ActionResult> Delete(int id)
