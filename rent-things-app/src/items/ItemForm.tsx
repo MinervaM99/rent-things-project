@@ -1,4 +1,4 @@
-import { ErrorMessage, Form, Formik, FormikHelpers } from "formik";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { itemCreationDTO } from "../items/items.model";
 import * as Yup from "yup";
 import Button from "../utils/Button";
@@ -19,19 +19,33 @@ import { Container, InputLabel } from "@mui/material";
 import { ageOptions, conditionOptions } from "../utils/SemanticNumberStorage";
 
 export default function ItemForm(props: itemFormProps) {
-  const [selectedOption, setSelectedOption] =
-    useState<SelectedOptionModel | null>(null);
-
-  const handleChange = (selectedOption: SelectedOptionModel | null) => {
-    setSelectedOption(selectedOption);
-    console.log(selectedOption?.value);
-  };
-
   const categoryOptions = props.selectedCategory.map((object) => ({
     value: object.id,
     label: object.name,
   }));
 
+  const initialCategory = categoryOptions.find(c => c.value === props.model.categoryId)
+
+  const [selectedOption, setSelectedOption] =
+    useState<SelectedOptionModel | null>(initialCategory ? initialCategory : null);
+
+  const initialAge = ageOptions.find(a => a.value === props.model.age);
+  const [selectedAge, setSelectedAge] =
+    useState<SelectedOptionModel | null>(initialAge ? initialAge : null);
+
+  const handleChange = (selectedOption: SelectedOptionModel | null) => {
+    if(selectedOption) setSelectedOption(selectedOption);
+    console.log(selectedOption?.value);
+  };
+
+  const handleChangeAge = (selectedOption: SelectedOptionModel | null) => {
+    if(selectedOption) setSelectedAge(selectedOption);
+  };
+
+  // const [location, setLocation] = useState<string>(""); // props.model.location
+
+
+console.log(props.model, categoryOptions);
   return (
     <>
       <Formik
@@ -42,7 +56,9 @@ export default function ItemForm(props: itemFormProps) {
             actions.setSubmitting(false);
           } else {
             values.categoryId = selectedOption.value;
-            props.onSubmit(values, actions);
+            values.age = selectedAge ? selectedAge.value : props.model.age;
+            console.log("submit");
+            props.onSubmit(values);
           }
         }}
         validationSchema={Yup.object({
@@ -77,9 +93,9 @@ export default function ItemForm(props: itemFormProps) {
                 menuPlacement="auto"
                 className="basic-single"
                 classNamePrefix="select"
-                value={selectedOption}
+                defaultValue={selectedOption}
                 name="categoryId"
-                onChange={handleChange} 
+                onChange={handleChange}
                 options={categoryOptions}
               />
             </div>
@@ -92,16 +108,29 @@ export default function ItemForm(props: itemFormProps) {
             />
 
             <CheckboxGroup
+              value={props.model.condition}
               options={conditionOptions}
               field="condition"
               displayName="Selectează condiția produsului:"
             />
 
-            <SelectGroup
-              displayName="Selecteaza varsta produsului"
-              field="age"
-              options={ageOptions}
-            />
+            <div className="mb-5">
+              <InputLabel sx={{paddingBottom: "10px"}}>
+                Selecteaza varsta produsului
+              </InputLabel>
+              <ErrorMessage name="age">
+                {(msg) => <div className="text-danger">{msg}</div>}
+              </ErrorMessage>
+              <Select
+                menuPlacement="auto"
+                className="basic-single"
+                classNamePrefix="select"
+                defaultValue={selectedAge}
+                name="age"
+                onChange={handleChangeAge}
+                options={ageOptions}
+              />
+            </div>
 
             {/* <div>
           <Map/>
@@ -128,7 +157,8 @@ export default function ItemForm(props: itemFormProps) {
               </div>
             </div>
 
-            <MyTextField field="location" displayName="Locația" />
+            {/* <MyTextField field="location" displayName="Locația" /> */}
+            <MyTextField field="location" displayName="Locația obiectului" />
 
             <Button type="submit" disabled={formikProps.isSubmitting}>
               Salveaza
@@ -147,7 +177,7 @@ interface itemFormProps {
   model: itemCreationDTO;
   onSubmit(
     values: itemCreationDTO,
-    action: FormikHelpers<itemCreationDTO>
+    action?: FormikHelpers<itemCreationDTO>
   ): void;
   selectedCategory: categoryDTO[];
 }

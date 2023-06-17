@@ -6,8 +6,9 @@ import GenericListComponent from "./GenericListComponent";
 import RecordsPerPageSelect from "./RecordsPerPageSelect";
 import customConfirm from "./customConfirm";
 import Swal from "sweetalert2";
-import { Box, Paper, Table, TableContainer, Typography } from "@mui/material";
+import { Box, Paper, Table, TableContainer, Typography} from "@mui/material";
 import Pagination from "./Pagination";
+import styled from "styled-components";
 
 export default function IndexEntity<T>(props: indexEntityProps<T>) {
   const [entities, setEntities] = useState<T[]>([]);
@@ -25,19 +26,20 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
 
   async function loadData() {
     try {
-      const response = await axios
+      await axios
         .get(props.url, {
           params: { page, recordsPerPage },
         })
         .then((response: AxiosResponse<T[]>) => {
           const totalAmountOfRecords = parseInt(
             response.headers["totalamountofrecords"],
-            10
+            recordsPerPage
           );
           setTotalAmountOfPages(
             Math.ceil(totalAmountOfRecords / recordsPerPage)
           );
           setEntities(response.data);
+          console.log("aaaa", response.data);
         });
 
       // const totalAmountOfRecords = parseInt(
@@ -49,11 +51,12 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
       // setEntities((prevEntities) => [...prevEntities, ...response.data]);
     } catch (error: any) {
       Swal.fire("", `${error.response.data}`, "error");
-      // navigate("/");
+      navigate("/");
     }
   }
 
   async function deleteEntity(id: number) {
+    console.log("delete",id);
     try {
       await axios.delete(`${props.url}/${id}`);
       loadData();
@@ -83,15 +86,11 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
 
   return (
     <>
-      <Box my={5} textAlign="center">
-        <Typography
-          variant="h4"
-          component="div"
-          fontWeight="bold"
-          color="text.secondary"
+      <Box my={2} textAlign="center">
+        <StyledTypography
         >
           {props.title}
-        </Typography>
+        </StyledTypography>
       </Box>
 
       {props.createURL ? (
@@ -144,3 +143,13 @@ interface indexEntityProps<T> {
     buttons: (editURL: string, id: number) => ReactElement
   ): ReactElement;
 }
+const StyledTypography = styled(Typography)`
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding-block: 10px;
+
+  &:hover {
+    color: #a967df;
+  }
+`;

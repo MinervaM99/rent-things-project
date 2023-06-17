@@ -12,10 +12,12 @@ export default function EditItem() {
   const [listCategory, setListCategory] = useState<categoryDTO[]>([]);
 
   function transform(item: itemDTO): itemCreationDTO {
+
+    console.log("bbb", item);
     return {
       name: item.name,
       description: item.description,
-      // userId: item.userId,
+      userId: item.userId?.id,
       pictureURL: item.photo,
       dayPrice: item.dayPrice,
       age: item.age,
@@ -23,7 +25,7 @@ export default function EditItem() {
       monthPrice: item.monthPrice,
       condition: item.condition,
       available: item.available,
-      categoryId: item.categoryName?  item.categoryName.id : 0,
+      categoryId: item.categoryId?.id
     };
   }
   //to do - categoryId?
@@ -40,7 +42,7 @@ export default function EditItem() {
     <Container maxWidth="sm">
       <EditEntity<itemCreationDTO, itemDTO>
         url={urlItems}
-        indexURL="../"
+        indexURL="/myAccount/1"
         entityName="anunțul"
         transformFormData={convertItemToFormData}
         transform={transform}
@@ -56,16 +58,6 @@ export default function EditItem() {
           ></ItemForm>
         )}
       </EditEntity>     
-      {/* The id is {id}
-      {item && itemEdit ? (
-        <ItemForm
-          model={item}
-          onSubmit={async (values) => await edit(values)}
-          selectedCategory={itemEdit.categoryToSelect}
-        />
-      ) : (
-        <Loading />
-      )} */}
     </Container>
   );
 }

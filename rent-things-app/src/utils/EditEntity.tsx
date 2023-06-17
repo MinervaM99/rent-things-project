@@ -19,7 +19,6 @@ export default function EditEntity<TCreation, TRead>(
     try {
       axios.get(`${props.url}/${id}`).then((response: AxiosResponse<TRead>) => {
         setEntity(props.transform(response.data));
-        console.log(response.data);
       });
     } catch (error: any) {
       setErrors(error.response.data);
@@ -38,6 +37,7 @@ export default function EditEntity<TCreation, TRead>(
           data: formData,
           headers: { "Content-Type": "multipart/form-data" },
         });
+        Swal.fire("Editat cu succes!");
       } else {
         await axios.put(`${props.url}/${id}`, entityToEdit);
         Swal.fire("Editat cu succes!");

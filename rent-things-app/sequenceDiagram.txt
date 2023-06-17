@@ -1,0 +1,13 @@
+@startuml
+skinparam SequenceMessageAlignment center
+actor User
+User -> WebPortal: login 
+WebPortal -> Backend:POST request with username and password
+Backend ->Backend:Validation.Generate JWT token.
+Backend -->WebPortal:Return JWT token
+WebPortal ->WebPortal:Store JWT token
+User -> WebPortal:Get list of articles
+WebPortal ->Backend:GET /article(send JWT token at header)
+Backend ->Backend:Validate JWT token
+Backend-->WebPortal:Return the Response
+@enduml

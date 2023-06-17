@@ -13,7 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 const SearchBox = styled(Box)`
   align-items: center;
   border-radius: 8px;
-  background-color: #f5f5f5;
+  background-color: #f5f5f5e2;
   padding: 8px;
   width: 570px;
   margin: 100px;
@@ -70,7 +70,7 @@ export default function LandingPage() {
         <SearchIcon onClick={handleSearch}/>
         </Button>
       </SearchBox>
-      <h3>Ultimele adaugate</h3>
+      <h3>Anunțuri publicate</h3>
       <AlertContext.Provider
         value={() => {
           loadData();

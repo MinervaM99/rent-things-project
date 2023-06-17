@@ -9,7 +9,7 @@ export default function AuthForm(props: authFormProps) {
   const phoneRegexInt = /^(07\d{8})$/;
 
   return (
-    <>
+    <div>
       <Formik
         initialValues={props.model}
         onSubmit={props.onSubmit}
@@ -17,7 +17,12 @@ export default function AuthForm(props: authFormProps) {
           email: Yup.string()
             .required("Acest camp este obligatoriu")
             .email("Email-ul nu este valid"),
-          password: Yup.string().required("Acest camp este obligatoriu"),
+          password: Yup.string()
+            .required("Acest camp este obligatoriu")
+            .min(
+              8,
+              "Parola trebuie să conțină cel puțin 8 caractere dintre care cel puțin o cifră și un caracter special"
+            ),
           phoneNumber: Yup.string()
             .matches(
               phoneRegexInt,
@@ -25,15 +30,15 @@ export default function AuthForm(props: authFormProps) {
             )
             .required("Acest câmp este obligatoriu"),
           userName: Yup.string()
+            .required("Acest camp este obligatoriu")
             .matches(
               /^[a-zA-Z0-9]*$/,
               "Numele de utilizator poate conține doar litere și cifre"
-            ).required("Acest camp este obligatoriu"),
+            ),
         })}
       >
         {(formikProps) => (
           <Form>
-            {/* <TextField displayName="Nume utilizator" field="userName" /> */}
             <MyTextField displayName="Email" field="email" />
             <MyTextField
               displayName="Password"
@@ -56,7 +61,7 @@ export default function AuthForm(props: authFormProps) {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 }
 

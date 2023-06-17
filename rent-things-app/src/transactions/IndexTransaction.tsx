@@ -15,7 +15,6 @@ import { userInfoDTO } from "../security/security.model";
 export default function IndexTransaction(props: IndexTransactionProps) {
   const { claims } = useContext(AuthenticationContext);
   const [reload, setReload] = useState<Boolean>(false);
-  const [lenderInfo, setLenderInfo] = useState<userInfoDTO>();
   //obtine username din claims
   function getUserName(): string {
     return claims.find((x) => x.name === "userName")?.value || "";
@@ -24,6 +23,7 @@ export default function IndexTransaction(props: IndexTransactionProps) {
 
   //delete - sterge o tranzactie respinsa sau in asteptare
   async function deleteTransaction(id: string) {
+    console.log("ola", id);
     try {
       await axios.delete(`${urlTransactions}/${id}`);
       Swal.fire({
@@ -42,11 +42,14 @@ export default function IndexTransaction(props: IndexTransactionProps) {
       <IndexEntity<transactionDTO>
         url={`${urlTransactions}/${props.urlTransactionParam}`}
         reload={reload}
+        title={props.title}
       >
-        {(transactions, buttons) => (
+        {(transactions, buttons) => {
+          console.log()
+          return (
           <>
             <TableHead>
-              <TableRow style={{ backgroundColor: '#d5aff5ae', color: 'white' }}>
+              <TableRow>
                 <TableCell></TableCell>
                 <TableCell align="left">Proprietar</TableCell>
                 <TableCell align="left">Produs</TableCell>
@@ -102,7 +105,7 @@ export default function IndexTransaction(props: IndexTransactionProps) {
                 ))}
             </TableBody>
           </>
-        )}
+        )}}
       </IndexEntity>
     </>
   );
@@ -111,4 +114,5 @@ export default function IndexTransaction(props: IndexTransactionProps) {
 interface IndexTransactionProps {
   urlTransactionParam?: string;
   statusParam?: number;
+  title: string;
 }

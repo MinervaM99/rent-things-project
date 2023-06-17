@@ -124,7 +124,8 @@ namespace RentThingsAPI.Migrations
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+						.IsRequired();
 
                     b.HasKey("Id");
 

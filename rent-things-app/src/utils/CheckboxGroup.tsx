@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import { FormCheck, FormGroup } from "react-bootstrap";
 import { ErrorMessage, useField } from "formik";
 import { InputLabel } from "@mui/material";
+import { number } from "joi";
 
 interface CheckboxGroupProps {
   options: { label: string; value: number }[];
   field: string;
   displayName: string;
+  value?: number;
 }
 
+
 export default function CheckboxGroup(props: CheckboxGroupProps) {
-  const [selectedValue, setSelectedValue] = useState<number | undefined>(); // Modificare: specifică tipul variabilei selectedValue
+  const [selectedValue, setSelectedValue] = useState<number | undefined>(props.value || 0); // Modificare: specifică tipul variabilei selectedValue
   const [, meta, helpers] = useField<number>(props.field); 
 
   const handleCheckboxChange = (value: number) => {

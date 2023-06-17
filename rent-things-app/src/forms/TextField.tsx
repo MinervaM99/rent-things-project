@@ -6,7 +6,13 @@ export default function MyTextField(props: textFieldProps) {
     <>
       <div className="mb-3">
         <InputLabel htmlFor={props.field}>{props.displayName} </InputLabel>
-        <Field name={props.field} id={props.field} className="form-control" type={props.type} />
+        <Field
+          style={{height: "35px"}}
+          name={props.field}
+          id={props.field}
+          className="form-control"
+          type={props.type}
+        />
         <ErrorMessage name={props.field}>
           {(msg) => <div className="text-danger">{msg}</div>}
         </ErrorMessage>

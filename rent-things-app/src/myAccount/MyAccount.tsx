@@ -57,7 +57,9 @@ export default function MyAccount() {
             borderRadius: "50%",
           }}
         >
-          <Link to={buildAvatarLink()}>{userName ? userName.charAt(0).toUpperCase() : null}</Link>
+          <Link to={buildAvatarLink()}>
+            {userName ? userName.charAt(0).toUpperCase() : null}
+          </Link>
         </Avatar>
         <ContainerLinks>
           <NavLinks>
@@ -70,19 +72,27 @@ export default function MyAccount() {
             </StyledLink>
             <Divider />
             <StyledLink
-               to="/myAccount/2"
+              to="#"
               onClick={() => handleOptionSelect("optiunea2")}
               selected={selectedOption === "optiunea2"}
             >
-              Tranzacțiiel mele
+              Cereri de imprumut inițiate
             </StyledLink>
             <Divider />
             <StyledLink
-              to="#"
+              to="/account/transactions"
               onClick={() => handleOptionSelect("optiunea3")}
               selected={selectedOption === "optiunea3"}
             >
-              Editeaza contul
+              Cereri in așteptare
+            </StyledLink>
+            <Divider />
+            <StyledLink
+              to="/account/transactions"
+              onClick={() => handleOptionSelect("optiunea3")}
+              selected={selectedOption === "optiunea3"}
+            >
+              Istoricul cererilor acceptate
             </StyledLink>
           </NavLinks>
         </ContainerLinks>
@@ -98,14 +108,23 @@ export default function MyAccount() {
         )}
         {selectedOption === "optiunea2" && (
           <>
-          {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
-            <h3>Cerereri de împrumut în așteptare</h3>
-            <IndexTransaction urlTransactionParam={`borrow/${userName}`} statusParam={1}/>
+            {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
+            <IndexTransaction
+              urlTransactionParam={`borrow/${userName}`}
+              statusParam={1}
+              title="Cerereri de împrumut în așteptare"
+            />
 
-            <h3>Cereri de imprumut acceptate</h3>
-            <IndexTransaction urlTransactionParam={`borrow/${userName}`} statusParam={2}/>
-            <h3>Cereri de imprumut respinse</h3>
-            <IndexTransaction urlTransactionParam={`borrow/${userName}`} statusParam={3}/>
+            <IndexTransaction
+              urlTransactionParam={`borrow/${userName}`}
+              statusParam={2}
+              title="Cereri de imprumut acceptate"
+            />
+            <IndexTransaction
+              urlTransactionParam={`borrow/${userName}`}
+              statusParam={3}
+              title="Cerereri de împrumut respinse"
+            />
           </>
         )}
         {selectedOption === "optiunea3" && (
@@ -120,7 +139,7 @@ export default function MyAccount() {
 
 const Container = styled.div`
   display: flex;
-  height: 100vh;
+  height: auto;
 `;
 const ContainerLinks = styled.div`
   padding-top: 35px;
@@ -128,7 +147,7 @@ const ContainerLinks = styled.div`
 const Menu = styled.div`
   width: 25%;
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #fff;
   justify-content: center;
 `;
 

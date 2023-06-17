@@ -85,7 +85,7 @@ export default function Pagination(props: paginationProps) {
 }
 
 interface linkModel {
-  page: number;
+  page: number; 
   enabled: boolean;
   text: string;
   active: boolean;

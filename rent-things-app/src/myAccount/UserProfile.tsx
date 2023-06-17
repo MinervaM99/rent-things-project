@@ -6,7 +6,7 @@ import { urlAccounts, urlItems } from "../endpoints";
 import { useNavigate, useParams } from "react-router-dom";
 import { userInfoDTO } from "../security/security.model";
 import MyAccount from "./MyAccount";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Box, Button, Container, Typography } from "@mui/material";
 import { generateRandomColor } from "../utils/utils";
 import styled from "styled-components";
 import React from "react";
@@ -19,14 +19,13 @@ export default function UserProfile() {
   const { userName }: any = useParams();
   const [items, setItems] = useState<itemDTO[]>([]);
   const [userInfo, setUserInfo] = useState<userInfoDTO>();
-  
+
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
   }
   const userNameClaim = getUserName();
   const randomColor = generateRandomColor();
 
-  console.log(userName);
   useEffect(() => {
     loadInfoUser();
   }, [userName]);
@@ -37,14 +36,13 @@ export default function UserProfile() {
 
   function loadInfoUser() {
     try {
-       axios
+      axios
         .get(`${urlAccounts}/${userName}`)
         .then((response: AxiosResponse<userInfoDTO>) => {
           setUserInfo(response.data);
           console.log(response.data);
         });
-    } catch (error: any) {
-    }
+    } catch (error: any) {}
   }
 
   function loadData() {
@@ -54,40 +52,39 @@ export default function UserProfile() {
         .then((response: AxiosResponse<itemDTO[]>) => {
           setItems(response.data);
         });
-    } catch (error: any) {
-     
-    }
+    } catch (error: any) {}
   }
-  console.log(userInfo?.email);
   return (
-    <div style={{ paddingLeft: 0, marginLeft: 0 }}>
+    <>
       <StyledDiv>
         <div style={{ display: "flex", paddingTop: "50px" }}>
           <Avatar
             sx={{
               bgcolor: randomColor,
-              width: 70,
-              height: 70,
+              width: 80,
+              height: 80,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "50px",
             }}
           >
-            <span style={{ fontSize: "34px" }}>
+            <span style={{ fontSize: "45px" }}>
               {userName.charAt(0).toUpperCase()}
             </span>
           </Avatar>
-
-          <span> {userInfo?.userName}</span>
+          <Box sx={{ marginLeft: "25px", paddingTop: "20px" }}>
+            <Typography> {userInfo?.userName}</Typography>
+            <br />
+            Email: {userInfo?.email}
+            <br />
+            Numar de telefon: {userInfo?.phoneNumber}
+          </Box>
         </div>
-        <span>
-          Email: {userInfo?.email}
-          <br />
-          Numar de telefon: {userInfo?.phoneNumber}
-        </span>
-        {userNameClaim == userName ? (
+
+        {userNameClaim === userName ? (
           <Button
+        sx={{padding: "20px", marginLeft: "40px"}}
             size="medium"
             color="inherit"
             onClick={() => navigate(`/account/edit`)}
@@ -96,16 +93,20 @@ export default function UserProfile() {
           </Button>
         ) : null}
       </StyledDiv>
-
-      <h3>Anunțuri publicate: </h3>
-      <ItemsList listOfItems={items} />
-    </div>
+      {items.length === 0 ? null : (
+        <Container>
+          <h3>Anunțurile pubilicate de {userInfo?.userName} </h3>
+          <ItemsList listOfItems={items} />
+        </Container>
+      )}
+    </>
   );
 }
 //to do cand apas pe buton, sa ma duca la ruta myAccount dar care sa aiba /user email astfel incat sa stie de la cine ia datele
 
-const StyledDiv = styled.div`
-  background-color: lightgreen;
-  height: 50vh;
+const StyledDiv = styled("div")`
+  background-color: #fff;
+  height: 45vh;
   width: 100%;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 `;
