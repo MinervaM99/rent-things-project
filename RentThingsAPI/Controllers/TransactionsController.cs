@@ -41,7 +41,11 @@ namespace RentThingsAPI.Controllers
 
 			if (isOverlap)
 			{
-				return BadRequest("Intervalul de date selecat se suprapune cu o tranzacție existentă");
+				return BadRequest("Intervalul de date selecat se suprapune cu o tranzacție existentă.");
+			}
+			if(transactionDTO.StartDate> transactionDTO.EndDate)
+			{
+				return BadRequest("Alegeți un interval de timp valid.");
 			}
 
 			var newTransaction = mapper.Map<Transaction>(transactionDTO);
@@ -96,7 +100,7 @@ namespace RentThingsAPI.Controllers
 					.AsQueryable();
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
-			var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
+			var transactions = await queryable.Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<TransactionDTO>>(transactions);
 		}
 
@@ -106,7 +110,7 @@ namespace RentThingsAPI.Controllers
 		{
 			var today = DateTime.Now;
 			var transaction = await context.Transactions.Include(x => x.User).Include(x => x.Item)
-				.Where(t => t.ItemId == itemId && t.StartDate > today)
+				.Where(t => t.ItemId == itemId && t.StartDate > today && t.Status==2).OrderBy(x => x.StartDate)
 				.ToListAsync();
 
 			return mapper.Map<List<TransactionDTO>>(transaction);
@@ -115,39 +119,47 @@ namespace RentThingsAPI.Controllers
 
 
 		//get all transaction by LenderId
-		[HttpGet("lend/{lenderId}")]
-		public async Task<ActionResult<List<TransactionDTO>>> GetAllByLender([FromQuery] PaginationDTO paginationDTO, string lenderId, [FromQuery]  int status)
+		[HttpGet("lend/{lenderId}/{status:int}")]
+		public async Task<ActionResult<List<TransactionDTO>>> GetAllByLender([FromQuery] PaginationDTO paginationDTO, string lenderId,  int status)
 		{
 			if (status < 1 || status > 3)
 			{
 				return BadRequest("Invalid status value. Status should be between 1 and 3.");
 			}
 			var userIdLend = await userManager.FindByNameAsync(lenderId);
-			if(userIdLend == null) { return NotFound(); }
-			var queryable = context.Transactions
-								.Include(t => t.Item).Include(x => x.User).Include(x => x.Item)
-								.Where(t => t.Item.UserId == userIdLend.Id && t.Status == status)
-								.AsQueryable();
-			await HttpContext.InsertParametersPaginationInHeader(queryable);
+			if (userIdLend == null) { return NotFound(); }
+			//var queryable = context.Transactions
+			//					.Include(t => t.Item).Include(x => x.User).Include(x => x.Item)
+			//					.Where(t => t.Item.UserId == userIdLend.Id && t.Status == status)
+			//					.AsQueryable();
+			//await HttpContext.InsertParametersPaginationInHeader(queryable);
 
-			var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
+			//var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
+			//return mapper.Map<List<TransactionDTO>>(transactions)
+			var transactions = await context.Transactions
+				.Include(t => t.Item)
+				.Include(x => x.User)
+				.Where(t => t.Item.UserId == userIdLend.Id && t.Status == status)
+				.OrderByDescending(x => x.StartDate)
+				.ToListAsync();
+
 			return mapper.Map<List<TransactionDTO>>(transactions);
 		}
 
 
 		////get all transaction by borrower UserName 
-		[HttpGet("borrow/{borrowerId}")]
-		public async Task<ActionResult<List<TransactionDTO>>> GetAllByBorrower([FromQuery] PaginationDTO paginationDTO, string borrowerId)
+		[HttpGet("borrow/{borrowerId}/{status:int}")]
+		public async Task<ActionResult<List<TransactionDTO>>> GetAllByBorrower([FromQuery] PaginationDTO paginationDTO, string borrowerId, int status)
 		{
 			var userIdBorrower = await userManager.FindByNameAsync(borrowerId);
 			if (userIdBorrower == null) { return NotFound(); }
 			var queryable = context.Transactions.Include(x=>x.User).Include(x=>x.Item)
-								.Where(t => t.UserId == userIdBorrower.Id)
+								.Where(t => t.UserId == userIdBorrower.Id && (status == 1 ? t.Status == status : t.Status != 1))
 								.AsQueryable(); 
 			
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
-			var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
+			var transactions = await queryable.OrderByDescending(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<TransactionDTO>>(transactions);
 		}
 
@@ -179,6 +191,7 @@ namespace RentThingsAPI.Controllers
 
 			return overlappingTransaction != null;
 		}
+
 	}
 	
 

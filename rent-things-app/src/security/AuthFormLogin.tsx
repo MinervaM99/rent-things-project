@@ -5,6 +5,8 @@ import TextField from "../forms/TextField";
 import Button from "../utils/Button";
 import { Link } from "react-router-dom";
 
+import { FormButton, FormCancelButton} from './AuthForm'
+
 export default function AuthFormLogin(props: authFormProps) {
   return (
     <>
@@ -25,13 +27,9 @@ export default function AuthFormLogin(props: authFormProps) {
               field="password"
               type="password"
             />
-
-            <Link className="btn btn-secondary" to="/" style={{ marginRight: '10px' }}>
-              Anuleaza
-            </Link>
-            <Button disabled={formikProps.isSubmitting} type="submit">
+            <FormButton disabled={formikProps.isSubmitting} type="submit">
               {props.textSubmitButton}
-            </Button>
+            </FormButton>
           </Form>
         )}
       </Formik>

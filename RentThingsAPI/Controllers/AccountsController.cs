@@ -64,7 +64,7 @@ namespace RentThingsAPI.Controllers
 			// queryable = queryable.Where(user => !userManager.IsInRoleAsync(user, "admin").Result);
 
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
-			var users = await queryable.OrderBy(x => x.Email).Paginate(paginationDTO).ToListAsync();
+			var users = await queryable.OrderBy(x => x.UserName).Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<UserDTO>>(users);
 		}
 
@@ -88,15 +88,25 @@ namespace RentThingsAPI.Controllers
 			return NoContent();
 		}
 
+
+		[HttpPost("removeAdmin")]
+		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+		public async Task<ActionResult> RemoveAdmin([FromBody] string userId)
+		{
+			var user = await userManager.FindByIdAsync(userId);
+			await userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
+			return NoContent();
+		}
+
 		[HttpPost("edit")]
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<IActionResult> UpdateUserFields([FromBody] UserEditDTO userEditDTO)
 		{
-			// Verificați identitatea utilizatorului
+			// Verifica identitatea utilizatorului
 			var user = await userManager.FindByNameAsync(userEditDTO.UserName);
 			if (user == null)
 			{
-				return NotFound(); // Tratați cazul în care utilizatorul nu a fost găsit
+				return NotFound(); //  cazul în care utilizatorul nu a fost găsit
 			}
 			user.PhoneNumber = userEditDTO.PhoneNumber;
 			user.Email = userEditDTO.Email;
@@ -123,7 +133,7 @@ namespace RentThingsAPI.Controllers
 			}
 			else
 			{
-				return BadRequest("Incorrect Login");
+				return BadRequest("Autentificare nereușită");
 			}
 		}
 
@@ -139,6 +149,7 @@ namespace RentThingsAPI.Controllers
 			return mapper.Map<UserDTO>(user);
 
 		}
+
 
 		[HttpGet("info/{userId}")]
 		public async Task<ActionResult<UserDTO>> GetUserInfoById(string userId)
@@ -180,9 +191,6 @@ namespace RentThingsAPI.Controllers
 			var user = await userManager.FindByEmailAsync(userCredentials.Email);
 			if (user == null)
 			{
-				// Tratează cazul în care utilizatorul nu este găsit în baza de date
-				// și ia măsuri corespunzătoare, cum ar fi returnarea unei erori sau a unui mesaj de avertizare.
-				// În acest exemplu, vom returna o valoare nulă pentru token și data de expirare.
 				return null;
 			}
 

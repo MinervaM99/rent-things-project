@@ -6,11 +6,9 @@ export default function Pagination(props: paginationProps) {
     if (link.page === props.currentPage) {
       return;
     }
-
     if (!link.enabled) {
       return;
     }
-
     props.onChange(link.page);
   }
 
@@ -18,11 +16,9 @@ export default function Pagination(props: paginationProps) {
     if (link.active) {
       return "active pointer";
     }
-
     if (!link.enabled) {
       return "disabled";
     }
-
     return "pointer";
   }
 
@@ -32,7 +28,7 @@ export default function Pagination(props: paginationProps) {
     const links: linkModel[] = [];
 
     links.push({
-      text: "Previous",
+      text: "<",
       enabled: previousPageEnabled,
       page: previousPage,
       active: false,
@@ -58,7 +54,7 @@ export default function Pagination(props: paginationProps) {
     const nextPage = props.currentPage + 1;
 
     links.push({
-      text: "Next",
+      text: ">",
       page: nextPage,
       enabled: nextPageEnabled,
       active: false,

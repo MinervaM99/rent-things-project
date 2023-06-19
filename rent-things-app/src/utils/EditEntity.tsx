@@ -37,7 +37,7 @@ export default function EditEntity<TCreation, TRead>(
           data: formData,
           headers: { "Content-Type": "multipart/form-data" },
         });
-        Swal.fire("Editat cu succes!");
+         Swal.fire("Editat cu succes!");
       } else {
         await axios.put(`${props.url}/${id}`, entityToEdit);
         Swal.fire("Editat cu succes!");

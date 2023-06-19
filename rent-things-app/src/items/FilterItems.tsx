@@ -1,7 +1,7 @@
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import { categoryDTO } from "../category/category.model";
 import Button from "../utils/Button";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { urlCategorirs, urlItems } from "../endpoints";
 import { itemDTO } from "./items.model";
@@ -15,8 +15,41 @@ import {
   TextField,
   Typography,
   InputLabel,
+  Divider,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import styled from "styled-components";
+
+const SearchBox = styled.div`
+  display: flex;
+  border-radius: 8px;
+  background-color: #f5f5f5e2;
+  width: 400px;
+  height: 50px;
+  margin-top: 6%;
+  border: 2px solid #007369;
+`;
+
+const SearchTextField = styled.input`
+  border-radius: 8px 0 0 8px;
+  height: 100%;
+  width: 100%;
+  border: none;
+  position: relative;
+  margin: 0;
+  font-size: 15px;
+  /* text-align: left; */
+  color: #008c72;
+`;
+
+const SearchBarButton = styled(Button)`
+  height: 46px;
+  width: 50px;
+  background-color: #25684f;
+  border-radius: 0 2px 2px 0;
+  border: none;
+`;
 
 export default function FilterItems() {
   const { itemName } = useParams();
@@ -66,18 +99,18 @@ export default function FilterItems() {
       });
   }
 
+  const handleKeyDown = (
+    event: KeyboardEvent<HTMLInputElement>,
+    formikProps: FormikProps<filterItemsForm>
+  ) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent form submission if Enter is pressed
+      formikProps.submitForm();
+    }
+  };
+
   return (
-    <Container maxWidth="lg">
-      <Box my={3} textAlign="center">
-        <Typography
-          variant="h4"
-          component="div"
-          fontWeight="bold"
-          color="text.secondary"
-        >
-          Găsește obiectul de care ai nevoie
-        </Typography>
-      </Box>
+    <>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
@@ -90,22 +123,84 @@ export default function FilterItems() {
           <>
             <Form>
               <div className="row gx-3 align-items-center">
-                <div className="col-auto">
-                  <TextField
-                    type="text"
-                    sx={{ width: "300px" }}
-                    className="form-control"
-                    id="name"
-                    placeholder="Numele produsului"
-                    {...formikProps.getFieldProps("name")}
-                  />
-                </div>
-
-                <div className="col-auto">
+                <Box
+                  my={3}
+                  textAlign="left"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    margin: "100px 0 100px 0",
+                    // marginBottom: "100px",
+                    // marginTop: "70px",
+                    width: "100%",
+                    justifyContent: "space-evenly",
+                  }}
+                >
+                  <div className="col-auto">
+                    <SearchBox>
+                      <SearchTextField
+                        aria-placeholder="Caută un obiect"
+                        id="name"
+                        placeholder="denumirea obiectului..."
+                        {...formikProps.getFieldProps("name")}
+                        onKeyDown={(event) => handleKeyDown(event, formikProps)}
+                      />
+                      <SearchBarButton>
+                        <SearchIcon
+                          onClick={() => formikProps.submitForm()}
+                          style={{ fontSize: "32px", color: "#fff" }}
+                        />
+                      </SearchBarButton>
+                    </SearchBox>
+                  </div>
+                  <Typography
+                    sx={{
+                      fontSize: "40px",
+                      width: "50%",
+                      color: "#008C72",
+                      fontFamily: "Lucida Console",
+                    }}
+                    variant="h4"
+                    component="div"
+                    fontWeight="bold"
+                  >
+                    Găsește obiectul de care<br/> ai nevoie 
+                    <Typography
+                      sx={{
+                        fontSize: "20px",
+                        width: "50%",
+                        fontFamily: "Lucida Console",
+                      }}
+                      variant="h1"
+                      component="div"
+                      color="text.secondary"
+                    >
+                      și vecinul dispus să<br /> îl împrumute
+                    </Typography>
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.3)", // Customize the shadow here
+                  }}
+                >
+                  <Divider />
+                </Box>
+                <div
+                  className="col-auto"
+                  style={{
+                    marginTop: "40px",
+                    marginBottom: "15px",
+                    marginLeft: "10px",
+                  }}
+                >
                   <Select
                     className="from-select"
                     id="category"
-                    sx={{ width: "200px", height: "40px" }}
+                    sx={{
+                      width: "150px",
+                      height: "30px",
+                    }}
                     placeholder="categorie"
                     {...formikProps.getFieldProps("categoryId")}
                   >
@@ -120,12 +215,15 @@ export default function FilterItems() {
                   </Select>
                 </div>
 
-                <div className="col-auto">
+                <div
+                  className="col-auto"
+                  style={{ marginTop: "40px", marginBottom: "15px" }}
+                >
                   <Select
                     className="form-select"
                     id="condition"
                     placeholder="conditie"
-                    sx={{ width: "200px", height: "40px" }}
+                    sx={{ width: "150px", height: "30px" }}
                     {...formikProps.getFieldProps("condition")}
                   >
                     <MenuItem sx={{ color: "gray" }} value={0}>
@@ -139,13 +237,16 @@ export default function FilterItems() {
                   </Select>
                 </div>
 
-                <div className="col-auto">
+                <div
+                  className="col-auto"
+                  style={{ marginTop: "40px", marginBottom: "15px" }}
+                >
                   <Button
                     className="btn btn-primary"
                     onClick={() => formikProps.submitForm()}
                     disabled={false}
                   >
-                    Filtreaza
+                    Caută
                   </Button>
                   <Button
                     className="btn btn-danger ms-3"
@@ -161,15 +262,24 @@ export default function FilterItems() {
                 </div>
               </div>
             </Form>
-            {items.length == 0 ? (
-              <InputLabel>Nu am găsit niciun obiect. </InputLabel>
+            {items.length === 0 ? (
+              <InputLabel
+                sx={{
+                  fontSize: "30px",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "50px",
+                }}
+              >
+                Nu s-a găsit niciun obiect.{" "}
+              </InputLabel>
             ) : (
               <ItemsList listOfItems={items} />
             )}
           </>
         )}
       </Formik>
-    </Container>
+    </>
   );
 }
 

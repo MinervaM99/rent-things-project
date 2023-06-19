@@ -56,7 +56,6 @@ export default function IndexTransactionStatus() {
       );
       Swal.fire({
         title: "Succes",
-        text: "Ai acceptat/respins cererea de imprumut.",
         icon: "success",
       });
       setReloadTransactions(true);
@@ -86,8 +85,8 @@ export default function IndexTransactionStatus() {
   //incarca date despre tranzactiile de manageuit
   async function loadTransactionRequests() {
     try {
-      const response = await axios.get(`${urlTransactions}/lend/${userName}`, {
-        params: { page, recordsLoades, status: 1 },
+      const response = await axios.get(`${urlTransactions}/lend/${userName}/${1 as number}`, {
+        params: { page, recordsLoades },
       });
       const totalAmountOfRecords = parseInt(
         response.headers["totalamountofrecords"],
@@ -98,8 +97,8 @@ export default function IndexTransactionStatus() {
       setinProcessTransactions([...response.data]);
       setReloadTransactions(false);
       console.log(response.data);
-    } catch (error) {
-      Swal.fire("", "Eroare", "error");
+    } catch (error:any) {
+      Swal.fire("Eroare", `${error.response.data}`, "error");
       navigate("/");
     }
   }
@@ -107,8 +106,8 @@ export default function IndexTransactionStatus() {
   //incarca date istoric tranzactii acceptate
   async function loadAcceptedTransactions() {
     try {
-      const response = await axios.get(`${urlTransactions}/lend/${userName}`, {
-        params: { page, recordsLoades, status: 2 },
+      const response = await axios.get(`${urlTransactions}/lend/${userName}/${2 as number}`, {
+        params: { page, recordsLoades },
       });
       const totalAmountOfRecords = parseInt(
         response.headers["totalamountofrecords"],
@@ -119,14 +118,22 @@ export default function IndexTransactionStatus() {
       setConfirmedTransactions([...response.data]);
       setReloadTransactions(false);
       console.log(response.data);
-    } catch (error) {
-      Swal.fire("", "Eroare", "error");
+    } catch (error:any) {
+      Swal.fire("Eroare", `${error.response.data}`, "error");
     }
   }
 
   return (
     <>
-      <Container maxWidth="lg" sx={{ marginBottom: "50px", marginTop: "30px" }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          marginBottom: "50px",
+          marginTop: "30px",
+          maxHeight: "400px",
+          overflowY: "auto",
+        }}
+      >
         <GenericListComponent
           list={inProcessTransactions}
           loadingUI={<Loading />}
@@ -214,8 +221,16 @@ export default function IndexTransactionStatus() {
         )}
       </Container>
 
-      <Container>
-        <h4>Istoric Tranzactii acceptate</h4>
+      <Container
+        maxWidth="lg"
+        sx={{
+          marginBottom: "50px",
+          marginTop: "30px",
+          maxHeight: "350px",
+          overflowY: "auto",
+        }}
+      >
+        <h4>Istoricul împrumuturilor oferite</h4>
         <GenericListComponent
           list={confirmedTransactions}
           loadingUI={<Loading />}
@@ -263,14 +278,6 @@ export default function IndexTransactionStatus() {
             </TableContainer>
           )}
         </GenericListComponent>
-
-        {hasMoreData2 && (
-          <div style={{ marginTop: "20px" }}>
-            <Button onClick={() => setPage2((prevPage) => prevPage + 1)}>
-              Încarcă următoarele
-            </Button>
-          </div>
-        )}
       </Container>
     </>
   );

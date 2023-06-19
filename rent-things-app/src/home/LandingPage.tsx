@@ -9,6 +9,7 @@ import {Container, Box, TextField, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SearchIcon from '@mui/icons-material/Search';
+import FilterItems from "../items/FilterItems";
 
 const SearchBox = styled(Box)`
   align-items: center;
@@ -70,14 +71,16 @@ export default function LandingPage() {
         <SearchIcon onClick={handleSearch}/>
         </Button>
       </SearchBox>
-      <h3>Anunțuri publicate</h3>
+      {/* <h3>Anunțuri publicate</h3> */}
       <AlertContext.Provider
         value={() => {
           loadData();
         }}
       >
-        <ItemsList listOfItems={items.lastItemsAdded} />
+        <FilterItems/>
+        {/* <ItemsList listOfItems={items.lastItemsAdded} /> */}
       </AlertContext.Provider>
+
     </Container>
   );
 }

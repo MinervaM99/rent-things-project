@@ -37,7 +37,7 @@ export default function EditUserForm(props: userFormProps) {
             <Button type="submit" disabled={formikProps.isSubmitting}>
               Salveaza
             </Button>
-            <Link className="btn btn-secondary" to="/category">
+            <Link className="btn btn-secondary" to={props.cancelUrl}>
               Anuleaza
             </Link>
           </Form>
@@ -50,4 +50,5 @@ export default function EditUserForm(props: userFormProps) {
 interface userFormProps {
   model: userInfoDTO;
   onSubmit(values: userInfoDTO, action: FormikHelpers<userInfoDTO>): void;
+  cancelUrl: string;
 }

@@ -4,7 +4,7 @@ export default function RecordsPerPageSelect(props: recordsPerPageSelectProps){
   return(
     <>
        <div className="mb-3" style ={{width: '150px'}}>
-        <label>Records per page: </label>
+        <label>Număr de înregistrări pe pagină: </label>
         <select
           className="form-select"
           defaultValue={5}

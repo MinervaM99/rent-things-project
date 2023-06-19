@@ -15,7 +15,7 @@ export interface itemDTO {
   weekPrice?: number;
   age: number;
   location?: string;
-  userId?: userInfoDTO; //information about userName
+  userId?: userInfoDTO;
 }
 
 export interface itemCreationDTO {

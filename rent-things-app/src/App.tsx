@@ -9,6 +9,7 @@ import { getClaims } from "./security/handelJWT";
 import configureInterceptor from "./utils/httpInterceptors";
 import NavigationMenu from "./Menu";
 import { Box } from "@mui/material";
+import styled from "styled-components";
 
 configureValidations();
 configureInterceptor();
@@ -64,14 +65,18 @@ function App() {
             ))}
           </Routes>
           </Box>
-        <footer className="bd-footer py-5 mt-5 bg-light">
+        <Footer className="bd-footer py-5 mt-5 bg-light">
           <div className="container">
             Rent things app {new Date().getFullYear().toString()}
           </div>
-        </footer>
+        </Footer>
       </AuthenticationContext.Provider>
     </>
   );
 }
+
+export const Footer = styled.footer`
+ 
+` 
 
 export default App;

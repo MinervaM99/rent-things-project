@@ -28,7 +28,6 @@ export default function EditUser() {
         .get(`${urlAccounts}/${userName}`)
         .then((response: AxiosResponse<userInfoDTO>) => {
           setUserInfo(response.data);
-          console.log(response.data);
         });
     } catch (error: any) {
       console.log(error.response.data);
@@ -38,9 +37,9 @@ export default function EditUser() {
   const handleSubmit = (values: userInfoDTO) => {
     try {
       axios.post(`${urlAccounts}/edit`, values);
-      console.log(values);
       Swal.fire("Editat cu succes!");
       navigate(`/account/${userName}`);
+      loadInfoUser();
     } catch (error) {
       Swal.fire("Eroare", "Ceva nu a funcționat.", "error");
       navigate(`/account/${userName}`);
@@ -60,7 +59,7 @@ export default function EditUser() {
         </Typography>
       </Box>
       {userInfo?.userName ? (
-        <EditUserForm model={userInfo} onSubmit={handleSubmit} />
+        <EditUserForm model={userInfo} onSubmit={handleSubmit} cancelUrl={`/account/${userName}`}/>
       ) : (
         <Loading />
       )}

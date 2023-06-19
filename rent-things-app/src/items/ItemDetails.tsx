@@ -122,7 +122,11 @@ export default function ItemDetails() {
         navigate(`/item/${id}`);
       }
     } catch (error: any) {
-      Swal.fire("Error", `${error.response.data}`, "error");
+      Swal.fire ({
+        icon: "error",
+        title: `${error.response.data}`,
+        confirmButtonText: "Ok",
+      });
     }
   }
   const randomColor = generateRandomColor();
@@ -223,6 +227,7 @@ export default function ItemDetails() {
                 onSubmit={(values) => sendRequest(values)}
               />
 
+              {/* Display unavailable dates */}
               <Typography>
                 {transactions.length === 0 ? null : (
                   <>
@@ -236,8 +241,7 @@ export default function ItemDetails() {
                       const itemDetails = (
                         <div key={index}>
                           <span>
-                            {formatDate(unavailableStartDate)} -
-                            {formatDate(unavailableEndDate)}
+                            {formatDate(unavailableStartDate)} -- {formatDate(unavailableEndDate)}
                           </span>
                         </div>
                       );
@@ -270,7 +274,7 @@ export default function ItemDetails() {
                     item.userId.userName.charAt(0).toUpperCase()}
                 </Avatar>
                 <Link style={{ margin: "8px" }} to={buildLink()}>
-                  {item?.userId?.userName}{" "}
+                  {item?.userId?.userName}
                 </Link>
               </Typography>
             </Paper>

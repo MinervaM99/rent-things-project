@@ -16,70 +16,125 @@ export default function IndexUsers() {
   }
 
   async function doAdmin(url: string, id: string) {
-    try{
+    try {
       await axios.post(url, JSON.stringify(id), {
         headers: { "Content-Type": "application/json" },
       });
-  
+
       Swal.fire({
         title: "Success",
-        text: "Operation finished correctly",
+        text: "Operația a fost realizată cu succes.",
         icon: "success",
       });
-    }catch(error:any){
+    } catch (error: any) {
       Swal.fire({
         title: "Eroare",
         text: `${error.response.data}`,
         icon: "error",
       });
-    } 
+    }
   }
 
   return (
-    <IndexEntity<userDTO> title="Users" url={`${urlAccounts}/listUsers`}>
-      {(users) => (
-        <>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users?.map((user) => (
-              <tr key={user.id}>
-                <td>
-                  <Button
-                    onClick={() =>
-                      customConfirm(
-                        () => makeAdmin(user.id),
-                        `${user.email} va avea drepturi de administrator`,
-                        "Acorda"
-                      )
-                    }
-                  >
-                    Make Admin
-                  </Button>
-
-                  <Button
-                    className="btn btn-danger ms-2"
-                    onClick={() =>
-                      customConfirm(
-                        () => removeAdmin(user.id),
-                        `Doresti sa stergi drepturile de administrator ale utilizatorului ${user.email} ?`,
-                        "Sterge"
-                      )
-                    }
-                  >
-                    Remove Admin
-                  </Button>
-                </td>
-                <td>{user.email}</td>
+    <>
+      <IndexEntity<userDTO> title="Users" url={`${urlAccounts}/listUsers`}>
+        {(users) => (
+          <>
+            <thead>
+              <tr>
+                <th>Acțiuni</th>
+                <th>Id</th>
+                <th>Nume de utilizator</th>
+                <th>Email</th>
               </tr>
-            ))}
-          </tbody>
-        </>
-      )}
-    </IndexEntity>
+            </thead>
+            <tbody>
+              {users?.map((user) => (
+                <tr key={user.id}>
+                  <td>
+                    <Button
+                      onClick={() =>
+                        customConfirm(
+                          () => makeAdmin(user.id),
+                          `${user.email} va avea drepturi de administrator`,
+                          "Acorda"
+                        )
+                      }
+                    >
+                      Acordă Drepturi
+                    </Button>
+
+                    <Button
+                      className="btn btn-danger ms-2"
+                      onClick={() =>
+                        customConfirm(
+                          () => removeAdmin(user.id),
+                          `Doresti sa stergi drepturile de administrator ale utilizatorului ${user.email} ?`,
+                          "Sterge"
+                        )
+                      }
+                    >
+                      Șterge drepturi
+                    </Button>
+                  </td>
+                  <td>{user.id}</td>
+                  <td>{user.userName}</td>
+                  <td>{user.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </>
+        )}
+      </IndexEntity>
+      <IndexEntity<userDTO> title="Users" url={`${urlAccounts}/listUsers`}>
+        {(users) => (
+          <>
+            <thead>
+              <tr>
+                <th>Acțiuni</th>
+                <th>Id</th>
+                <th>Nume de utilizator</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users?.map((user) => (
+                <tr key={user.id}>
+                  <td>
+                    <Button
+                      onClick={() =>
+                        customConfirm(
+                          () => makeAdmin(user.id),
+                          `${user.email} va avea drepturi de administrator`,
+                          "Acorda"
+                        )
+                      }
+                    >
+                      Acordă Drepturi
+                    </Button>
+
+                    <Button
+                      className="btn btn-danger ms-2"
+                      onClick={() =>
+                        customConfirm(
+                          () => removeAdmin(user.id),
+                          `Doresti sa stergi drepturile de administrator ale utilizatorului ${user.email} ?`,
+                          "Sterge"
+                        )
+                      }
+                    >
+                      Șterge drepturi
+                    </Button>
+                  </td>
+                  <td>{user.id}</td>
+                  <td>{user.userName}</td>
+                  <td>{user.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </>
+        )}
+      </IndexEntity>
+    </>
   );
 }

@@ -2,12 +2,11 @@ export interface claim {
   name: string;
   value: string;
 }
-
 export interface userCredentialsRegister {
-  email: string;
-  password: string;
-  phoneNumber: string;
   userName: string;
+  email?: string;
+  phoneNumber: string;
+  password: string;
 }
 export interface userCredentialsLogin {
   userName: string;

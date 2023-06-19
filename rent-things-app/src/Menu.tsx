@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { NavDropdown, Form, FormControl, Navbar } from "react-bootstrap";
+import { NavDropdown, Form, FormControl } from "react-bootstrap";
 import "./home/home.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Authorized from "./security/Authorized";
@@ -21,19 +21,19 @@ export default function Menu() {
     <>
       <Navbar className="navbar navbar-expand-lg ">
         <div className="container-fluid">
-          <NavLink className="navbar-brand" to="/">
+          <Logo className="navbar-brand" to="/">
             My rent app
-          </NavLink>
+          </Logo>
           <div
             className="collapse navbar-collapse"
             style={{ display: "flex", justifyContent: "space-between" }}
           >
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <NavbarLink className="nav-link" to="/items/filter">
                   Filtrează item-uri
                 </NavbarLink>
-              </li>
+              </li> */}
               <Authorized
                 role="admin"
                 authorized={
@@ -51,25 +51,29 @@ export default function Menu() {
                   </>
                 }
               ></Authorized>
-              <Authorized
-                authorized={
-                  <>
-                    <div className="collapse navbar-collapse">
-                      <ul className="navbar-nav">
-                        <NavbarLink className="nav-link" to="/items/create">
-                          Adaugă un item
-                        </NavbarLink>
-                      </ul>
-                    </div>
-                  </>
-                }
-              ></Authorized>
             </ul>
 
             <div className="d-flex">
               <Authorized
                 authorized={
                   <>
+                    <div className="collapse navbar-collapse">
+                      <ul className="navbar-nav">
+                        <Button
+                          size="medium"
+                
+                        >
+                          <NavbarLink className="nav-link" to="/items/create">
+                            Adaugă un anunț
+                          </NavbarLink>
+                        </Button>
+                      </ul>
+                    </div>
+                  </>
+                }
+              ></Authorized>
+              <Authorized
+                authorized={
                     <div className="collapse navbar-collapse">
                       <ul className="navbar-nav">
                         <NavbarLink
@@ -79,38 +83,45 @@ export default function Menu() {
                           Tranzactii
                         </NavbarLink>
                         <li className="nav-item mr-auto">
-                          <NavDropdown
-                            title={<span>Bună, {getUserName()}</span>}
+                          <NavOptionsDropdown
+                            title={
+                              <NavDropdownTitle>
+                                Bună, {getUserName()}
+                              </NavDropdownTitle>
+                            }
                             id="basic-nav-dropdown"
                           >
-                            <NavDropdown.Item>
+                            <NavDropdownItem>
                               {/* <Link to={buildUserAccountLink()}>Contul Meu</Link> */}
-                              <Link to="/myAccount/1">Contul Meu</Link>
-                            </NavDropdown.Item>
+                              <NavDropdownLink to="/myAccount/1">
+                                Contul Meu
+                              </NavDropdownLink>
+                            </NavDropdownItem>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item>
-                              <Button
+                            <NavDropdownItem>
+                              <NavDropdownLogout
                                 onClick={() => {
                                   logout();
                                   update([]);
                                   navigate("/");
                                 }}
-                                style={{ backgroundColor: "pink" }}
                               >
                                 Log out
-                              </Button>
-                            </NavDropdown.Item>
-                          </NavDropdown>
+                              </NavDropdownLogout>
+                            </NavDropdownItem>
+                          </NavOptionsDropdown>
                         </li>
                       </ul>
                     </div>
-                  </>
                 }
                 notAuthorized={
                   <>
-                    <Link to={"/login"} className="nav-link btn btn-link">
+                    <NavbarAuthentificationLink
+                      to={"/login"}
+                      className="nav-link btn btn-link"
+                    >
                       Autentificare
-                    </Link>
+                    </NavbarAuthentificationLink>
                   </>
                 }
               ></Authorized>
@@ -123,20 +134,91 @@ export default function Menu() {
 }
 
 export const NavbarLink = styled(Link)`
-  color: white;
+  color: #ffffff;
   font-size: x-large;
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
   margin: 10px;
   &:hover,
   &:focus {
-    color: blue;
-  }
-  &:active {
-    color: red;
+    color: #0b2b40;
   }
   @media (max-width: 700px) {
     display: none;
+  }
+`;
+
+const NavbarAuthentificationLink = styled(Link)`
+  color: #ffffff;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  margin: 10px;
+  &:hover,
+  &:focus {
+    color: #ffffff;
+    background-color: #0b2b40;
+  }
+  @media (max-width: 700px) {
+    display: none;
+  }
+  border-radius: 10px;
+  border: 1px #0b2b40 solid;
+`;
+
+export const Logo = styled(Link)`
+  color: #fff;
+  margin: 10px;
+  font-size: x-large;
+  cursor: pointer;
+  &:hover {
+    color: #0b2b40;
+  }
+`;
+
+export const NavDropdownLink = styled(Link)`
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+`;
+
+export const NavDropdownLogout = styled.span`
+  color: #3b8c6e;
+  font-size: 13px;
+  padding: 10px;
+
+  &:focus,
+  &:hover {
+    color: #1e5959;
+  }
+`;
+
+export const NavOptionsDropdown = styled(NavDropdown)`
+  color: #fff;
+  font-size: x-large;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  margin: 10px;
+  &:hover,
+  &:focus {
+    color: #0b2b40;
+  }
+`;
+
+const NavDropdownItem = styled(NavDropdown.Item)`
+  color: #fff;
+  margin: 0;
+`;
+
+const NavDropdownTitle = styled.span`
+  color: #fff;
+  .dropdown-toggle::after {
+    color: white;
+  }
+  &:hover,
+  &:focus {
+    color: #0b2b40;
   }
 `;
 
@@ -150,4 +232,15 @@ export const NavbarContainer = styled.nav`
 
 export const NavbarLinkContainer = styled.div`
   display: flex;
+  width: 100%;
+`;
+
+export const Navbar = styled.nav`
+  position: sticky;
+  top: 0;
+  z-index: 99999;
+  display: flex;
+  background-color: #25684f;
+  width: 100%;
+  height: 60px;
 `;

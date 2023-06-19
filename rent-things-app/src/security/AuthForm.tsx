@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import Button from "../utils/Button";
 import { Link } from "react-router-dom";
 import MyTextField from "../forms/TextField";
+import styled from "styled-components";
 
 export default function AuthForm(props: authFormProps) {
   const phoneRegexInt = /^(07\d{8})$/;
@@ -47,23 +48,47 @@ export default function AuthForm(props: authFormProps) {
             />
             <MyTextField displayName="Numar de telefon" field="phoneNumber" />
             <MyTextField displayName="Nume de utilizator" field="userName" />
-
-            <Link
-              className="btn btn-secondary"
-              style={{ marginRight: "10px" }}
-              to="/"
-            >
-              Anuleaza
-            </Link>
-            <Button disabled={formikProps.isSubmitting} type="submit">
+            <FormButton disabled={formikProps.isSubmitting} type="submit">
               {props.textSubmitButton}
-            </Button>
+            </FormButton>
           </Form>
         )}
       </Formik>
     </div>
   );
 }
+
+export const FormButton = styled(Button)`
+  margin: 10px 0 0px 0px;
+  border-radius: 5px;
+  font-size: 13px;
+  border: none;
+  background: #3B8C6E;
+  color: #fff;
+  text-align: center;
+  padding:5px;
+  height: 30px;
+  &:hover, &:focus{
+    background: #3b8c6ec2;
+  }
+  width: 100%
+`;
+
+export const FormCancelButton = styled(Link)`
+  margin: 6px 0 10px 0px;
+  border-radius: 5px;
+  font-size: 13px;
+  text-align: center;
+  border: none;
+  background: #1e5959;
+  color: #fff;
+  padding: 5px;
+  height: 30px;
+  &:hover,
+  &:focus {
+    background: #1e5959d1;
+  }
+`;
 
 interface authFormProps {
   model: userCredentialsRegister;

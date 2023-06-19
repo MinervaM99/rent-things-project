@@ -3,14 +3,13 @@ import { urlTransactions } from "../endpoints";
 import IndexEntity from "../utils/IndexEntity";
 import { transactionDTO } from "./transactions.model";
 import { formatDate } from "../utils/utils";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import AuthenticationContext from "../security/AuthentictionContext";
 import customConfirm from "../utils/customConfirm";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
-import { userInfoDTO } from "../security/security.model";
 //to do
 export default function IndexTransaction(props: IndexTransactionProps) {
   const { claims } = useContext(AuthenticationContext);
@@ -45,28 +44,30 @@ export default function IndexTransaction(props: IndexTransactionProps) {
         title={props.title}
       >
         {(transactions, buttons) => {
-          console.log()
+          console.log();
           return (
-          <>
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="left">Proprietar</TableCell>
-                <TableCell align="left">Produs</TableCell>
-                <TableCell align="left">Data de început</TableCell>
-                <TableCell align="left">Data de sfârșit</TableCell>
-                <TableCell align="left">Caștig</TableCell>
-                <TableCell align="left">Id Cerere</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {transactions
-                ?.filter(
-                  (transaction) => transaction.status === props.statusParam
-                )
-                .map((transaction, index) => (
+            <>
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Acțiuni</TableCell>
+                  <TableCell align="center">Status</TableCell>
+                  {props.transactionType === 1 ? (
+                    <TableCell align="left">Debitor</TableCell>
+                  ) : (
+                    <TableCell align="left">Proprietar</TableCell>
+                  )}
+
+                  <TableCell align="left">Produs</TableCell>
+                  <TableCell align="left">Data de început</TableCell>
+                  <TableCell align="left">Data de sfârșit</TableCell>
+                  <TableCell align="left">Câștig</TableCell>
+                  <TableCell align="left">Id Cerere</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {transactions.map((transaction, index) => (
                   <TableRow
-                  key={`${transaction.id}-${index}`}
+                    key={`${transaction.id}-${index}`}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     {transaction.status === 2 ? (
@@ -74,7 +75,7 @@ export default function IndexTransaction(props: IndexTransactionProps) {
                     ) : (
                       <TableCell align="right">
                         <Button
-                          style={{ color: 'red' }}
+                          style={{ color: "red" }}
                           onClick={() =>
                             customConfirm(
                               () => deleteTransaction(transaction.id),
@@ -87,25 +88,48 @@ export default function IndexTransaction(props: IndexTransactionProps) {
                         </Button>
                       </TableCell>
                     )}
-                    <TableCell align="left">
-                      <Link to={`/account/${transaction.itemId.id}`}>
-                        Detalii Proprietar
-                      </Link>
-                    </TableCell>
+                    {transaction.status === 2 ? (
+                      <TableCell>ACCEPTAT</TableCell>
+                    ) : transaction.status === 3 ? (
+                      <TableCell align="center">RESPINS</TableCell>
+                    ) : (
+                      <TableCell>...</TableCell>
+                    )}
+                    {props.transactionType === 1 ? (
+                      <TableCell align="left">
+                        <Link to={`/account/${transaction.itemId.id}`}>
+                          Detalii Debitor
+                        </Link>
+                      </TableCell>
+                    ) : (
+                      <TableCell align="left">
+                        <Link to={`/account/${transaction.itemId.id}`}>
+                          Detalii Proprietar
+                        </Link>
+                      </TableCell>
+                    )}
+
                     <TableCell align="left">
                       <Link to={`/item/${transaction.itemId}`}>
                         {transaction.itemId?.name}
                       </Link>
                     </TableCell>
-                    <TableCell align="left">{formatDate(transaction.startDate)}</TableCell>
-                    <TableCell align="left">{formatDate(transaction.endDate)}</TableCell>
-                    <TableCell align="left">{transaction.earnings} Ron</TableCell>
+                    <TableCell align="left">
+                      {formatDate(transaction.startDate)}
+                    </TableCell>
+                    <TableCell align="left">
+                      {formatDate(transaction.endDate)}
+                    </TableCell>
+                    <TableCell align="left">
+                      {transaction.earnings} Ron
+                    </TableCell>
                     <TableCell align="left">{transaction.id}</TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </>
-        )}}
+              </TableBody>
+            </>
+          );
+        }}
       </IndexEntity>
     </>
   );
@@ -113,6 +137,6 @@ export default function IndexTransaction(props: IndexTransactionProps) {
 
 interface IndexTransactionProps {
   urlTransactionParam?: string;
-  statusParam?: number;
   title: string;
+  transactionType?: number;
 }

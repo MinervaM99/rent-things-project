@@ -9,13 +9,13 @@ export default function IndexCategory() {
         url={urlCategorirs}
         createURL="../category/create"
         title="Categorii"
-        entityName="Adauga o categorie"
+        entityName="Adaugă o categorie nouă"
       >
         {(categories, buttons) => (
           <>
             <thead>
               <tr>
-                <th></th>
+                <th>Acțiuni</th>
                 <th>Nume categorie</th>
               </tr>
             </thead>

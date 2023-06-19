@@ -6,7 +6,14 @@ import GenericListComponent from "./GenericListComponent";
 import RecordsPerPageSelect from "./RecordsPerPageSelect";
 import customConfirm from "./customConfirm";
 import Swal from "sweetalert2";
-import { Box, Paper, Table, TableContainer, Typography} from "@mui/material";
+import {
+  Box,
+  Container,
+  Paper,
+  Table,
+  TableContainer,
+  Typography,
+} from "@mui/material";
 import Pagination from "./Pagination";
 import styled from "styled-components";
 
@@ -24,16 +31,16 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, recordsPerPage, props.reload]);
 
-  async function loadData() {
+  function loadData() {
     try {
-      await axios
+      axios
         .get(props.url, {
           params: { page, recordsPerPage },
         })
         .then((response: AxiosResponse<T[]>) => {
           const totalAmountOfRecords = parseInt(
             response.headers["totalamountofrecords"],
-            recordsPerPage
+            10
           );
           setTotalAmountOfPages(
             Math.ceil(totalAmountOfRecords / recordsPerPage)
@@ -56,7 +63,7 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
   }
 
   async function deleteEntity(id: number) {
-    console.log("delete",id);
+    console.log("delete", id);
     try {
       await axios.delete(`${props.url}/${id}`);
       loadData();
@@ -85,34 +92,27 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
   };
 
   return (
-    <>
+    <Container>
       <Box my={2} textAlign="center">
-        <StyledTypography
-        >
-          {props.title}
-        </StyledTypography>
+        <StyledTypography>{props.title}</StyledTypography>
       </Box>
 
       {props.createURL ? (
-        <Link className="btn btn-primary" to={props.createURL}>
-          {props.entityName}
-        </Link>
+        <div style={{ marginBottom: "0px" }}>
+          <Link className="btn btn-primary" to={props.createURL}>
+            {props.entityName}
+          </Link>
+        </div>
       ) : null}
-      {
-        <RecordsPerPageSelect
-          onChange={(amountOfRecords) => {
-            setPage(1);
-            setRecordsPerPage(amountOfRecords);
-          }}
-        />
-      }
 
-      <Pagination
-        currentPage={page}
-        totalAmountOfPages={totalAmountOfPages}
-        onChange={(newPage) => setPage(newPage)}
-      />
-
+      {/* <RecordsPerPageSelect
+        onChange={(amountOfRecords) => {
+          setPage(1);
+          setRecordsPerPage(amountOfRecords);
+        }}
+      /> */}
+      
+      {/* to do -- fa containerul fix, ca elementele de sub el sa nu se mute daca sunt putine inregistrari */}
       <GenericListComponent list={entities}>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -121,14 +121,22 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
         </TableContainer>
       </GenericListComponent>
 
+      <div>
+        <Pagination
+          currentPage={page}
+          totalAmountOfPages={totalAmountOfPages}
+          onChange={(newPage) => setPage(newPage)}
+        />
+      </div>
+
       {/* {hasMoreData && (
         <div style={{ marginTop: "20px" }}>
           <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
             Încarcă următoarele
           </Button>
         </div>
-      )} */}
-    </>
+      )}  */}
+    </Container>
   );
 }
 

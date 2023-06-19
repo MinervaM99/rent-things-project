@@ -4,6 +4,9 @@
   padding: 15px;
   position: relative;
   transition: all 0.3s ease;
+  position: fixed;
+  z-index: 99999;
+  top: 0
 }
 
 .nav.affix {

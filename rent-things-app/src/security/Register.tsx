@@ -9,13 +9,14 @@ import AuthenticationContext from "./AuthentictionContext";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Box, Container, Typography } from "@mui/material";
+import styled from "styled-components";
 
 export default function Register() {
   const [errors, setErrors] = useState<string[]>([]);
   const { update } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
-  async function register(credentials: userCredentialsRegister) {
+  async function register(credentials: userCredentialsRegister) { 
     try {
       setErrors([]);
       const response = await axios.post<authenticationResponse>(
@@ -45,27 +46,41 @@ export default function Register() {
   }
 
   return (
-    <Container maxWidth="sm">
+    <AuthContainer maxWidth = "xs" sx={{margin: "60px auto 50px auto"}}>
       <Box my={3} textAlign="center">
-        <Typography
+        <Typography sx={{fontFamily: "Lucida Console"}}
           variant="h4"
           component="div"
-          fontWeight="bold"
           color="text.secondary"
         >
           Crează un cont nou
         </Typography>
       </Box>
       <DisplayErrors errors={errors} />
-      <AuthForm
+      <AuthForm 
         model={{email: "", password: "", phoneNumber: "", userName: ""}}
         onSubmit={async (values) => await register(values)}
         textSubmitButton="Creaza contul"
       />
-      <p></p>
-      <div className="mb-3">
-        Ai deja un cont? <Link to={"../Login"}>Conecteaza-te</Link>
-      </div>
-    </Container>
+      
+      <AuthLink className="mb-3">
+      <Link to={"../login"}>Conecteaza-te</Link>Ai deja un cont? 
+      </AuthLink>
+    </AuthContainer>
   );
 }
+
+export const AuthLink = styled.div`
+position: relative;
+  
+ display: flex;
+ flex-direction: row-reverse;
+`
+
+export const AuthContainer = styled(Container)`
+  display: grid;
+  border-radius: 15px;
+  box-shadow: -1px -1px 5px #1e595910, 4px 6px 8px #3B8C6E;
+  padding: 15px 15px 20px 15px;
+`
+

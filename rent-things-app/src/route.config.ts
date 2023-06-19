@@ -34,7 +34,7 @@ const routes = [
   {path: '/account/edit', component: EditUser},
   {path: '/account/transactions', component: IndexTransactionStatus},
 
-  {path: '/', component: LandingPage},
+  {path: '/', component: FilterItems},
   {path: '*', component: NonExistingRoute}
 ];
 

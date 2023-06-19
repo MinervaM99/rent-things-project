@@ -8,12 +8,13 @@ import AuthenticationContext from "./AuthentictionContext";
 import { Link, useNavigate } from "react-router-dom";
 import AuthFormLogin from "./AuthFormLogin";
 import { Box, Container, Typography } from "@mui/material";
+import { AuthContainer, AuthLink } from "./Register";
 
 export default function Login(props: loginProps) {
   const [errors, setErrors] = useState<string[]>([]);
   const { update } = useContext(AuthenticationContext);
   const navigate = useNavigate();
-  
+
   async function login(credentials: userCredentialsLogin) {
     try {
       setErrors([]);
@@ -30,25 +31,29 @@ export default function Login(props: loginProps) {
   }
 
   return (
-      <Container maxWidth="sm">
-      <Box my={3} textAlign="center">
-        <Typography
-          variant="h4"
-          component="div"
-          fontWeight="bold"
-          color="text.secondary"
-        >
-          Autentifică-te
-        </Typography>
-      </Box>
-      <DisplayErrors errors={errors} />
-      <AuthFormLogin
-        model={{ userName: "", password: "" }}
-        onSubmit={async (values) => await login(values)}
-      />
-      <p></p>
-      <div className="mb-3">Nu ai un cont? <Link to={"../Register"}>Creaza un cont nou</Link></div>
-    </Container>
+    <>
+      <AuthContainer maxWidth="xs" sx={{ margin: "60px auto 50px auto" }}>
+        <Box my={3} textAlign="center">
+          <Typography
+            sx={{ fontFamily: "Lucida Console" }}
+            variant="h4"
+            component="div"
+            color="text.secondary"
+          >
+            Conectează-te
+          </Typography>
+        </Box>
+        <DisplayErrors errors={errors} />
+        <AuthFormLogin
+          model={{ userName: "", password: "" }}
+          onSubmit={async (values) => await login(values)}
+        />
+
+        <AuthLink className="mb-3">
+          <Link to={"../Register"}>Creaza un cont nou </Link>Nu ai un cont? 
+        </AuthLink>
+      </AuthContainer>
+    </>
   );
 }
 

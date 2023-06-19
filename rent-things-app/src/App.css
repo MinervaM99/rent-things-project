@@ -1,8 +1,5 @@
 .App {
+  display: grid;
   text-align: center;
-}
-
-.leaflet-container {
-  width: 90%;
-  height: 70vh;
+  font-family: "Lucida Console"
 }

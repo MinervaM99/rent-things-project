@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthenticationContext from "../security/AuthentictionContext";
 import ItemsList from "../items/ItemsList";
 import axios, { AxiosResponse } from "axios";
-import { urlItems } from "../endpoints";
+import { urlAccounts, urlItems } from "../endpoints";
 import { itemDTO } from "../items/items.model";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -68,7 +68,7 @@ export default function MyAccount() {
               onClick={() => handleOptionSelect("optiunea1")}
               selected={selectedOption === "optiunea1"}
             >
-              Produsele mele
+             Anunțurile mele
             </StyledLink>
             <Divider />
             <StyledLink
@@ -76,23 +76,23 @@ export default function MyAccount() {
               onClick={() => handleOptionSelect("optiunea2")}
               selected={selectedOption === "optiunea2"}
             >
-              Cereri de imprumut inițiate
+              Cereri de imprumut trimise
             </StyledLink>
             <Divider />
             <StyledLink
               to="/account/transactions"
-              onClick={() => handleOptionSelect("optiunea3")}
-              selected={selectedOption === "optiunea3"}
+              onClick={() => handleOptionSelect("optiunea4")}
+              selected={selectedOption === "optiunea4"}
             >
-              Cereri in așteptare
+              Cereri de împrumut primite
             </StyledLink>
             <Divider />
             <StyledLink
-              to="/account/transactions"
+              to="#"
               onClick={() => handleOptionSelect("optiunea3")}
               selected={selectedOption === "optiunea3"}
             >
-              Istoricul cererilor acceptate
+              Împrumuturi oferite
             </StyledLink>
           </NavLinks>
         </ContainerLinks>
@@ -100,7 +100,7 @@ export default function MyAccount() {
       <Content>
         {selectedOption === "optiunea1" && (
           <>
-            <h2>Produsele mele</h2>
+            <h2>Anunțurile mele</h2>
             <div className="mb-3">
               <ItemsList listOfItems={items} />
             </div>
@@ -110,26 +110,23 @@ export default function MyAccount() {
           <>
             {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
             <IndexTransaction
-              urlTransactionParam={`borrow/${userName}`}
-              statusParam={1}
+              urlTransactionParam={`borrow/${userName}/${1 as number}`}
               title="Cerereri de împrumut în așteptare"
             />
 
             <IndexTransaction
-              urlTransactionParam={`borrow/${userName}`}
-              statusParam={2}
-              title="Cereri de imprumut acceptate"
-            />
-            <IndexTransaction
-              urlTransactionParam={`borrow/${userName}`}
-              statusParam={3}
-              title="Cerereri de împrumut respinse"
+              urlTransactionParam={`borrow/${userName}/${2 as number}`}
+              title="Răspunsul la cererile de împrumut trimise"
             />
           </>
         )}
         {selectedOption === "optiunea3" && (
           <>
-            <h2>Cui ai dat</h2>
+            <IndexTransaction
+              urlTransactionParam={`lend/${userName}/${2 as number}`}
+              title="Istoricul imprumuturilor oferite"
+              transactionType={1} //lender
+            />
           </>
         )}
       </Content>
@@ -145,7 +142,7 @@ const ContainerLinks = styled.div`
   padding-top: 35px;
 `;
 const Menu = styled.div`
-  width: 25%;
+  width: 20%;
   padding: 20px;
   background-color: #fff;
   justify-content: center;
