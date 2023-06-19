@@ -43,7 +43,7 @@ export default function IndexTransaction(props: IndexTransactionProps) {
         reload={reload}
         title={props.title}
       >
-        {(transactions, buttons) => {
+        {(transactions) => {
           console.log();
           return (
             <>
@@ -97,20 +97,20 @@ export default function IndexTransaction(props: IndexTransactionProps) {
                     )}
                     {props.transactionType === 1 ? (
                       <TableCell align="left">
-                        <Link to={`/account/${transaction.itemId.id}`}>
+                        <Link to={`/account/${transaction.itemId?.id}`}>
                           Detalii Debitor
                         </Link>
                       </TableCell>
                     ) : (
                       <TableCell align="left">
-                        <Link to={`/account/${transaction.itemId.id}`}>
+                        <Link to={`/account/${transaction.itemId?.id}`}>
                           Detalii Proprietar
                         </Link>
                       </TableCell>
                     )}
 
                     <TableCell align="left">
-                      <Link to={`/item/${transaction.itemId}`}>
+                      <Link to={`/item/${transaction.itemId.id}`}>
                         {transaction.itemId?.name}
                       </Link>
                     </TableCell>

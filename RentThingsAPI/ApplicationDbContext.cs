@@ -7,10 +7,7 @@ namespace RentThingsAPI
 {
 	public class ApplicationDbContext : IdentityDbContext
 	{
-		public ApplicationDbContext([NotNullAttribute] DbContextOptions options) : base(options)
-		{
-
-		}
+		public ApplicationDbContext([NotNullAttribute] DbContextOptions options) : base(options){}
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{

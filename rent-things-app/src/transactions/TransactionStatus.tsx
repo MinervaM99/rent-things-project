@@ -196,7 +196,7 @@ export default function IndexTransactionStatus() {
                           </Link>
                         </td>
                         <td>
-                          <Link to={`/item/${transaction.itemId.id}`}>
+                          <Link to={`/item/${transaction.itemId?.id}`}>
                             {transaction.itemId.name}
                           </Link>
                         </td>

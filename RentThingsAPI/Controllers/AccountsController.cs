@@ -133,7 +133,7 @@ namespace RentThingsAPI.Controllers
 			}
 			else
 			{
-				return BadRequest("Autentificare nereușită");
+				return BadRequest("Autentificare nereușită.");
 			}
 		}
 
