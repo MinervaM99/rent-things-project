@@ -5,32 +5,22 @@ import * as Yup from "yup";
 import { useState } from "react";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import styled from "styled-components";
-import Button from "../utils/Button";
+import {FormButton} from "../style";
 import { transactionCreationDTO } from "./transactions.model";
 import { differenceInDays, isTomorrow, nextDay } from "date-fns";
 
 const DatePickerInput = styled(DatePicker)`
-  font-size: 1.5rem;
-  padding: 0.5rem;
+  font-size: 1.3rem;
   cursor: pointer;
-  max-width: 150px;
+  width: 150px;
   .react-datepicker__month-container {
     width: 500px; /* Ajustează dimensiunea calendarului în funcție de nevoile tale */
   }
 `;
 
-const CalendarIcon = styled(CalendarMonthOutlinedIcon)`
-  position: absolute;
-  top: 50%;
-  right: 0.5rem;
-  transform: translateY(-50%);
-  font-size: 1.5rem;
-  color: #555;
-  cursor: pointer;
-`;
-
 const DatePickerWrapper = styled.div`
   position: relative;
+  margin-top: 10px;
 `;
 
 const DatePickerContainer = styled.div`
@@ -108,7 +98,14 @@ export default function RentForm(props: rentFormProps) {
                     formikProps.setFieldValue("startDate", date);
                   }}
                 ></DatePickerInput>
-                <CalendarIcon />
+                <CalendarMonthOutlinedIcon
+                  sx={{
+                    position: "absolute",
+                    right: "5px",
+                    top: "24px",
+                    
+                  }}
+                />
               </DatePickerWrapper>
               <DatePickerWrapper>
                 pana in data de
@@ -133,7 +130,14 @@ export default function RentForm(props: rentFormProps) {
                     }
                   }}
                 />
-                <CalendarIcon />
+                <CalendarMonthOutlinedIcon
+                  sx={{
+                    position: "absolute",
+                    right: "13px",
+                    top: "24px",
+                    
+                  }}
+                />
               </DatePickerWrapper>
             </DatePickerContainer>
 
@@ -150,9 +154,9 @@ export default function RentForm(props: rentFormProps) {
             ) : null}
 
             <p>
-              {numDays == 0 ? (
+              {numDays === 0 ? (
                 <></>
-              ) : numDays == 1 ? (
+              ) : numDays === 1 ? (
                 <>1 zi selectată</>
               ) : (
                 <p>{numDays} zile selectate</p>
@@ -163,9 +167,9 @@ export default function RentForm(props: rentFormProps) {
             <Field type="hidden" name="startDate" />
             <Field type="hidden" name="endDate" />
 
-            <Button type="submit" onClick={() => formikProps.isSubmitting}>
+            <FormButton type="submit" onClick={() => formikProps.isSubmitting}>
               Trimite cererea de împrumut
-            </Button>
+            </FormButton>
           </Form>
         )}
       </Formik>

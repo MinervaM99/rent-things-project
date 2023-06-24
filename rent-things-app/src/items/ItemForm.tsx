@@ -1,8 +1,6 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { itemCreationDTO } from "../items/items.model";
 import * as Yup from "yup";
-import Button from "../utils/Button";
-import { Link } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { categoryDTO } from "../category/category.model";
@@ -13,10 +11,9 @@ import MyTextField from "../forms/TextField";
 import ReactQuillField from "../forms/ReactQuillField";
 import CheckboxGroup from "../utils/CheckboxGroup";
 import CheckBoxWithInput from "../utils/CheckBoxWithInput";
-import SelectGroup from "../utils/SelectGroup";
-import Map from "../utils/Map";
-import { Container, InputLabel } from "@mui/material";
+import { InputLabel } from "@mui/material";
 import { ageOptions, conditionOptions } from "../utils/SemanticNumberStorage";
+import {FormCancelButton, FormButton } from "../style";
 
 export default function ItemForm(props: itemFormProps) {
   const categoryOptions = props.selectedCategory.map((object) => ({
@@ -62,6 +59,9 @@ console.log(props.model, categoryOptions);
           }
         }}
         validationSchema={Yup.object({
+          location: Yup.string()
+          .required("Adaugă o locație pentru produsul tău.")
+          .firstLetterUppercase(),
           description: Yup.string()
             .required("Adaugă o descriere pentru produsul tău.")
             .firstLetterUppercase(),
@@ -82,7 +82,7 @@ console.log(props.model, categoryOptions);
         {(formikProps) => (
           <Form>
             <div className="mb-5">
-              <InputLabel sx={{paddingBottom: "10px"}}>
+              <InputLabel>
                 Selecteaza categoria care se potrivește cel mai bine produsului
                 tău
               </InputLabel>
@@ -160,12 +160,12 @@ console.log(props.model, categoryOptions);
             {/* <MyTextField field="location" displayName="Locația" /> */}
             <MyTextField field="location" displayName="Locația obiectului" />
 
-            <Button type="submit" disabled={formikProps.isSubmitting}>
+            <FormButton type="submit" disabled={formikProps.isSubmitting}>
               Salveaza
-            </Button>
-            <Link className="btn btn-secondary" to="../">
+            </FormButton>
+            <FormCancelButton style={{width: "100%"}} className="btn btn-secondary" to="../">
               Anuleaza
-            </Link>
+            </FormCancelButton>
           </Form>
         )}
       </Formik>

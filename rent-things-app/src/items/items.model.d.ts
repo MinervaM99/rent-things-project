@@ -10,7 +10,7 @@ export interface itemDTO {
   available?: boolean;
   categoryId: categoryDTO; 
   condition: number;
-  dayPrice?: number;
+  dayPrice: number;
   monthPrice?: numbers;
   weekPrice?: number;
   age: number;
@@ -28,8 +28,8 @@ export interface itemCreationDTO {
   //add the photo
   photo?: File;
   age: number;
-  location?: string;
-  dayPrice?: number;
+  location: string;
+  dayPrice: number;
   monthPrice?: number;
   weekPrice?: number;
   available?: boolean;

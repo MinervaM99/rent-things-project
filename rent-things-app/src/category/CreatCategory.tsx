@@ -50,6 +50,7 @@ export default function CreateCategory() {
           Adaugă o categorie nouă
         </Typography>
       </Box>
+      
       <DisplayErrors errors={errors} />
       <CategoryForm
         model={{ name: "" }}

@@ -20,7 +20,7 @@ export default function EditCategory() {
             }}
           />
         )}
-      </EditEntity>
+      </EditEntity> 
     </Container>
   );
 }

@@ -5,7 +5,14 @@ import { urlAccounts, urlItems, urlTransactions } from "../endpoints";
 import { itemDTO } from "./items.model";
 import Loading from "../utils/Loading";
 import DisplayErrors from "../utils/DisplayErrors";
-import { Avatar, Box, CardMedia, Paper, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CardMedia,
+  Container,
+  Paper,
+  Typography,
+} from "@mui/material";
 import RentForm from "../transactions/RentForm";
 import { userDTO, userInfoDTO } from "../security/security.model";
 import {
@@ -14,7 +21,8 @@ import {
 } from "../transactions/transactions.model";
 import Swal from "sweetalert2";
 import AuthenticationContext from "../security/AuthentictionContext";
-import { formatDate } from "../utils/utils";
+import { formatDate, generateRandomColor } from "../utils/utils";
+import Authorized from "../security/Authorized";
 
 export default function ItemDetails() {
   const { claims } = useContext(AuthenticationContext);
@@ -23,7 +31,7 @@ export default function ItemDetails() {
   //built the link for user details page using user name
   const buildLink = () => `/account/${item?.userId?.userName}`;
   const [item, setItem] = useState<itemDTO>();
-  const [userInfo, setUserInfo] = useState<userInfoDTO>();
+  // const [userInfo, setUserInfo] = useState<userInfoDTO>();
   const [errors, setErrors] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<transactionDTO[]>([]);
   const navigate = useNavigate();
@@ -33,26 +41,21 @@ export default function ItemDetails() {
     return claims.find((x) => x.name === "userName")?.value || "";
   }
   const userName = getUserName();
-  useEffect(() => {
-    loadInfoUser();
-  }, [userName]);
 
-  async function loadInfoUser() {
-    try {
-      await axios
-        .get(`${urlAccounts}/${userName}`)
-        .then((response: AxiosResponse<userInfoDTO>) => {
-          setUserInfo(response.data);
-          console.log(response.data);
-        });
-    } catch (error: any) {
-      setErrors(error.response.data);
-    }
+  function getUserId(): string {
+    return claims.find((x) => x.name === "userId")?.value || "";
   }
+  const myUserId = getUserId();
 
   useEffect(() => {
     loadItemDetails();
   }, [id]);
+
+  useEffect(() => {
+    if (item && item.userId) {
+      getUnavailableDates();
+    }
+  }, [item]);
 
   async function loadItemDetails() {
     try {
@@ -66,41 +69,32 @@ export default function ItemDetails() {
     }
   }
 
-  useEffect(() => {
-    if (item && item.userId) {
-      getUnavailableDates();
-    }
-  }, [item]);
-
   function getUnavailableDates() {
     try {
       axios
         .get(`${urlTransactions}/${id}`)
         .then((response: AxiosResponse<transactionDTO[]>) => {
           setTransactions(response.data);
-          console.log(response.data);
+          console.log("aaa", response.data);
         });
     } catch (error: any) {
       setErrors(error.response.data);
     }
   }
 
-  function generateRandomColor() {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
-
-  async function sendRequest(values: transactionCreationDTO) {
-    try {
-      console.log(values);
-      const startDate = new Date(values.startDate);
-      const endDate = new Date(values.endDate);
-      const confirmResult = await Swal.fire({
-        html: `
+  async function sendTransactionRequest(values: transactionCreationDTO) {
+    if (userName === "") {
+      Swal.fire({
+        icon: "error",
+        title: `Trebuie sa vă conectați pentru a trimite o cerere.`,
+        confirmButtonText: "Ok",
+      });
+    } else {
+      try {
+        const startDate = new Date(values.startDate);
+        const endDate = new Date(values.endDate);
+        const confirmResult = await Swal.fire({
+          html: `
           <h3>Doriti sa imprumutai acest produs?</h3>
           <p><strong>Din data de:</strong> ${formatDate(
             startDate
@@ -110,47 +104,47 @@ export default function ItemDetails() {
           )}, ora ${endDate.toLocaleTimeString()}</p>
           <p>Datorați proprietarului ${values.earnings} Ron</p>
         `,
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Trimite cererea",
-        cancelButtonText: "Cancel",
-      });
-      if (confirmResult.isConfirmed) {
-        await axios.post(urlTransactions, values);
-        console.log(values);
-        Swal.fire("Cererea de împrumut a fost trimisă!", "success");
-        navigate(`/item/${id}`);
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Trimite cererea",
+          cancelButtonText: "Cancel",
+        });
+        if (confirmResult.isConfirmed) {
+          const response = await axios.post(urlTransactions, values);
+          console.log(response.data);
+          Swal.fire("Cererea de împrumut a fost trimisă!", "success");
+          navigate(`/item/${id}`);
+        }
+      } catch (error: any) {
+        setErrors(error.response.data);
+        Swal.fire({
+          icon: "error",
+          html: `<h3> ${error.response.data}</h3> `,
+          confirmButtonText: "Ok",
+        });
       }
-    } catch (error: any) {
-      Swal.fire ({
-        icon: "error",
-        title: `${error.response.data}`,
-        confirmButtonText: "Ok",
-      });
     }
   }
   const randomColor = generateRandomColor();
+
   return (
-    <>
-      <DisplayErrors errors={errors} />
+    <Container sx={{ display: "flex", justifyContent: "center" }}>
+      {/* <DisplayErrors errors={errors} /> */}
       {item ? (
         <div style={{ display: "flex" }}>
           <Box
             sx={{
               display: "flex",
               // flexWrap: "wrap",
-              margin: "15px",
-              "& > :not(style)": {
-                m: 1,
-                width: 750,
-                height: 700,
-              },
+              height: "auto",
+              margin: "35px 0px 0px 0px",
+              width: "70%",
             }}
           >
             {/* Item detalis */}
             <Paper
               elevation={2}
-              sx={{ width: "600px", height: "450px", padding: "20px" }}
+              sx={{ width: "700px", height: "600px", padding: "20px" }}
             >
               <CardMedia
                 component="img"
@@ -167,12 +161,26 @@ export default function ItemDetails() {
                 gutterBottom
                 variant="h5"
                 component="div"
-                dangerouslySetInnerHTML={{ __html: item?.description }}
+                fontSize={"25px"}
+                dangerouslySetInnerHTML={{ __html: item.name }}
               ></Typography>
-              <Typography variant="body2" color="text.secondary">
-                {item?.dayPrice}
+              {/* <Typography
+                variant="body2"
+                color="text.secondary"
+                fontSize={"18px"}
+              >
+                {item.condition}
+              </Typography> */}
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                fontSize={"13px"}
+                dangerouslySetInnerHTML={{ __html: item.description }}
+              ></Typography>
+              <Typography sx={{ marginBottom: "100px", fontSize: "15px" , marginTop: "25px"}}>
+                Locatia produdului: {item?.location}
               </Typography>
-              <Typography>Locatia produdului: {item?.location}</Typography>
             </Paper>
           </Box>
 
@@ -180,33 +188,52 @@ export default function ItemDetails() {
           <Box
             sx={{
               // flexWrap: "wrap",
-              margin: "23px",
+              margin: "35px 0px 0px 25px",
+              position: "sticky",
             }}
           >
             <Paper
               elevation={2}
               sx={{ width: 350, height: 350, padding: "20px" }}
             >
-              <Typography gutterBottom variant="h5" component="div">
+              <Typography
+                gutterBottom
+                variant="h5"
+                component="div"
+                fontSize={"25px"}
+                
+              >
                 Împrumută produsul
               </Typography>
               {item?.dayPrice != null ? (
                 item?.dayPrice > 0 ? (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    fontSize={"15px"}
+                  >
                     {item?.dayPrice} Ron/zi
                   </Typography>
                 ) : null
               ) : null}
               {item?.weekPrice != null ? (
                 item?.weekPrice > 0 ? (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    fontSize={"13px"}
+                  >
                     {item?.weekPrice} Ron/saptamana
                   </Typography>
                 ) : null
               ) : null}
               {item?.monthPrice != null ? (
                 item?.monthPrice > 0 ? (
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    fontSize={"13px"}
+                  >
                     {item?.monthPrice} Ron/luna
                   </Typography>
                 ) : null
@@ -214,7 +241,7 @@ export default function ItemDetails() {
 
               <RentForm
                 model={{
-                  userId: `${userInfo?.id}`, //borrowerId (me)
+                  userId: `${myUserId}`, //borrowerId (me)
                   itemId: id,
                   startDate: "",
                   endDate: "",
@@ -224,14 +251,14 @@ export default function ItemDetails() {
                 dayPrice={item.dayPrice}
                 weekPrice={item.weekPrice}
                 monthPrice={item.monthPrice}
-                onSubmit={(values) => sendRequest(values)}
+                onSubmit={(values) => sendTransactionRequest(values)}
               />
 
               {/* Display unavailable dates */}
               <Typography>
                 {transactions.length === 0 ? null : (
                   <>
-                    <span>Acest produs nu este disponibil intervalul:</span>
+                    <span>Acest produs nu este disponibil in intervalul:</span>
                     {transactions.map((transaction, index) => {
                       const unavailableStartDate = new Date(
                         transaction.startDate
@@ -241,7 +268,8 @@ export default function ItemDetails() {
                       const itemDetails = (
                         <div key={index}>
                           <span>
-                            {formatDate(unavailableStartDate)} -- {formatDate(unavailableEndDate)}
+                            {formatDate(unavailableStartDate)} --{" "}
+                            {formatDate(unavailableEndDate)}
                           </span>
                         </div>
                       );
@@ -273,9 +301,18 @@ export default function ItemDetails() {
                   {item?.userId?.userName &&
                     item.userId.userName.charAt(0).toUpperCase()}
                 </Avatar>
-                <Link style={{ margin: "8px" }} to={buildLink()}>
-                  {item?.userId?.userName}
-                </Link>
+                <Authorized
+                  authorized={
+                    <Link style={{ margin: "8px" }} to={buildLink()}>
+                      {item?.userId?.userName}
+                    </Link>
+                  }
+                  notAuthorized={
+                    <span style={{ margin: "8px" }}>
+                      {item?.userId?.userName}
+                    </span>
+                  }
+                ></Authorized>
               </Typography>
             </Paper>
           </Box>
@@ -283,6 +320,6 @@ export default function ItemDetails() {
       ) : (
         <Loading />
       )}
-    </>
+    </Container>
   );
 }

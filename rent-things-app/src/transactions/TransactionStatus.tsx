@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@mui/material";
 import customConfirm from "../utils/customConfirm";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import GenericListComponent from "../utils/GenericListComponent";
@@ -29,20 +29,17 @@ export default function IndexTransactionStatus() {
     useState<transactionDTO[]>();
 
   const [hasMoreData, setHasMoreData] = useState(true);
-  const [hasMoreData2, setHasMoreData2] = useState(true);
-
   const [reloadTransactions, setReloadTransactions] = useState<boolean>(false);
-
   const [page, setPage] = useState(1);
   const [page2, setPage2] = useState(1);
   const recordsLoades: number = 5;
   const navigate = useNavigate();
 
   //obtine username din claims
-  function getUserName(): string {
-    return claims.find((x) => x.name === "userName")?.value || "";
+  function getUserId(): string {
+    return claims.find((x) => x.name === "userId")?.value || "";
   }
-  const userName = getUserName();
+  const myUserId = getUserId();
 
   //post- modifica statusul tranzactiei
   async function handleTrRequest(id: string, status: number) {
@@ -62,7 +59,7 @@ export default function IndexTransactionStatus() {
     } catch (error: any) {
       Swal.fire({
         title: "Eroare",
-        text: "A apărut o eroare. Încercați din nou.",
+        html: `${error.response.data}`,
         icon: "error",
       });
     }
@@ -85,7 +82,7 @@ export default function IndexTransactionStatus() {
   //incarca date despre tranzactiile de manageuit
   async function loadTransactionRequests() {
     try {
-      const response = await axios.get(`${urlTransactions}/lend/${userName}/${1 as number}`, {
+      const response = await axios.get(`${urlTransactions}/lend/${myUserId}/${1 as number}`, {
         params: { page, recordsLoades },
       });
       const totalAmountOfRecords = parseInt(
@@ -96,17 +93,17 @@ export default function IndexTransactionStatus() {
       setHasMoreData(page < totalPages);
       setinProcessTransactions([...response.data]);
       setReloadTransactions(false);
-      console.log(response.data);
     } catch (error:any) {
       Swal.fire("Eroare", `${error.response.data}`, "error");
-      navigate("/");
+      
     }
   }
 
   //incarca date istoric tranzactii acceptate
   async function loadAcceptedTransactions() {
+  
     try {
-      const response = await axios.get(`${urlTransactions}/lend/${userName}/${2 as number}`, {
+      const response = await axios.get(`${urlTransactions}/lend/${myUserId}/${2 as number}`, {
         params: { page, recordsLoades },
       });
       const totalAmountOfRecords = parseInt(
@@ -114,12 +111,11 @@ export default function IndexTransactionStatus() {
         10
       );
       const totalPages = Math.ceil(totalAmountOfRecords / recordsLoades);
-      setHasMoreData2(page < totalPages);
       setConfirmedTransactions([...response.data]);
       setReloadTransactions(false);
       console.log(response.data);
     } catch (error:any) {
-      Swal.fire("Eroare", `${error.response.data}`, "error");
+      Swal.fire("Eroare", "error");
     }
   }
 
@@ -153,8 +149,8 @@ export default function IndexTransactionStatus() {
                 <table className="table table-striped">
                   <thead>
                     <tr>
+                      <th style={{textAlign: "center"}}>Acțiuni</th>
                       <th></th>
-                      <th>Vecin</th>
                       <th>Produs</th>
                       <th>Data de început</th>
                       <th>Data de sfârșit</th>

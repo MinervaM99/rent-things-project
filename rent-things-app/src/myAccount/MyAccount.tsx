@@ -4,25 +4,32 @@ import ItemsList from "../items/ItemsList";
 import axios, { AxiosResponse } from "axios";
 import { urlAccounts, urlItems } from "../endpoints";
 import { itemDTO } from "../items/items.model";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 import { generateRandomColor } from "../utils/utils";
 import IndexTransaction from "../transactions/IndexTransaction";
 
 export default function MyAccount() {
   const { claims } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
   const [items, setItems] = useState<itemDTO[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>("optiunea1");
+  const [isDeleted, setIsDeleted] = useState<boolean>(false);
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
   }
   const userName = getUserName();
+  function getUserId(): string {
+    return claims.find((x) => x.name === "userId")?.value || "";
+  }
+  const myUserId = getUserId();
   const buildAvatarLink = () => `/account/${userName}`;
+  const buildEditLink = () => `/edit/${userName}`;
 
   useEffect(() => {
     loadData();
-  }, [userName]);
+  }, [userName, isDeleted]);
 
   function loadData() {
     try {
@@ -45,22 +52,32 @@ export default function MyAccount() {
   return (
     <Container>
       <Menu>
-        <Avatar
-          sx={{
-            bgcolor: randomColor,
-            width: 60,
-            height: 60,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            border: "2px solid yourColorHere",
-            borderRadius: "50%",
-          }}
-        >
-          <Link to={buildAvatarLink()}>
-            {userName ? userName.charAt(0).toUpperCase() : null}
-          </Link>
-        </Avatar>
+        <div style={{  marginLeft: "10px",paddingTop: "50px" }}>
+          <Avatar
+            sx={{
+              bgcolor: randomColor,
+              width: 60,
+              height: 60,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "2px solid yourColorHere",
+              borderRadius: "50%",
+            }}
+          >
+            <Link to={buildAvatarLink()}>
+              {userName ? userName.charAt(0).toUpperCase() : null}
+            </Link>
+          </Avatar>
+          <Button
+        sx={{paddingBottom: "10px", marginLeft: "-5px"}}
+            size="medium"
+            color="inherit"
+            onClick={() => navigate(`/account/edit`)}
+          >
+            Editează
+          </Button>
+        </div>
         <ContainerLinks>
           <NavLinks>
             <StyledLink
@@ -68,7 +85,7 @@ export default function MyAccount() {
               onClick={() => handleOptionSelect("optiunea1")}
               selected={selectedOption === "optiunea1"}
             >
-             Anunțurile mele
+              Anunțurile mele
             </StyledLink>
             <Divider />
             <StyledLink
@@ -77,14 +94,6 @@ export default function MyAccount() {
               selected={selectedOption === "optiunea2"}
             >
               Cereri de imprumut trimise
-            </StyledLink>
-            <Divider />
-            <StyledLink
-              to="/account/transactions"
-              onClick={() => handleOptionSelect("optiunea4")}
-              selected={selectedOption === "optiunea4"}
-            >
-              Cereri de împrumut primite
             </StyledLink>
             <Divider />
             <StyledLink
@@ -100,8 +109,8 @@ export default function MyAccount() {
       <Content>
         {selectedOption === "optiunea1" && (
           <>
-            <h2>Anunțurile mele</h2>
-            <div className="mb-3">
+           
+            <div className="mb-3" style={{marginLeft: "30px"}}>
               <ItemsList listOfItems={items} />
             </div>
           </>
@@ -110,12 +119,12 @@ export default function MyAccount() {
           <>
             {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
             <IndexTransaction
-              urlTransactionParam={`borrow/${userName}/${1 as number}`}
+              urlTransactionParam={`borrow/${myUserId}/${1 as number}`}
               title="Cerereri de împrumut în așteptare"
             />
 
             <IndexTransaction
-              urlTransactionParam={`borrow/${userName}/${2 as number}`}
+              urlTransactionParam={`borrow/${myUserId}/${2 as number}`}
               title="Răspunsul la cererile de împrumut trimise"
             />
           </>
@@ -123,7 +132,7 @@ export default function MyAccount() {
         {selectedOption === "optiunea3" && (
           <>
             <IndexTransaction
-              urlTransactionParam={`lend/${userName}/${2 as number}`}
+              urlTransactionParam={`lend/${myUserId}/${2 as number}`}
               title="Istoricul imprumuturilor oferite"
               transactionType={1} //lender
             />
@@ -140,6 +149,7 @@ const Container = styled.div`
 `;
 const ContainerLinks = styled.div`
   padding-top: 35px;
+  margin-left: 10px;
 `;
 const Menu = styled.div`
   width: 20%;

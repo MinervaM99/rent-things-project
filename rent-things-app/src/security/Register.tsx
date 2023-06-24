@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Box, Container, Typography } from "@mui/material";
 import styled from "styled-components";
+import { FormContainer, AuthLink } from "../style";
 
 export default function Register() {
   const [errors, setErrors] = useState<string[]>([]);
@@ -46,7 +47,7 @@ export default function Register() {
   }
 
   return (
-    <AuthContainer maxWidth = "xs" sx={{margin: "60px auto 50px auto"}}>
+    <FormContainer style={{ margin: "60px auto 50px auto", maxWidth: "500px" }}>
       <Box my={3} textAlign="center">
         <Typography sx={{fontFamily: "Lucida Console"}}
           variant="h4"
@@ -66,21 +67,9 @@ export default function Register() {
       <AuthLink className="mb-3">
       <Link to={"../login"}>Conecteaza-te</Link>Ai deja un cont? 
       </AuthLink>
-    </AuthContainer>
+    </FormContainer>
   );
 }
 
-export const AuthLink = styled.div`
-position: relative;
-  
- display: flex;
- flex-direction: row-reverse;
-`
 
-export const AuthContainer = styled(Container)`
-  display: grid;
-  border-radius: 15px;
-  box-shadow: -1px -1px 5px #1e595910, 4px 6px 8px #3B8C6E;
-  padding: 15px 15px 20px 15px;
-`
 

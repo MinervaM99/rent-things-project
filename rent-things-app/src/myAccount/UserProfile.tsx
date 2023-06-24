@@ -58,6 +58,7 @@ export default function UserProfile() {
     <>
       <StyledDiv>
         <div style={{ display: "flex", paddingTop: "50px" }}>
+        <div style={{ display: "flex", paddingTop: "15px" }}>
           <Avatar
             sx={{
               bgcolor: randomColor,
@@ -73,6 +74,7 @@ export default function UserProfile() {
               {userName.charAt(0).toUpperCase()}
             </span>
           </Avatar>
+          </div>
           <Box sx={{ marginLeft: "25px", paddingTop: "20px" }}>
             <Typography> {userInfo?.userName}</Typography>
             <br />
@@ -95,8 +97,16 @@ export default function UserProfile() {
       </StyledDiv>
       {items.length === 0 ? null : (
         <Container>
-          <h3>Anunțurile pubilicate de {userInfo?.userName} </h3>
-          <ItemsList listOfItems={items} />
+           <Typography
+            sx={{ paddingTop: "20px" ,paddingBottom: "20px", marginLeft: "60px" }}
+            variant="h5"
+            component="div"
+            color="text.secondary"
+          >
+            Anunțuri pubilicate de {userInfo?.userName} 
+          </Typography>
+          <div style={{ display: "flex", paddingLeft: "45px" }}>
+          <ItemsList listOfItems={items} /></div>
         </Container>
       )}
     </>
@@ -106,7 +116,7 @@ export default function UserProfile() {
 
 const StyledDiv = styled("div")`
   background-color: #fff;
-  height: 45vh;
+  height: 35vh;
   width: 100%;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
 `;

@@ -5,9 +5,10 @@ import TextField from "../forms/TextField";
 import * as Yup from "yup";
 import { userInfoDTO } from "../security/security.model";
 import { Container } from "@mui/material";
+import { FormButton, FormCancelButton } from "../style";
 
 export default function EditUserForm(props: userFormProps) {
-  const phoneRegexInt = /^(07\d{8})$/; 
+  const phoneRegexInt = /^(07\d{8})$/;
   return (
     <>
       <Formik
@@ -29,17 +30,17 @@ export default function EditUserForm(props: userFormProps) {
 
         {(formikProps) => (
           <Form>
-           
-
+            <br/>
             <TextField field="email" displayName="Email" />
+            <br/>
             <TextField field="phoneNumber" displayName="Numar de telefon" />
 
-            <Button type="submit" disabled={formikProps.isSubmitting}>
-              Salveaza
-            </Button>
-            <Link className="btn btn-secondary" to={props.cancelUrl}>
+            <FormButton disabled={formikProps.isSubmitting} type="submit" style={{marginTop: "30px"}}>
+            Salveaza
+            </FormButton>
+            <FormCancelButton style={{width: "100%"}} className="btn btn-secondary" to="/myAccount/1">
               Anuleaza
-            </Link>
+            </FormCancelButton>
           </Form>
         )}
       </Formik>

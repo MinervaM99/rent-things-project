@@ -6,13 +6,12 @@ import { itemCreationDTO, itemDTO } from "./items.model";
 import { convertItemToFormData } from "../utils/formDataUtils";
 import EditEntity from "../utils/EditEntity";
 import { categoryDTO } from "../category/category.model";
-import { Container } from "@mui/material";
+import { FormContainer } from "../style";
 
 export default function EditItem() {
   const [listCategory, setListCategory] = useState<categoryDTO[]>([]);
 
   function transform(item: itemDTO): itemCreationDTO {
-
     console.log("bbb", item);
     return {
       name: item.name,
@@ -25,7 +24,8 @@ export default function EditItem() {
       monthPrice: item.monthPrice,
       condition: item.condition,
       available: item.available,
-      categoryId: item.categoryId?.id
+      categoryId: item.categoryId?.id,
+      location: `${item.location ? item.location: ""}`
     };
   }
   //to do - categoryId?
@@ -39,7 +39,9 @@ export default function EditItem() {
   }, []);
 
   return (
-    <Container maxWidth="sm">
+    <FormContainer
+      style={{ margin: "60px auto 50px auto", maxWidth: "700px" }}
+    >
       <EditEntity<itemCreationDTO, itemDTO>
         url={urlItems}
         indexURL="/myAccount/1"
@@ -57,7 +59,7 @@ export default function EditItem() {
             }))}
           ></ItemForm>
         )}
-      </EditEntity>     
-    </Container>
+      </EditEntity>
+    </FormContainer>
   );
 }

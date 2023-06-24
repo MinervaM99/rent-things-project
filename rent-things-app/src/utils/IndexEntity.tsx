@@ -45,9 +45,10 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
           setTotalAmountOfPages(
             Math.ceil(totalAmountOfRecords / recordsPerPage)
           );
-          setEntities(response.data);
-          console.log("aaaa", response.data);
+          setEntities((prevEntities) => [...prevEntities, ...response.data]);
+        setHasMoreData(page < totalAmountOfPages);
         });
+      //to do Props.setRload(true)
 
       // const totalAmountOfRecords = parseInt(
       //   response.headers["totalamountofrecords"],
@@ -78,15 +79,16 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
     return (
       <>
         <Link className="btn btn-success" to={editURL}>
-          Edit
+          Editează
         </Link>
 
-        <Button
+        <button
+          style={{ marginLeft: "10px" }}
           onClick={() => customConfirm(() => deleteEntity(id))}
           className="btn btn-danger"
         >
-          Delete
-        </Button>
+          Șterge
+        </button>
       </>
     );
   };
@@ -97,21 +99,13 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
         <StyledTypography>{props.title}</StyledTypography>
       </Box>
 
-      {props.createURL ? (
-        <div style={{ marginBottom: "0px" }}>
-          <Link className="btn btn-primary" to={props.createURL}>
-            {props.entityName}
-          </Link>
-        </div>
-      ) : null}
-
       {/* <RecordsPerPageSelect
         onChange={(amountOfRecords) => {
           setPage(1);
           setRecordsPerPage(amountOfRecords);
         }}
       /> */}
-      
+
       {/* to do -- fa containerul fix, ca elementele de sub el sa nu se mute daca sunt putine inregistrari */}
       <GenericListComponent list={entities}>
         <TableContainer component={Paper}>
@@ -136,6 +130,21 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
           </Button>
         </div>
       )}  */}
+      {props.createURL ? (
+        <div
+          style={{
+            marginTop: "0px",
+            width: "96%",
+            justifyContent: "flex-end",
+            display: "flex",
+            // marginTop: "20px"
+          }}
+        >
+          <Link className="btn btn-primary" to={props.createURL}>
+            {props.entityName}
+          </Link>
+        </div>
+      ) : null}
     </Container>
   );
 }

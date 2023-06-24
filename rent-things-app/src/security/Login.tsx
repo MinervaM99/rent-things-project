@@ -8,7 +8,7 @@ import AuthenticationContext from "./AuthentictionContext";
 import { Link, useNavigate } from "react-router-dom";
 import AuthFormLogin from "./AuthFormLogin";
 import { Box, Container, Typography } from "@mui/material";
-import { AuthContainer, AuthLink } from "./Register";
+import { FormContainer, AuthLink } from "../style";
 
 export default function Login(props: loginProps) {
   const [errors, setErrors] = useState<string[]>([]);
@@ -32,7 +32,7 @@ export default function Login(props: loginProps) {
 
   return (
     <>
-      <AuthContainer maxWidth="xs" sx={{ margin: "60px auto 50px auto" }}>
+      <FormContainer style={{ margin: "60px auto 50px auto", maxWidth: "500px" }}>
         <Box my={3} textAlign="center">
           <Typography
             sx={{ fontFamily: "Lucida Console" }}
@@ -52,7 +52,7 @@ export default function Login(props: loginProps) {
         <AuthLink className="mb-3">
           <Link to={"../Register"}>Creaza un cont nou </Link>Nu ai un cont? 
         </AuthLink>
-      </AuthContainer>
+      </FormContainer>
     </>
   );
 }

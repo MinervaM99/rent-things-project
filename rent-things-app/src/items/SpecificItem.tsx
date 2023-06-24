@@ -9,6 +9,8 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Divider,
+  Paper,
   Typography,
 } from "@mui/material";
 import { urlItems } from "../endpoints";
@@ -18,6 +20,46 @@ import customConfirm from "../utils/customConfirm";
 import { useContext } from "react";
 import AlertContext from "../utils/AlertContext";
 import styled from "styled-components";
+import { dropRight } from "lodash";
+
+export const ItemName = styled(Link)`
+  font-size: 19px;
+  color: black;
+  margin-bottom: 10px;
+  text-decoration: none;
+  &:hover {
+    color: black;
+  }
+`;
+
+export const ItemPrice = styled(Link)`
+  font-size: 15px;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+  &:hover {
+    color: black;
+  }
+`;
+
+export const ItemDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+`;
+
+const ItemNameBox = styled.div`
+  margin-bottom: 10px;
+  height: 57px;
+`;
+
+const ItemPricesBox = styled.div`
+  margin-top: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 62px;
+`;
 
 export default function SpecificItem(props: itemDTO) {
   const buildLink = () => `/item/${props.id}`;
@@ -39,60 +81,77 @@ export default function SpecificItem(props: itemDTO) {
         text: "Anunțul a fos șters.",
         icon: "success",
         confirmButtonText: "OK",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate(`../myAccount`); // Navigăm doar dacă butonul "OK" a fost apăsat
-        }
       });
     } catch (error) {
       Swal.fire("Eroare", "error");
-      navigate(`../myAccount`);
+      navigate(`../myAccount/1`);
     }
   }
 
   return (
-    <Container>
-      <Box
-        sx={{
-          // display: "flex",
-          // flexWrap: "wrap",
-          "& > :not(style)": {
-            width: 750,
-            height: 290,
-          },
-        }}
+    <Container >
+      <Paper
+        elevation={3}
+        sx={{ height: "400px", width: "280px", margin: "15px" }}
       >
-        <Card sx={{ maxWidth: 270, margin: 1, height: 200 }}>
-          <CardActionArea>
-            <CardContent>
-              <Link to={buildLink()}>
-                <CardMedia
-                  component="img"
-                  image={props.photo}
-                  alt="Product"
-                  style={{
-                    objectFit: "cover",
-                    height: "170px",
-                    width: "auto",
-                  }}
-                />
-              </Link>
-            </CardContent>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                <Link to={buildLink()}>{props.name}</Link>
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                <Link to={buildLink()}>{props.dayPrice}</Link>
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </Box>
+        {/* <ItemBox> */}
+        <CardContent
+          sx={{
+            display: "flex",
+            padding: "1px",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#fff",
+          }}
+        >
+          <Link to={buildLink()}>
+            <CardMedia
+                component="img"
+                image={props.photo}
+                alt="Product"
+                style={{
+                  objectFit: "cover",
+                  height: "200px",
+                  maxWidth: "230",
+                }}
+              />
+          </Link>
+        </CardContent>
+        <ItemDetails>
+          <ItemNameBox>
+            <ItemName to={buildLink()}>{props.name}</ItemName>
+          </ItemNameBox>
+          <Divider />
+          <ItemPricesBox>
+            <ItemPrice to={buildLink()}>
+              {props.dayPrice / 10 < 1 ? (
+                <>
+                  <pre></pre>
+                  {props.dayPrice}
+                </>
+              ) : (
+                props.dayPrice
+              )}{" "}
+              RON/zi
+            </ItemPrice>
+            {props.weekPrice ? (
+              <ItemPrice to={buildLink()}>
+                {props.weekPrice} RON/saptamana
+              </ItemPrice>
+            ) : null}
+            {props.monthPrice ? (
+              <ItemPrice to={buildLink()}>
+                {props.monthPrice} RON/luna
+              </ItemPrice>
+            ) : null}
+          </ItemPricesBox>
+          <p style={{ color: "gray", fontWeight: "bold" }}>{props.location}</p>
+        </ItemDetails>
+        {/* </ItemBox> */}
+      </Paper>
 
       {isSpecificRoute && (
-        <Card sx={{ maxWidth: 270, margin: 1, height: 40 }}>
-          <CardActions>
+        <div style={{display: "flex", marginLeft:"20px"}}>
             <Button
               size="medium"
               color="error"
@@ -106,17 +165,30 @@ export default function SpecificItem(props: itemDTO) {
             >
               Șterge
             </Button>
-            <Button size="medium" color="inherit" onClick={handleOnClickEdit}>
+            <Button
+              size="medium"
+              color="inherit"
+              onClick={handleOnClickEdit}
+              style={{ display: "flex" }}
+            >
               Editează
             </Button>
-          </CardActions>
-        </Card>
+            </div>
+        
       )}
+      
     </Container>
   );
 }
 
+const ItemBox = styled(Paper)`
+  height: 407px;
+  width: 280px;
+  margin: 15px;
+  background-color: #fff;
+`;
+
 const Container = styled.div`
   display: block;
-  padding: 0;
+  margin: 0;
 `;

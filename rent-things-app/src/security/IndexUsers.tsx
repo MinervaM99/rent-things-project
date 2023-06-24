@@ -5,8 +5,17 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { userDTO } from "./security.model";
 import { urlAccounts } from "../endpoints";
+import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { useContext } from "react";
+import AuthenticationContext from "./AuthentictionContext";
 
 export default function IndexUsers() {
+  const { update, claims } = useContext(AuthenticationContext);
+
+  function getUserName(): string {
+    return claims.filter((x) => x.name === "userName")[0]?.value;
+  }
+  const userName = getUserName();
   async function makeAdmin(id: string) {
     await doAdmin(`${urlAccounts}/makeAdmin`, id);
   }
@@ -37,104 +46,59 @@ export default function IndexUsers() {
 
   return (
     <>
-      <IndexEntity<userDTO> title="Users" url={`${urlAccounts}/listUsers`}>
-        {(users) => (
-          <>
-            <thead>
-              <tr>
-                <th>Acțiuni</th>
-                <th>Id</th>
-                <th>Nume de utilizator</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users?.map((user) => (
-                <tr key={user.id}>
-                  <td>
-                    <Button
-                      onClick={() =>
-                        customConfirm(
-                          () => makeAdmin(user.id),
-                          `${user.email} va avea drepturi de administrator`,
-                          "Acorda"
-                        )
-                      }
-                    >
-                      Acordă Drepturi
-                    </Button>
+      <IndexEntity<userDTO> title="Utilizatorii ShareCircle" url={`${urlAccounts}/listUsers`}>
+        {(users) => { 
+          return (
+            <>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{fontSize:"16px"}}>Acțiuni</TableCell>
+                  <TableCell sx={{fontSize:"16px"}}>Id</TableCell>
+                  <TableCell sx={{fontSize:"16px"}}>Nume de utilizator</TableCell>
+                  <TableCell sx={{fontSize:"16px"}}>Email</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {users?.map((user) => ( 
+                  <TableRow key={user.id}>
+                    {user.userName === userName? null :<><TableCell>
+                      <Button
+                        onClick={() =>
+                          customConfirm(
+                            () => makeAdmin(user.id),
+                            `${user.email} va avea drepturi de administrator`,
+                            "Acorda"
+                          )
+                        }
+                      >
+                        Acordă Drepturi de Admin
+                      </Button>
 
-                    <Button
-                      className="btn btn-danger ms-2"
-                      onClick={() =>
-                        customConfirm(
-                          () => removeAdmin(user.id),
-                          `Doresti sa stergi drepturile de administrator ale utilizatorului ${user.email} ?`,
-                          "Sterge"
-                        )
-                      }
-                    >
-                      Șterge drepturi
-                    </Button>
-                  </td>
-                  <td>{user.id}</td>
-                  <td>{user.userName}</td>
-                  <td>{user.email}</td>
-                </tr>
-              ))}
-            </tbody>
-          </>
-        )}
-      </IndexEntity>
-      <IndexEntity<userDTO> title="Users" url={`${urlAccounts}/listUsers`}>
-        {(users) => (
-          <>
-            <thead>
-              <tr>
-                <th>Acțiuni</th>
-                <th>Id</th>
-                <th>Nume de utilizator</th>
-                <th>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users?.map((user) => (
-                <tr key={user.id}>
-                  <td>
-                    <Button
-                      onClick={() =>
-                        customConfirm(
-                          () => makeAdmin(user.id),
-                          `${user.email} va avea drepturi de administrator`,
-                          "Acorda"
-                        )
-                      }
-                    >
-                      Acordă Drepturi
-                    </Button>
-
-                    <Button
-                      className="btn btn-danger ms-2"
-                      onClick={() =>
-                        customConfirm(
-                          () => removeAdmin(user.id),
-                          `Doresti sa stergi drepturile de administrator ale utilizatorului ${user.email} ?`,
-                          "Sterge"
-                        )
-                      }
-                    >
-                      Șterge drepturi
-                    </Button>
-                  </td>
-                  <td>{user.id}</td>
-                  <td>{user.userName}</td>
-                  <td>{user.email}</td>
-                </tr>
-              ))}
-            </tbody>
-          </>
-        )}
+                      {/* <Button
+                        className="btn btn-danger ms-2"
+                        onClick={() =>
+                          customConfirm(
+                            () => removeAdmin(user.id),
+                            `Doresti sa stergi drepturile de administrator ale utilizatorului ${user.email} ?`,
+                            "Sterge"
+                          )
+                        }
+                      >
+                        Șterge drepturi
+                      </Button> */}
+                    </TableCell>
+                    <TableCell sx={{fontSize:"12px"}}>{user.id}</TableCell>
+                    <TableCell sx={{fontSize:"12px"}}>{user.userName}</TableCell>
+                    <TableCell sx={{fontSize:"12px"}}>{user.email}</TableCell></>}
+                    
+                  </TableRow>
+                ))}
+              </TableBody>
+            </>
+          );
+        }}
       </IndexEntity>
     </>
   );
 }
+

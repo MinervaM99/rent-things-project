@@ -42,7 +42,7 @@ function App() {
         <Box
         sx={{
           flexDirection: 'column',
-          minHeight: '70vh',
+          // minHeight: '70vh',
         }}
       >
           <Routes>
@@ -65,9 +65,9 @@ function App() {
             ))}
           </Routes>
           </Box>
-        <Footer className="bd-footer py-5 mt-5 bg-light">
+        <Footer className="bd-footer py-5" style={{ backgroundColor: "#fff"}}>
           <div className="container">
-            Rent things app {new Date().getFullYear().toString()}
+            CircleShare {new Date().getFullYear().toString()}
           </div>
         </Footer>
       </AuthenticationContext.Provider>

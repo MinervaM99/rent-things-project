@@ -8,6 +8,7 @@ import Loading from "../utils/Loading";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { Box, Container, Typography } from "@mui/material";
+import { FormContainer } from "../style";
 
 export default function EditUser() {
   const { claims } = useContext(AuthenticationContext);
@@ -47,15 +48,15 @@ export default function EditUser() {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box my={5} textAlign="center">
-        <Typography
+
+    <FormContainer style={{ margin: "60px auto 50px auto", maxWidth: "500px" }}>
+      <Box my={3} textAlign="center">
+        <Typography sx={{fontFamily: "Lucida Console"}}
           variant="h4"
           component="div"
-          fontWeight="bold"
           color="text.secondary"
         >
-          Editeaza profilul
+          Actualizează datele
         </Typography>
       </Box>
       {userInfo?.userName ? (
@@ -63,6 +64,6 @@ export default function EditUser() {
       ) : (
         <Loading />
       )}
-    </Container>
+    </FormContainer>
   );
 }

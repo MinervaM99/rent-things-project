@@ -44,24 +44,23 @@ export default function IndexTransaction(props: IndexTransactionProps) {
         title={props.title}
       >
         {(transactions) => {
-          console.log();
           return (
             <>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center">Acțiuni</TableCell>
-                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="center" sx={{fontSize:"14px"}}>Acțiuni</TableCell>
+                  <TableCell align="center" sx={{fontSize:"14px"}}>Status</TableCell>
                   {props.transactionType === 1 ? (
-                    <TableCell align="left">Debitor</TableCell>
+                    <TableCell align="left" sx={{fontSize:"14px"}}>Debitor</TableCell>
                   ) : (
-                    <TableCell align="left">Proprietar</TableCell>
+                    <TableCell align="left" sx={{fontSize:"14px"}}>Proprietar</TableCell>
                   )}
 
-                  <TableCell align="left">Produs</TableCell>
-                  <TableCell align="left">Data de început</TableCell>
-                  <TableCell align="left">Data de sfârșit</TableCell>
-                  <TableCell align="left">Câștig</TableCell>
-                  <TableCell align="left">Id Cerere</TableCell>
+                  <TableCell align="left" sx={{fontSize:"14px"}}>Produs</TableCell>
+                  <TableCell align="left" sx={{fontSize:"14px"}}>Data de început</TableCell>
+                  <TableCell align="left" sx={{fontSize:"14px"}}>Data de sfârșit</TableCell>
+                  <TableCell align="left" sx={{fontSize:"14px"}}>Câștig</TableCell>
+                  <TableCell align="left" sx={{fontSize:"14px"}}>Id Cerere</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

@@ -5,6 +5,8 @@ export default function Button(props: buttonProps) {
       disabled={props.disabled}
       className={props.className}
       onClick={props.onClick}
+      style={props.style}
+      // style={{backgroundColor: "#6d2bbd"}}
     >
       {props.children}
     </button>
@@ -16,11 +18,12 @@ interface buttonProps {
   onClick?(): void;
   type: "button" | "submit";
   disabled: boolean;
-  className: string
+  className: string;
+  style?: any;
 }
 
 Button.defaultProps = {
   type: "button", 
   disabled: false,
-  className: "btn btn-primary"
+  className: "btn btn-primary",
 };

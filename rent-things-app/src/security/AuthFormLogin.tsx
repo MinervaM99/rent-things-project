@@ -5,7 +5,7 @@ import TextField from "../forms/TextField";
 import Button from "../utils/Button";
 import { Link } from "react-router-dom";
 
-import { FormButton, FormCancelButton} from './AuthForm'
+import { FormButton, FormCancelButton} from '../style'
 
 export default function AuthFormLogin(props: authFormProps) {
   return (

@@ -8,6 +8,7 @@ import { useContext } from "react";
 import AuthenticationContext from "./security/AuthentictionContext";
 import styled from "styled-components";
 import { Button } from "@mui/material";
+import NotificationAddOutlinedIcon from "@mui/icons-material/NotificationAddOutlined";
 
 export default function Menu() {
   const { update, claims } = useContext(AuthenticationContext);
@@ -22,7 +23,7 @@ export default function Menu() {
       <Navbar className="navbar navbar-expand-lg ">
         <div className="container-fluid">
           <Logo className="navbar-brand" to="/">
-            My rent app
+            ShareCircle
           </Logo>
           <div
             className="collapse navbar-collapse"
@@ -59,11 +60,18 @@ export default function Menu() {
                   <>
                     <div className="collapse navbar-collapse">
                       <ul className="navbar-nav">
-                        <Button
-                          size="medium"
-                
-                        >
-                          <NavbarLink className="nav-link" to="/items/create">
+                        <Button size="medium">
+                          <NavbarLink
+                            className="nav-link"
+                            to="/items/create"
+                            style={{
+                              border: "1px solid #ecf6e5ac",
+                              borderRadius: "5px",
+                              fontSize:"12px",
+                              padding:"5px 10px",
+                              backgroundColor: "#759e7c"
+                            }}
+                          >
                             Adaugă un anunț
                           </NavbarLink>
                         </Button>
@@ -74,45 +82,45 @@ export default function Menu() {
               ></Authorized>
               <Authorized
                 authorized={
-                    <div className="collapse navbar-collapse">
-                      <ul className="navbar-nav">
-                        <NavbarLink
-                          className="nav-link"
-                          to="/account/transactions"
+                  <div className="collapse navbar-collapse">
+                    <ul className="navbar-nav">
+                      <NavbarLink
+                        className="nav-link"
+                        to="/account/transactions"
+                      >
+                        <NotificationAddOutlinedIcon fontSize="large" />
+                      </NavbarLink>
+                      <li className="nav-item mr-auto">
+                        <NavOptionsDropdown
+                          title={
+                            <NavDropdownTitle>
+                              Bună, {getUserName()}
+                            </NavDropdownTitle>
+                          }
+                          id="basic-nav-dropdown"
                         >
-                          Tranzactii
-                        </NavbarLink>
-                        <li className="nav-item mr-auto">
-                          <NavOptionsDropdown
-                            title={
-                              <NavDropdownTitle>
-                                Bună, {getUserName()}
-                              </NavDropdownTitle>
-                            }
-                            id="basic-nav-dropdown"
-                          >
-                            <NavDropdownItem>
-                              {/* <Link to={buildUserAccountLink()}>Contul Meu</Link> */}
-                              <NavDropdownLink to="/myAccount/1">
-                                Contul Meu
-                              </NavDropdownLink>
-                            </NavDropdownItem>
-                            <NavDropdown.Divider />
-                            <NavDropdownItem>
-                              <NavDropdownLogout
-                                onClick={() => {
-                                  logout();
-                                  update([]);
-                                  navigate("/");
-                                }}
-                              >
-                                Log out
-                              </NavDropdownLogout>
-                            </NavDropdownItem>
-                          </NavOptionsDropdown>
-                        </li>
-                      </ul>
-                    </div>
+                          <NavDropdownItem>
+                            {/* <Link to={buildUserAccountLink()}>Contul Meu</Link> */}
+                            <NavDropdownLink to="/myAccount/1">
+                              Contul Meu
+                            </NavDropdownLink>
+                          </NavDropdownItem>
+                          <NavDropdown.Divider />
+                          <NavDropdownItem>
+                            <NavDropdownLogout
+                              onClick={() => {
+                                logout();
+                                update([]);
+                                navigate("/");
+                              }}
+                            >
+                              Log out
+                            </NavDropdownLogout>
+                          </NavDropdownItem>
+                        </NavOptionsDropdown>
+                      </li>
+                    </ul>
+                  </div>
                 }
                 notAuthorized={
                   <>
@@ -141,8 +149,9 @@ export const NavbarLink = styled(Link)`
   margin: 10px;
   &:hover,
   &:focus {
-    color: #0b2b40;
+    color: #ffffff81;
   }
+
   @media (max-width: 700px) {
     display: none;
   }
@@ -154,8 +163,7 @@ const NavbarAuthentificationLink = styled(Link)`
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
   margin: 10px;
-  &:hover,
-  &:focus {
+  &:hover {
     color: #ffffff;
     background-color: #0b2b40;
   }
@@ -169,10 +177,14 @@ const NavbarAuthentificationLink = styled(Link)`
 export const Logo = styled(Link)`
   color: #fff;
   margin: 10px;
-  font-size: x-large;
+  margin-top: 6px;
+  font-size: 20px;
   cursor: pointer;
   &:hover {
-    color: #0b2b40;
+    color: #ffffffb4;
+  }
+  &:focus {
+    color: #fff;
   }
 `;
 
@@ -181,14 +193,25 @@ export const NavDropdownLink = styled(Link)`
   margin: 0;
   height: 100%;
   width: 100%;
+  color: #3b8c6e;
+  padding: 8px 0;
+  font-size: 14px;
+  text-decoration: none;
+
+  &:hover {
+    color: #1e5959;
+  }
+
+  &:focus {
+    color: #fff;
+  }
 `;
 
 export const NavDropdownLogout = styled.span`
   color: #3b8c6e;
-  font-size: 13px;
-  padding: 10px;
+  font-size: 14px;
+  padding: 8px 0;
 
-  &:focus,
   &:hover {
     color: #1e5959;
   }
@@ -200,9 +223,11 @@ export const NavOptionsDropdown = styled(NavDropdown)`
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
   margin: 10px;
-  &:hover,
+  &:hover {
+    color: #ffffffa6;
+  }
   &:focus {
-    color: #0b2b40;
+    color: #fff;
   }
 `;
 
@@ -216,9 +241,12 @@ const NavDropdownTitle = styled.span`
   .dropdown-toggle::after {
     color: white;
   }
-  &:hover,
+  &:hover {
+    color: #ffffffa6;
+  }
+
   &:focus {
-    color: #0b2b40;
+    color: #fff;
   }
 `;
 

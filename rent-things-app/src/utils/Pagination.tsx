@@ -27,26 +27,26 @@ export default function Pagination(props: paginationProps) {
     const previousPage = props.currentPage - 1;
     const links: linkModel[] = [];
 
-    links.push({
-      text: "<",
-      enabled: previousPageEnabled,
-      page: previousPage,
-      active: false,
-    });
+    // links.push({
+    //   text: "<",
+    //   enabled: previousPageEnabled,
+    //   page: previousPage,
+    //   active: false,
+    // });
 
-    for (let i = 1; i <= props.totalAmountOfPages; i++) {
-      if (
-        i >= props.currentPage - props.radio &&
-        i <= props.currentPage + props.radio
-      ) {
-        links.push({
-          text: `${i}`,
-          active: props.currentPage === i,
-          enabled: true,
-          page: i,
-        });
-      }
-    }
+    // for (let i = 1; i <= props.totalAmountOfPages; i++) {
+    //   if (
+    //     i >= props.currentPage - props.radio &&
+    //     i <= props.currentPage + props.radio
+    //   ) {
+    //     links.push({
+    //       text: `${i}`,
+    //       active: props.currentPage === i,
+    //       enabled: true,
+    //       page: i,
+    //     });
+    //   }
+    // }
 
     const nextPageEnabled =
       props.currentPage !== props.totalAmountOfPages &&
@@ -54,7 +54,7 @@ export default function Pagination(props: paginationProps) {
     const nextPage = props.currentPage + 1;
 
     links.push({
-      text: ">",
+      text: "Afișează următoarele",
       page: nextPage,
       enabled: nextPageEnabled,
       active: false,
@@ -68,11 +68,12 @@ export default function Pagination(props: paginationProps) {
       <ul className="pagination justify-content-center">
         {linkModels.map((link) => (
           <li
+          style={{margin: "15px", fontSize: "18px"}}
             key={link.text}
             onClick={() => selectPage(link)}
             className={`page-item cursor ${getClass(link)}`}
           >
-            <span className="page-link">{link.text}</span>
+            <span className="page-link" >{link.text}</span>
           </li>
         ))}
       </ul>

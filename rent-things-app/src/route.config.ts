@@ -25,7 +25,7 @@ const routes = [
   {path: '/users', component: IndexUsers, isAdmin: true},
 
   {path: '/items/create', component: CreateItem,isUser: true},
-  {path: '/items/edit/:id', component: EditItem,isUser: true},
+  {path: '/items/edit/:id', component: EditItem},
   {path: '/items/filter/:itemName?', component: FilterItems},
   {path: '/item/:id', component: ItemDetails},
 
