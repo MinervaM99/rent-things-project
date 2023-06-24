@@ -51,6 +51,7 @@ namespace RentThingsAPI.Controllers
 			{
 				newItem.Photo = await fileStorageService.SaveFile(containerName, itemCreationDTO.Photo);
 			}
+			else return BadRequest("Adaugă o imagine a obiectului");
 
 			context.Items.Add(newItem);
 			await context.SaveChangesAsync();
@@ -151,8 +152,8 @@ namespace RentThingsAPI.Controllers
 			}
 
 			await HttpContext.InsertParametersPaginationInHeader(itemsQueryable);
-			var movies = await itemsQueryable.Paginate(filterItemsDTO.PaginationDTO).ToListAsync();
-			return mapper.Map<List<ItemDTO>>(movies);
+			var items = await itemsQueryable.Paginate(filterItemsDTO.PaginationDTO).OrderByDescending(x=>x.Id).ToListAsync();
+			return mapper.Map<List<ItemDTO>>(items);
 		}
 
 
@@ -178,7 +179,7 @@ namespace RentThingsAPI.Controllers
 
 
 		[HttpDelete("{id:int}")]
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		public async Task<ActionResult> DeleteItem(int Id)
 		{
 

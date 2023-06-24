@@ -14,7 +14,7 @@ namespace RentThingsAPI.DTOs
 		public string Description { get; set; }
 		[Required(ErrorMessage = "This field is required")]
 		public int Condition { get; set; }
-		public IFormFile Photo { get; set; }
+		public IFormFile? Photo { get; set; }
 		[Required(ErrorMessage = "This field is required")]
 		public int Age { get; set; }
 		public string? Location { get; set; }

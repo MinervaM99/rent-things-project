@@ -35,6 +35,7 @@ namespace RentThingsAPI.Controllers
 
 		//add new transaction
 		[HttpPost]
+		[AllowAnonymous]
 		public async Task<ActionResult> Post([FromBody] TransactionCreationDTO transactionDTO)
 		{
 			bool isOverlap = CheckDateOverlap(transactionDTO.ItemId, (DateTime)transactionDTO.StartDate, (DateTime)transactionDTO.EndDate);
@@ -89,7 +90,6 @@ namespace RentThingsAPI.Controllers
 		}
 
 
-
 		//get all transactions
 		[HttpGet]
 		public async Task<ActionResult<List<TransactionDTO>>> GetAllTransactuins([FromQuery] PaginationDTO paginationDTO)
@@ -106,6 +106,7 @@ namespace RentThingsAPI.Controllers
 
 		//get transaction by ItemId
 		[HttpGet("{itemId:int}")]
+		[AllowAnonymous]
 		public async Task<ActionResult<List<TransactionDTO>>> GetTransaction(int itemId)
 		{
 			var today = DateTime.Now;
@@ -124,37 +125,29 @@ namespace RentThingsAPI.Controllers
 		{
 			if (status < 1 || status > 3)
 			{
-				return BadRequest("Invalid status value. Status should be between 1 and 3.");
+				return BadRequest("Status nevalid. Parametrul status trebuie sa 1, 2 sau 3");
 			}
-			var userIdLend = await userManager.FindByNameAsync(lenderId);
-			if (userIdLend == null) { return NotFound(); }
-			//var queryable = context.Transactions
-			//					.Include(t => t.Item).Include(x => x.User).Include(x => x.Item)
-			//					.Where(t => t.Item.UserId == userIdLend.Id && t.Status == status)
-			//					.AsQueryable();
-			//await HttpContext.InsertParametersPaginationInHeader(queryable);
+			var queryable = context.Transactions
+								.Include(t => t.Item).Include(x => x.User).Include(x => x.Item)
+								.Where(t => t.Item.UserId == lenderId && t.Status == status)
+								.AsQueryable();
+			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
-			//var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
-			//return mapper.Map<List<TransactionDTO>>(transactions)
-			var transactions = await context.Transactions
-				.Include(t => t.Item)
-				.Include(x => x.User)
-				.Where(t => t.Item.UserId == userIdLend.Id && t.Status == status)
-				.OrderByDescending(x => x.StartDate)
-				.ToListAsync();
-
+			var transactions = await queryable.OrderBy(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<TransactionDTO>>(transactions);
 		}
 
 
-		////get all transaction by borrower UserName 
+		////get all transaction by borrower Id 
 		[HttpGet("borrow/{borrowerId}/{status:int}")]
 		public async Task<ActionResult<List<TransactionDTO>>> GetAllByBorrower([FromQuery] PaginationDTO paginationDTO, string borrowerId, int status)
 		{
-			var userIdBorrower = await userManager.FindByNameAsync(borrowerId);
-			if (userIdBorrower == null) { return NotFound(); }
+			if (status < 1 || status > 3)
+			{
+				return BadRequest("Status nevalid. Parametrul status trebuie sa 1, 2 sau 3");
+			}
 			var queryable = context.Transactions.Include(x=>x.User).Include(x=>x.Item)
-								.Where(t => t.UserId == userIdBorrower.Id && (status == 1 ? t.Status == status : t.Status != 1))
+								.Where(t => t.UserId == borrowerId && (status == 1 ? t.Status == status : t.Status != 1))
 								.AsQueryable(); 
 			
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
@@ -163,6 +156,7 @@ namespace RentThingsAPI.Controllers
 			return mapper.Map<List<TransactionDTO>>(transactions);
 		}
 
+		
 		//delete a transaction by Id
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> DeleteItem(string Id)
@@ -175,14 +169,13 @@ namespace RentThingsAPI.Controllers
 			await context.SaveChangesAsync();
 			return Ok(transaction);
 		}
-
+		
 
 		private bool CheckDateOverlap(int itemId, DateTime _startDate, DateTime _endDate)
 		{
 			DateTime startDate = _startDate.ToUniversalTime();
 			DateTime endDate = _endDate.ToUniversalTime();
 
-			// Verifică dacă există o tranzacție existentă care se suprapune cu intervalul de date dorit
 			var overlappingTransaction = context.Transactions.FirstOrDefault(t =>
 						t.ItemId == itemId &&
 						t.Status == 2 &&

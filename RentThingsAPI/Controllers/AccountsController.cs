@@ -196,7 +196,8 @@ namespace RentThingsAPI.Controllers
 
 			var claims = new List<Claim>()
 			{
-				new Claim("userName", user.UserName)
+				new Claim("userName", user.UserName),
+				new Claim("userId", user.Id)
 			};
 
 			var userClaims = await userManager.GetClaimsAsync(user);

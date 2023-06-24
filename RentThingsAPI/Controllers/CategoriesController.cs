@@ -38,6 +38,7 @@ namespace RentThingsAPI.Controllers
 		}
 
 
+
 		//get one category by Id
 		[HttpGet("{Id:int}")] //api/categories/example
 		public async Task<ActionResult<CategoryDTO>> GetId(int Id)
