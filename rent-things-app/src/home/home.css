@@ -1,0 +1,91 @@
+.nav {
+  background-color: #fff;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+  position: fixed;
+  z-index: 99999;
+  top: 0
+}
+
+.nav.affix {
+  background-color: #fff;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.nav .logo a {
+  color: #333;
+  font-size: 25px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.nav .main_list {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.navlinks {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navlinks li {
+  margin-right: 20px;
+}
+
+.navlinks li a {
+  color: #333;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.navlinks li a:hover {
+  color: #7b7bff;
+}
+
+.myH2 {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 50px 0;
+}
+
+.myP {
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 24px; /* Ajustează dimensiunea textului după preferință */
+}
+
+.logo-circle {
+  background-color: #f6c942; /* Ajustează culoarea cercului după preferință */
+  color: #ffffff; /* Ajustează culoarea textului cercului după preferință */
+  font-weight: bold;
+  font-size: 24px; /* Ajustează dimensiunea textului cercului după preferință */
+  border-radius: 50%;
+  padding: 4px 8px; /* Ajustează dimensiunea și spațiul din jurul cercului după preferință */
+  margin-left: 8px; /* Ajustează distanța dintre textul "Share" și cercul "Circle" */
+}
+
+
+

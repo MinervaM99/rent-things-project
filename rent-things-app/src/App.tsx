@@ -1,82 +1,82 @@
 import "./App.css";
-import { landingPageDTO } from "./items/items.model";
-import ItemsList from "./items/ItemsList";
-import { useEffect, useState } from "react";
-import Menu from "./Menu";
 import { Routes, Route } from "react-router-dom";
-import IndexCategory from "./category/IndexCategory";
+import routes from "./route.config";
+import configureValidations from "./Validations";
+import { useEffect, useState } from "react";
+import { claim } from "./security/security.model";
+import AuthenticationContext from "./security/AuthentictionContext";
+import { getClaims } from "./security/handelJWT";
+import configureInterceptor from "./utils/httpInterceptors";
+import NavigationMenu from "./Menu";
+import { Box } from "@mui/material";
+import styled from "styled-components";
+
+configureValidations();
+configureInterceptor();
 
 function App() {
-  const [items, setItems] = useState<landingPageDTO>({});
+  const [claims, setClaims] = useState<claim[]>([]);
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      setItems({
-        sportsAndRelax: [
-          {
-            id: 1,
-            title: "Idiotul",
-            description: "Dostoievsky",
-            price: 5,
-            itemImage:
-              "https://upload.wikimedia.org/wikipedia/ro/0/06/Idiotul.jpg",
-          },
-          {
-            id: 2,
-            title: "Crima si pedeapsa",
-            description: "Dostoievsky",
-            price: 4,
-            itemImage:
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Cover_of_the_first_edition_of_Crime_and_Punishment.jpg/200px-Cover_of_the_first_edition_of_Crime_and_Punishment.jpg",
-          },
-        ],
-        transport: [
-          {
-            id: 3,
-            title: "Remorca auto",
-            description: "Remorca 2 roti",
-            price: 40,
-            itemImage:
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Baset_trailer.jpg/220px-Baset_trailer.jpg",
-          },
-          {
-            id: 4,
-            title: "Bicicleta de munte",
-            description: "Foarte buna",
-            price: 20,
-            itemImage:
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Hardtail-mountain-bike.jpg/220px-Hardtail-mountain-bike.jpg",
-          },
-        ],
-      });
-    }, 1000);
+    setClaims(getClaims());
+  }, []);
 
-    return () => clearTimeout(timerId);
-  });
+  function isAdmin() {
+    return (
+      claims.findIndex(
+        (claim) => claim.name === "role" && claim.value === "admin"
+      ) > -1
+    );
+  }
+
+ 
+  function isUser() {
+    return claims.length > 0;
+  }
+
 
   return (
     <>
-      <Menu />
-      <div className="container">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                {" "}
-                <h3>Sport si Relaxare</h3>
-                <ItemsList listOfItems={items.sportsAndRelax} />
-                <h3>Transport</h3>
-                <ItemsList listOfItems={items.transport} />
-              </>
-            }
-          />
-
-          <Route path="/category" element={<IndexCategory />} />
-        </Routes>
-      </div>
+      <AuthenticationContext.Provider value={{ claims, update: setClaims }}>
+        <NavigationMenu />
+        <Box
+        sx={{
+          flexDirection: 'column',
+          // minHeight: '70vh',
+        }}
+      >
+          <Routes>
+            {routes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={
+                  route.isAdmin && !isAdmin() ? (
+                    route.isUser && !isUser() ? (
+                      <>Accesul nu este permis</>
+                    ) : (
+                      <route.component />
+                    )
+                  ) : (
+                    <route.component />
+                  )
+                }
+              />
+            ))}
+          </Routes>
+          </Box>
+        <Footer className="bd-footer py-5" style={{ backgroundColor: "#fff"}}>
+          <div className="container">
+            CircleShare {new Date().getFullYear().toString()}
+          </div>
+        </Footer>
+      </AuthenticationContext.Provider>
     </>
   );
 }
+
+export const Footer = styled.footer`
+ 
+` 
 
 export default App;

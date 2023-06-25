@@ -12,7 +12,7 @@ export default function GenericListComponent(props: genericListProps){
     if(props.loadingUI){
       return props.loadingUI;
     }
-    return <>Nu exista produse de afisat</>
+    return <>Nu exista date de afisat</>
   }else {
     return props.children;
   }

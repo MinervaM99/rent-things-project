@@ -1,1 +1,1 @@
-# rent-things-app
+# Circle app

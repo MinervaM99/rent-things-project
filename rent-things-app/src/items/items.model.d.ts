@@ -1,14 +1,41 @@
+import { categoryDTO } from "../category/category.model";
+import { userInfoDTO } from "../security/security.model";
+
 export interface itemDTO {
   id: number;
-  title: string;
+  name: string;
   description: string;
-  price: number;
-  itemImage: string;
-  // category: string;
-  // condition: string;
+  //itemImage?: File;
+  photo: string;
+  available?: boolean;
+  categoryId: categoryDTO; 
+  condition: number;
+  dayPrice: number;
+  monthPrice?: numbers;
+  weekPrice?: number;
+  age: number;
+  location?: string;
+  userId?: userInfoDTO;
 }
 
-export interface landingPageDTO{
-  transport?: itemDTO[];
-  sportsAndRelax?: itemDTO[];
+export interface itemCreationDTO {
+  name: string;
+  userId?: string;
+  description: string;
+  condition: number;
+  //picture url
+  pictureURL?: string;
+  //add the photo
+  photo?: File;
+  age: number;
+  location: string;
+  dayPrice: number;
+  monthPrice?: number;
+  weekPrice?: number;
+  available?: boolean;
+  categoryId: number;
+}
+
+export interface landingPageDTO {
+  lastItemsAdded?: itemDTO[];
 }
