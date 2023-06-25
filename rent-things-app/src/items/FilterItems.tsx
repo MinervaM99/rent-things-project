@@ -1,7 +1,7 @@
-import { Field, Form, Formik, FormikProps } from "formik";
+import { Form, Formik, FormikProps } from "formik";
 import { categoryDTO } from "../category/category.model";
 import Button from "../utils/Button";
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { urlCategorirs, urlItems } from "../endpoints";
 import { itemDTO } from "./items.model";
@@ -20,7 +20,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import styled from "styled-components";
-import { Carousel } from 'react-bootstrap';
+import { Carousel } from "react-bootstrap";
 
 const SearchBox = styled.div`
   display: flex;
@@ -128,8 +128,11 @@ export default function FilterItems() {
                     justifyContent: "space-evenly",
                   }}
                 >
-                  <div className="col-auto" style={{ backgroundColor: "#fff" }}>
-                    <SearchBox>
+                  <div
+                    className="col-auto"
+                    style={{ backgroundColor: "#fff", marginLeft: "70px" }}
+                  >
+                    <SearchBox style={{ width: "450px" }}>
                       <SearchTextField
                         aria-placeholder="Caută un obiect"
                         id="name"
@@ -150,7 +153,9 @@ export default function FilterItems() {
                       fontSize: "40px",
                       width: "50%",
                       color: "#008C72",
+                      fontWeight: "900",
                       fontFamily: "Lucida Console",
+                      margin: "-15px 0 0 0"
                     }}
                     variant="h4"
                     component="div"
@@ -163,6 +168,7 @@ export default function FilterItems() {
                         fontSize: "20px",
                         width: "50%",
                         fontFamily: "Lucida Console",
+                        padding: "5px 0 0 0"
                       }}
                       variant="h1"
                       component="div"
@@ -186,45 +192,40 @@ export default function FilterItems() {
                 style={{ backgroundColor: "#f4f5f7" }}
               >
                 <Select
-                    className="from-select"
-                    id="category"
-                    sx={{
-                      width: "150px",
-                      height: "30px",
-                    }}
-                    placeholder="categorie"
-                    {...formikProps.getFieldProps("categoryId")}
-                  >
-                    <MenuItem sx={{ color: "gray" }} value={0}>
-                      <InputLabel>Categoria</InputLabel>
-                    </MenuItem>
-                    {categories.map((option) => (
-                      <MenuItem key={option.id} value={option.id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                {/* <Carousel
-                  className="form-select"
+                  className="from-select"
                   id="category"
+                  sx={{
+                    width: "190px",
+                    height: "35px",
+                    backgroundColor: "#fff",
+                    marginLeft: "130px",
+                  }}
                   placeholder="categorie"
-                  style={{ width: "120px"}}
                   {...formikProps.getFieldProps("categoryId")}
-                  interval={null} // pentru a dezactiva automatizarea caruselului
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 200, // Setează înălțimea maximă pentru meniu
+                        overflow: "auto", // Activează bara de defilare pentru meniu
+                      },
+                    },
+                  }}
                 >
-                  
+                  <MenuItem sx={{ color: "gray" }} value={0}>
+                    <InputLabel>Categoria</InputLabel>
+                  </MenuItem>
                   {categories.map((option) => (
-                    <Carousel.Item key={option.id}>
-                      <MenuItem value={option.id}>{option.name}</MenuItem>
-                    </Carousel.Item>
+                    <MenuItem key={option.id} value={option.id}>
+                      {option.name}
+                    </MenuItem>
                   ))}
-                </Carousel> */}
+                </Select>
 
                 <Select
                   className="form-select"
                   id="condition"
                   placeholder="conditie"
-                  sx={{ width: "150px", height: "30px" }}
+                  sx={{ marginLeft: "10px", width: "190px", height: "35px" }}
                   {...formikProps.getFieldProps("condition")}
                 >
                   <MenuItem sx={{ color: "gray" }} value={0}>
@@ -239,7 +240,7 @@ export default function FilterItems() {
 
                 <div
                   className="col-auto"
-                  style={{ marginTop: "40px", marginBottom: "15px" }}
+                  style={{ marginTop: "10px", marginBottom: "15px" }}
                 >
                   <Button
                     className="btn btn-primary"

@@ -120,12 +120,14 @@ export default function IndexTransactionStatus() {
   }
 
   return (
-    <>
+    <div 
+    style={{height: "490px", marginTop:"-40px",backgroundColor:"#f4f5f7", }}>
       <Container
         maxWidth="lg"
         sx={{
           marginBottom: "50px",
-          marginTop: "30px",
+          marginTop: "40px",
+          paddingTop: "30px",
           maxHeight: "400px",
           overflowY: "auto",
         }}
@@ -140,7 +142,7 @@ export default function IndexTransactionStatus() {
               <h6>Nu există nici o solicitare.</h6>
             ) : (
               <div>
-                <h6 style={{ color: "red" }}>
+                <h6 style={{ color: "red", marginBottom: "20px" }}>
                   *Acceptarea unei cereri de imprumut care se suprapune ca
                   interval de timp cu o altă cerere de împrumut pentru același
                   produs, va determina respingerea tuturor celorlalte cereri de
@@ -275,6 +277,6 @@ export default function IndexTransactionStatus() {
           )}
         </GenericListComponent>
       </Container>
-    </>
+    </div>
   );
 }

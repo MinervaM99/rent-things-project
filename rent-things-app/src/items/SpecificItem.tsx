@@ -148,12 +148,18 @@ export default function SpecificItem(props: itemDTO) {
           <p style={{ color: "gray", fontWeight: "bold" }}>{props.location}</p>
         </ItemDetails>
         {/* </ItemBox> */}
+        
       </Paper>
 
       {isSpecificRoute && (
-        <div style={{display: "flex", marginLeft:"20px"}}>
+        <Paper  elevation={1}
+        sx={{ height: "50px", width: "280px", margin: "-10px 15px 0 15px" }}>
+        <div style={{display: "flex", marginLeft:"45px"}}>
             <Button
+            variant="outlined"
               size="medium"
+              sx={{marginRight: "30px",
+            marginTop: "10px"}}
               color="error"
               onClick={() =>
                 customConfirm(
@@ -166,15 +172,16 @@ export default function SpecificItem(props: itemDTO) {
               Șterge
             </Button>
             <Button
+            variant="outlined"
               size="medium"
-              color="inherit"
+              color="success"
               onClick={handleOnClickEdit}
-              style={{ display: "flex" }}
+              style={{ display: "flex", marginTop: "10px" }}
             >
               Editează
             </Button>
             </div>
-        
+            </Paper>
       )}
       
     </Container>

@@ -16,6 +16,7 @@ namespace RentThingsAPI.DTOs
 		public string PhoneNumber { get; set; }
 		[Required]
 		public string UserName { get; set; }
-		
+
+
 	}
 }

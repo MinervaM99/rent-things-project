@@ -59,8 +59,8 @@ export default function LandingPage() {
   }
 
   return (
-    <Container>
-       <SearchBox display="flex">
+    <Container  >
+       <SearchBox display="flex" >
         <SearchTextField
           label="Caută un obiect"
           variant="outlined"

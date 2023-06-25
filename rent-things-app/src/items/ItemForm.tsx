@@ -158,7 +158,7 @@ console.log(props.model, categoryOptions);
             </div>
 
             {/* <MyTextField field="location" displayName="Locația" /> */}
-            <MyTextField field="location" displayName="Locația obiectului" />
+            <MyTextField field="location" displayName="Adaug locul aproximativ de unde poate fi preluat obiectul tău" />
 
             <FormButton type="submit" disabled={formikProps.isSubmitting}>
               Salveaza

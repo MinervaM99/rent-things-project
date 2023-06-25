@@ -235,7 +235,7 @@ namespace RentThingsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("RentThingsAPI.Entities.Item", b =>
@@ -292,7 +292,7 @@ namespace RentThingsAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Items");
+                    b.ToTable("Items", (string)null);
                 });
 
             modelBuilder.Entity("RentThingsAPI.Entities.Transaction", b =>
@@ -326,7 +326,7 @@ namespace RentThingsAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

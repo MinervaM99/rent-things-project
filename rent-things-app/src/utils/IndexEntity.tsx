@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import Pagination from "./Pagination";
 import styled from "styled-components";
+import { NavbarLink } from "../Menu";
 
 export default function IndexEntity<T>(props: indexEntityProps<T>) {
   const [entities, setEntities] = useState<T[]>([]);
@@ -46,7 +47,7 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
             Math.ceil(totalAmountOfRecords / recordsPerPage)
           );
           setEntities((prevEntities) => [...prevEntities, ...response.data]);
-        setHasMoreData(page < totalAmountOfPages);
+          setHasMoreData(page < totalAmountOfPages);
         });
       //to do Props.setRload(true)
 
@@ -96,8 +97,19 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
   return (
     <Container>
       <Box my={2} textAlign="center">
-        <StyledTypography>{props.title}</StyledTypography>
+        <StyledTypography sx={{fontSize: "30px"}}>{props.title}</StyledTypography>
       </Box>
+
+    {props.entityName ? <Link
+        className="btn btn-primary"
+        to={props.createURL}
+        style={{
+          margin: "10px 0 25px 0"
+        }}
+      >
+        {props.entityName}
+      </Link>: null}
+      
 
       {/* <RecordsPerPageSelect
         onChange={(amountOfRecords) => {
@@ -139,11 +151,7 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
             display: "flex",
             // marginTop: "20px"
           }}
-        >
-          <Link className="btn btn-primary" to={props.createURL}>
-            {props.entityName}
-          </Link>
-        </div>
+        ></div>
       ) : null}
     </Container>
   );
@@ -162,11 +170,14 @@ interface indexEntityProps<T> {
 }
 const StyledTypography = styled(Typography)`
   text-decoration: none;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-weight: bold;
   padding-block: 10px;
+  color: #5d7966;
 
   &:hover {
-    color: #a967df;
+    color: #84a28e;
   }
 `;
+
+const NewCategoryButton = styled(Link)``;

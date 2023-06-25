@@ -55,38 +55,53 @@ export default function UserProfile() {
     } catch (error: any) {}
   }
   return (
-    <>
+    <div>
       <StyledDiv>
-        <div style={{ display: "flex", paddingTop: "50px" }}>
-        <div style={{ display: "flex", paddingTop: "15px" }}>
-          <Avatar
-            sx={{
-              bgcolor: randomColor,
-              width: 80,
-              height: 80,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginLeft: "50px",
-            }}
-          >
-            <span style={{ fontSize: "45px" }}>
-              {userName.charAt(0).toUpperCase()}
-            </span>
-          </Avatar>
+        <div style={{ display: "flex", paddingTop: "30px" }}>
+          <div style={{ display: "flex", paddingTop: "15px" }}>
+            <Avatar
+              sx={{
+                bgcolor: randomColor,
+                width: 75,
+                height: 75,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginLeft: "50px",
+                fontFamily: "Lucida Console",
+              }}
+            >
+              <span style={{ fontSize: "45px" }}>
+                {userName.charAt(0).toUpperCase()}
+              </span>
+            </Avatar>
           </div>
-          <Box sx={{ marginLeft: "25px", paddingTop: "20px" }}>
-            <Typography> {userInfo?.userName}</Typography>
-            <br />
-            Email: {userInfo?.email}
-            <br />
-            Numar de telefon: {userInfo?.phoneNumber}
+          <Box sx={{ marginLeft: "25px", paddingTop: "30px" }}>
+            <Typography
+              sx={{ fontFamily: "Lucida Console", paddingBottom: "10px" }}
+              variant="h4"
+              component="div"
+              color="text.secondary"
+            >
+              {userInfo?.userName}
+            </Typography>
+            <div >
+              <b style={{ padding: "0 10px 10px 0" ,fontSize: "14px",color: "#474545ee"}}>Email:</b>
+              <i style={{ fontSize: "18px" }}>{userInfo?.email}</i>
+            </div>
+            <div style={{paddingTop: "1px"}}>
+              <b style={{ paddingRight: "10px", marginTop: "30px" ,fontSize: "14px",color: "#474545ee"}}>
+                Număr de telefon:
+              </b>
+              <i style={{ fontSize: "15px" }}><b>{userInfo?.phoneNumber}</b></i>
+              
+            </div>
           </Box>
         </div>
 
         {userNameClaim === userName ? (
           <Button
-        sx={{padding: "20px", marginLeft: "40px"}}
+            sx={{ padding: "8px", margin: "-43px 0 0 50px " }}
             size="medium"
             color="inherit"
             onClick={() => navigate(`/account/edit`)}
@@ -96,20 +111,31 @@ export default function UserProfile() {
         ) : null}
       </StyledDiv>
       {items.length === 0 ? null : (
-        <Container>
-           <Typography
-            sx={{ paddingTop: "20px" ,paddingBottom: "20px", marginLeft: "60px" }}
+        <div
+          style={{
+            backgroundColor: "#f4f5f7",
+            margin: "0px 10px 0 10px",
+            paddingRight: "10px",
+          }}
+        >
+          <Typography
+            sx={{
+              paddingTop: "20px",
+              paddingBottom: "20px",
+              paddingLeft: "60px",
+            }}
             variant="h5"
             component="div"
             color="text.secondary"
           >
-            Anunțuri pubilicate de {userInfo?.userName} 
+            ANUNȚURI PUBLICATE DE {userInfo?.userName}
           </Typography>
           <div style={{ display: "flex", paddingLeft: "45px" }}>
-          <ItemsList listOfItems={items} /></div>
-        </Container>
+            <ItemsList listOfItems={items} />
+          </div>
+        </div>
       )}
-    </>
+    </div>
   );
 }
 //to do cand apas pe buton, sa ma duca la ruta myAccount dar care sa aiba /user email astfel incat sa stie de la cine ia datele
@@ -119,4 +145,6 @@ const StyledDiv = styled("div")`
   height: 35vh;
   width: 100%;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  paddingTop: 15px;
 `;

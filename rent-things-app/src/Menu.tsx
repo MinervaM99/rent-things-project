@@ -23,7 +23,9 @@ export default function Menu() {
       <Navbar className="navbar navbar-expand-lg ">
         <div className="container-fluid">
           <Logo className="navbar-brand" to="/">
-            ShareCircle
+            <div className="logo-container">
+              <span className="logo-text">CircleShare</span>
+            </div>
           </Logo>
           <div
             className="collapse navbar-collapse"
@@ -67,9 +69,9 @@ export default function Menu() {
                             style={{
                               border: "1px solid #ecf6e5ac",
                               borderRadius: "5px",
-                              fontSize:"12px",
-                              padding:"5px 10px",
-                              backgroundColor: "#759e7c"
+                              fontSize: "12px",
+                              padding: "5px 10px",
+                              backgroundColor: "#759e7c",
                             }}
                           >
                             Adaugă un anunț

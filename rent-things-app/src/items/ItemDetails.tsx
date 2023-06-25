@@ -23,6 +23,7 @@ import Swal from "sweetalert2";
 import AuthenticationContext from "../security/AuthentictionContext";
 import { formatDate, generateRandomColor } from "../utils/utils";
 import Authorized from "../security/Authorized";
+import { ageOptions, conditionOptions } from "../utils/SemanticNumberStorage";
 
 export default function ItemDetails() {
   const { claims } = useContext(AuthenticationContext);
@@ -85,7 +86,7 @@ export default function ItemDetails() {
   async function sendTransactionRequest(values: transactionCreationDTO) {
     if (userName === "") {
       Swal.fire({
-        icon: "error",
+        icon: "info",
         title: `Trebuie sa vă conectați pentru a trimite o cerere.`,
         confirmButtonText: "Ok",
       });
@@ -128,7 +129,7 @@ export default function ItemDetails() {
   const randomColor = generateRandomColor();
 
   return (
-    <Container sx={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ display: "flex", justifyContent: "center"  ,backgroundColor:"#f4f5f7", paddingBottom: "70px"}}>
       {/* <DisplayErrors errors={errors} /> */}
       {item ? (
         <div style={{ display: "flex" }}>
@@ -144,7 +145,7 @@ export default function ItemDetails() {
             {/* Item detalis */}
             <Paper
               elevation={2}
-              sx={{ width: "700px", height: "600px", padding: "20px" }}
+              sx={{ width: "750px", height: "550px", padding: "20px" }}
             >
               <CardMedia
                 component="img"
@@ -158,19 +159,22 @@ export default function ItemDetails() {
                 }}
               />
               <Typography
+                variant="body2"
+                color="text.secondary"
+                fontSize={"18px"}
+                sx={{display: "flex", padding: "0px 0 10px 0"}}
+              >
+                <div style={{border: "1px solid gray", borderRadius: "12px", width: "105px", fontSize: "13px", padding: "0 0px 0 10px", marginRight:"10px"}}>{item.condition? (conditionOptions.map((age) => (age.value ===item.age? <>{age.label}</>: null))) : null}</div>
+                <div style={{border: "1px solid gray", borderRadius: "12px", width: "130px", fontSize: "13px", padding: "0 0px 0 10px"}}>{item.age? (ageOptions.map((age) => (age.value ===item.age? <>{age.label}</>: null))) : null}  </div>
+              </Typography>
+              <Typography
                 gutterBottom
                 variant="h5"
                 component="div"
                 fontSize={"25px"}
                 dangerouslySetInnerHTML={{ __html: item.name }}
               ></Typography>
-              {/* <Typography
-                variant="body2"
-                color="text.secondary"
-                fontSize={"18px"}
-              >
-                {item.condition}
-              </Typography> */}
+              
               <Typography
                 gutterBottom
                 variant="h5"
@@ -178,8 +182,8 @@ export default function ItemDetails() {
                 fontSize={"13px"}
                 dangerouslySetInnerHTML={{ __html: item.description }}
               ></Typography>
-              <Typography sx={{ marginBottom: "100px", fontSize: "15px" , marginTop: "25px"}}>
-                Locatia produdului: {item?.location}
+              <Typography sx={{ color: "gray", fontWeight: "bold" ,marginBottom: "50px", fontSize: "15px" , marginTop: "25px"}}>
+                Locația produdului: {item?.location}
               </Typography>
             </Paper>
           </Box>
@@ -194,7 +198,7 @@ export default function ItemDetails() {
           >
             <Paper
               elevation={2}
-              sx={{ width: 350, height: 350, padding: "20px" }}
+              sx={{ width: 350, height: 360, padding: "20px" }}
             >
               <Typography
                 gutterBottom
@@ -303,8 +307,8 @@ export default function ItemDetails() {
                 </Avatar>
                 <Authorized
                   authorized={
-                    <Link style={{ margin: "8px" }} to={buildLink()}>
-                      {item?.userId?.userName}
+                    <Link style={{ margin: "8px 0 0 13px", color: "#5d5d5d" , fontSize: "18px"}} to={buildLink()}>
+                     <b>{item?.userId?.userName}</b> 
                     </Link>
                   }
                   notAuthorized={
@@ -320,6 +324,6 @@ export default function ItemDetails() {
       ) : (
         <Loading />
       )}
-    </Container>
+    </div>
   );
 }

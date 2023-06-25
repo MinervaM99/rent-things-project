@@ -6,7 +6,7 @@ const TransactionStatus = {
 
 export const conditionOptions = [
   { label: "Nou", value: 1 },
-  { label: "Aproape nou", value: 2 },
+  { label: "Ca nou", value: 2 },
   { label: "In stare bună", value: 3 },
   { label: "Utilizat", value: 4 },
 ];
