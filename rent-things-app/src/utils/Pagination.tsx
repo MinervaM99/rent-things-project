@@ -54,7 +54,7 @@ export default function Pagination(props: paginationProps) {
     const nextPage = props.currentPage + 1;
 
     links.push({
-      text: "Afișează următoarele",
+      text: "Afișează mai mult",
       page: nextPage,
       enabled: nextPageEnabled,
       active: false,

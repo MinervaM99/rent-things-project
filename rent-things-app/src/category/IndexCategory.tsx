@@ -3,9 +3,15 @@ import IndexEntity from "../utils/IndexEntity";
 import { categoryDTO } from "./category.model";
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 
-export default function   IndexCategory() {
+export default function IndexCategory() {
   return (
-    <>
+    <div
+      // style={{
+      //   backgroundColor: "#f4f5f7",
+      //   paddingTop: "1px",
+      //   margin: " 0 20px 0 20px",
+      // }}
+    >
       <IndexEntity<categoryDTO>
         url={urlCategorirs}
         createURL="../category/create"
@@ -16,8 +22,8 @@ export default function   IndexCategory() {
           <>
             <TableHead>
               <TableRow>
-                <TableCell sx={{fontSize:"19px"}}>Acțiuni</TableCell>
-                <TableCell sx={{fontSize:"19px"}}>Nume categorie</TableCell>
+                <TableCell sx={{ fontSize: "19px" }}>Acțiuni</TableCell>
+                <TableCell sx={{ fontSize: "19px" }}>Nume categorie</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -26,13 +32,15 @@ export default function   IndexCategory() {
                   <TableCell>
                     {buttons(`../category/edit/${category.id}`, category.id)}
                   </TableCell>
-                  <TableCell sx={{fontSize:"15px"}}>{category.name}</TableCell>
+                  <TableCell sx={{ fontSize: "15px" }}>
+                    {category.name}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </>
         )}
       </IndexEntity>
-    </>
+    </div>
   );
 }

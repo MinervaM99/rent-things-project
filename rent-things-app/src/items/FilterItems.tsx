@@ -189,7 +189,7 @@ export default function FilterItems() {
               </div>
               <div
                 className="row gx-3 align-items-center"
-                style={{ backgroundColor: "#f4f5f7" }}
+                style={{ backgroundColor: "#f4f5f7", padding: "7px 0 5px 0" }}
               >
                 <Select
                   className="from-select"
@@ -198,7 +198,7 @@ export default function FilterItems() {
                     width: "190px",
                     height: "35px",
                     backgroundColor: "#fff",
-                    marginLeft: "130px",
+                    marginLeft: "77px",
                   }}
                   placeholder="categorie"
                   {...formikProps.getFieldProps("categoryId")}
@@ -240,13 +240,15 @@ export default function FilterItems() {
 
                 <div
                   className="col-auto"
-                  style={{ marginTop: "10px", marginBottom: "15px" }}
+                  style={{ marginTop: "10px", marginBottom: "10px" }}
                 >
                   <Button
                     className="btn btn-primary"
                     // style={{backgroundColor: "#8e3fe7" }}
                     onClick={() => formikProps.submitForm()}
                     disabled={false}
+                    style={{margin: "0 -7px 0 10px"}}
+                    
                   >
                     Caută
                   </Button>

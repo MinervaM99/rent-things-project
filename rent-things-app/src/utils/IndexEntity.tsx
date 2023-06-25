@@ -138,7 +138,7 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
       {/* {hasMoreData && (
         <div style={{ marginTop: "20px" }}>
           <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
-            Încarcă următoarele
+            Afișează mai mult
           </Button>
         </div>
       )}  */}

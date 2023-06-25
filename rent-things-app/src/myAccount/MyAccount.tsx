@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import AuthenticationContext from "../security/AuthentictionContext";
 import ItemsList from "../items/ItemsList";
 import axios, { AxiosResponse } from "axios";
-import { urlAccounts, urlItems } from "../endpoints";
+import { urlItems } from "../endpoints";
 import { itemDTO } from "../items/items.model";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Avatar, Button, Box, Typography } from "@mui/material";
+import { Avatar, Button, Box} from "@mui/material";
 import { generateRandomColor } from "../utils/utils";
 import IndexTransaction from "../transactions/IndexTransaction";
 
@@ -25,7 +25,6 @@ export default function MyAccount() {
   }
   const myUserId = getUserId();
   const buildAvatarLink = () => `/account/${userName}`;
-  const buildEditLink = () => `/edit/${userName}`;
 
   useEffect(() => {
     loadData();

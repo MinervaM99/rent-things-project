@@ -152,7 +152,7 @@ export default function IndexTransactionStatus() {
                   <thead>
                     <tr>
                       <th style={{textAlign: "center"}}>Acțiuni</th>
-                      <th></th>
+                      <th>Utilizator</th>
                       <th>Produs</th>
                       <th>Data de început</th>
                       <th>Data de sfârșit</th>
@@ -213,7 +213,7 @@ export default function IndexTransactionStatus() {
         {hasMoreData && (
           <div style={{ marginTop: "20px" }}>
             <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
-              Încarcă următoarele
+              Încarcă mai mult
             </Button>
           </div>
         )}

@@ -129,7 +129,14 @@ export default function ItemDetails() {
   const randomColor = generateRandomColor();
 
   return (
-    <div style={{ display: "flex", justifyContent: "center"  ,backgroundColor:"#f4f5f7", paddingBottom: "70px"}}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "#f4f5f7",
+        paddingBottom: "70px",
+      }}
+    >
       {/* <DisplayErrors errors={errors} /> */}
       {item ? (
         <div style={{ display: "flex" }}>
@@ -162,10 +169,40 @@ export default function ItemDetails() {
                 variant="body2"
                 color="text.secondary"
                 fontSize={"18px"}
-                sx={{display: "flex", padding: "0px 0 10px 0"}}
+                sx={{ display: "flex", padding: "0px 0 10px 0" }}
               >
-                <div style={{border: "1px solid gray", borderRadius: "12px", width: "105px", fontSize: "13px", padding: "0 0px 0 10px", marginRight:"10px"}}>{item.condition? (conditionOptions.map((age) => (age.value ===item.age? <>{age.label}</>: null))) : null}</div>
-                <div style={{border: "1px solid gray", borderRadius: "12px", width: "130px", fontSize: "13px", padding: "0 0px 0 10px"}}>{item.age? (ageOptions.map((age) => (age.value ===item.age? <>{age.label}</>: null))) : null}  </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    border: "1px solid gray",
+                    borderRadius: "12px",
+                    width: "105px",
+                    fontSize: "13px",
+                    marginRight: "10px",
+                  }}
+                >
+                  {item.condition
+                    ? conditionOptions.map((age) =>
+                        age.value === item.age ? <>{age.label}</> : null
+                      )
+                    : null}
+                </div>
+                <div
+                  style={{
+                    border: "1px solid gray",
+                    borderRadius: "12px",
+                    width: "130px",
+                    fontSize: "13px",
+                    padding: "0 0px 0 10px",
+                  }}
+                >
+                  {item.age
+                    ? ageOptions.map((age) =>
+                        age.value === item.age ? <>{age.label}</> : null
+                      )
+                    : null}{" "}
+                </div>
               </Typography>
               <Typography
                 gutterBottom
@@ -174,7 +211,7 @@ export default function ItemDetails() {
                 fontSize={"25px"}
                 dangerouslySetInnerHTML={{ __html: item.name }}
               ></Typography>
-              
+
               <Typography
                 gutterBottom
                 variant="h5"
@@ -182,7 +219,15 @@ export default function ItemDetails() {
                 fontSize={"13px"}
                 dangerouslySetInnerHTML={{ __html: item.description }}
               ></Typography>
-              <Typography sx={{ color: "gray", fontWeight: "bold" ,marginBottom: "50px", fontSize: "15px" , marginTop: "25px"}}>
+              <Typography
+                sx={{
+                  color: "gray",
+                  fontWeight: "bold",
+                  marginBottom: "50px",
+                  fontSize: "15px",
+                  marginTop: "25px",
+                }}
+              >
                 Locația produdului: {item?.location}
               </Typography>
             </Paper>
@@ -204,19 +249,23 @@ export default function ItemDetails() {
                 gutterBottom
                 variant="h5"
                 component="div"
-                fontSize={"25px"}
-                
+                fontSize={"20px"}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  paddingBottom: "10px" 
+                }}
               >
-                Împrumută produsul
+                Împrumută
               </Typography>
               {item?.dayPrice != null ? (
                 item?.dayPrice > 0 ? (
                   <Typography
-                    variant="body2"
+                    variant="h5"
                     color="text.secondary"
                     fontSize={"15px"}
                   >
-                    {item?.dayPrice} Ron/zi
+                    <b>{item?.dayPrice} </b> Ron/zi
                   </Typography>
                 ) : null
               ) : null}
@@ -225,9 +274,9 @@ export default function ItemDetails() {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    fontSize={"13px"}
+                    fontSize={"15px"}
                   >
-                    {item?.weekPrice} Ron/saptamana
+                    <b>{item?.weekPrice}</b> Ron/saptamana
                   </Typography>
                 ) : null
               ) : null}
@@ -236,7 +285,7 @@ export default function ItemDetails() {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    fontSize={"13px"}
+                    fontSize={"15px"}
                   >
                     {item?.monthPrice} Ron/luna
                   </Typography>
@@ -262,7 +311,13 @@ export default function ItemDetails() {
               <Typography>
                 {transactions.length === 0 ? null : (
                   <>
-                    <span>Acest produs nu este disponibil in intervalul:</span>
+                    <Typography
+                      variant="body2"
+                      fontSize={"13px"}
+                      sx={{ paddingTop: "10px" }}
+                    >
+                      Acest produs nu este disponibil in intervalul:
+                    </Typography>
                     {transactions.map((transaction, index) => {
                       const unavailableStartDate = new Date(
                         transaction.startDate
@@ -271,10 +326,14 @@ export default function ItemDetails() {
 
                       const itemDetails = (
                         <div key={index}>
-                          <span>
+                          <Typography
+                            variant="body2"
+                            fontSize={"13px"}
+                            sx={{ paddingTop: "2px" }}
+                          >
                             {formatDate(unavailableStartDate)} --{" "}
                             {formatDate(unavailableEndDate)}
-                          </span>
+                          </Typography>
                         </div>
                       );
 
@@ -307,8 +366,15 @@ export default function ItemDetails() {
                 </Avatar>
                 <Authorized
                   authorized={
-                    <Link style={{ margin: "8px 0 0 13px", color: "#5d5d5d" , fontSize: "18px"}} to={buildLink()}>
-                     <b>{item?.userId?.userName}</b> 
+                    <Link
+                      style={{
+                        margin: "8px 0 0 13px",
+                        color: "#5d5d5d",
+                        fontSize: "18px",
+                      }}
+                      to={buildLink()}
+                    >
+                      <b>{item?.userId?.userName}</b>
                     </Link>
                   }
                   notAuthorized={

@@ -5,11 +5,9 @@ import axios, { AxiosResponse } from "axios";
 import { urlAccounts, urlItems } from "../endpoints";
 import { useNavigate, useParams } from "react-router-dom";
 import { userInfoDTO } from "../security/security.model";
-import MyAccount from "./MyAccount";
-import { Avatar, Box, Button, Container, Typography } from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import { generateRandomColor } from "../utils/utils";
 import styled from "styled-components";
-import React from "react";
 import AuthenticationContext from "../security/AuthentictionContext";
 
 export default function UserProfile() {
@@ -146,5 +144,4 @@ const StyledDiv = styled("div")`
   width: 100%;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
   position: sticky;
-  paddingTop: 15px;
 `;
