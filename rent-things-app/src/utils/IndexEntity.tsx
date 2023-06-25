@@ -97,19 +97,22 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
   return (
     <Container>
       <Box my={2} textAlign="center">
-        <StyledTypography sx={{fontSize: "30px"}}>{props.title}</StyledTypography>
+        <StyledTypography sx={{ fontSize: "30px" }}>
+          {props.title}
+        </StyledTypography>
       </Box>
 
-    {props.entityName ? <Link
-        className="btn btn-primary"
-        to={props.createURL}
-        style={{
-          margin: "10px 0 25px 0"
-        }}
-      >
-        {props.entityName}
-      </Link>: null}
-      
+      {(props.entityName && props.createURL )? (
+        <Link
+          className="btn btn-primary"
+          to={props.createURL}
+          style={{
+            margin: "10px 0 25px 0",
+          }}
+        >
+          {props.entityName}
+        </Link>
+      ) : null}
 
       {/* <RecordsPerPageSelect
         onChange={(amountOfRecords) => {
