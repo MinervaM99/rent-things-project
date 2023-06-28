@@ -21,6 +21,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import styled from "styled-components";
 import { Carousel } from "react-bootstrap";
+import LandingPage from "../home/LandingPage";
+import Loading from "../utils/Loading";
 
 const SearchBox = styled.div`
   display: flex;
@@ -64,7 +66,7 @@ export default function FilterItems() {
     categoryId: 0,
     condition: 0,
     page: 1,
-    recordsPerPage: 10,
+    recordsPerPage: 15,
   };
 
   useEffect(() => {
@@ -116,13 +118,17 @@ export default function FilterItems() {
         {(formikProps) => (
           <>
             <Form>
-              <div className="row gx-3 align-items-center">
+              <div className="row gx-3 align-items-center"
+               style={{
+                // backgroundImage: "linear-gradient(to top,#ffffff,#fff,#fff, #fff, #d0f1de)",
+              }}>
                 <Box
                   my={3}
                   textAlign="left"
                   sx={{
                     display: "flex",
                     flexDirection: "row",
+                    padding: "17px 0 8px 0",
                     margin: "65px 0 50px 0",
                     width: "100%",
                     justifyContent: "space-evenly",
@@ -130,7 +136,7 @@ export default function FilterItems() {
                 >
                   <div
                     className="col-auto"
-                    style={{ backgroundColor: "#fff", marginLeft: "70px" }}
+                    style={{  marginLeft: "70px" }}
                   >
                     <SearchBox style={{ width: "450px" }}>
                       <SearchTextField
@@ -155,7 +161,8 @@ export default function FilterItems() {
                       color: "#008C72",
                       fontWeight: "900",
                       fontFamily: "Lucida Console",
-                      margin: "-15px 0 0 0"
+                      margin: "-20px 0 0 0px",
+                      paddingLeft: "0px"
                     }}
                     variant="h4"
                     component="div"
@@ -267,16 +274,18 @@ export default function FilterItems() {
             </Form>
             <ItemsContainer>
               {items.length === 0 ? (
-                <InputLabel
-                  sx={{
-                    fontSize: "30px",
-                    display: "flex",
-                    justifyContent: "center",
-                    marginTop: "50px",
-                  }}
-                >
-                  Nu s-a găsit niciun obiect.{" "}
-                </InputLabel>
+                <Loading/>
+                // <InputLabel
+                //   sx={{
+                //     fontSize: "30px",
+                //     display: "flex",
+                //     justifyContent: "center",
+                //     marginTop: "50px",
+                //   }}
+                // >
+                //   Nu s-a găsit niciun obiect.
+                // </InputLabel>
+
               ) : (
                 <ItemsList listOfItems={items} />
               )}
@@ -298,5 +307,4 @@ interface filterItemsForm {
 
 const ItemsContainer = styled.div`
   background-color: #f4f5f7;
-  margin-bottom: 20px;
 `;

@@ -37,7 +37,3 @@ export function convertItemToFormData(item: itemCreationDTO): FormData {
 
   return formData;
 }
-export function formatDateToBackendFormat(date: any) {
-  const selectedDateTime = moment(date.target.value).startOf('day').format('YYYY-MM-DD HH:mm:ss');
-  return selectedDateTime;
-}

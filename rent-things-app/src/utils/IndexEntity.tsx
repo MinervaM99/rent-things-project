@@ -33,7 +33,9 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
   }, [page, recordsPerPage, props.reload]);
 
   function loadData() {
-    try {
+    try {if (props.reload) {
+      setEntities([]); // Reset entities state
+    }
       axios
         .get(props.url, {
           params: { page, recordsPerPage },
@@ -49,15 +51,6 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
           setEntities((prevEntities) => [...prevEntities, ...response.data]);
           setHasMoreData(page < totalAmountOfPages);
         });
-      //to do Props.setRload(true)
-
-      // const totalAmountOfRecords = parseInt(
-      //   response.headers["totalamountofrecords"],
-      //   10
-      // );
-      // const totalPages = Math.ceil(totalAmountOfRecords / recordsPerPage);
-      // setHasMoreData(page < totalPages);
-      // setEntities((prevEntities) => [...prevEntities, ...response.data]);
     } catch (error: any) {
       Swal.fire("", `${error.response.data}`, "error");
       navigate("/");
@@ -137,14 +130,6 @@ export default function IndexEntity<T>(props: indexEntityProps<T>) {
           onChange={(newPage) => setPage(newPage)}
         />
       </div>
-
-      {/* {hasMoreData && (
-        <div style={{ marginTop: "20px" }}>
-          <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
-            Afișează mai mult
-          </Button>
-        </div>
-      )}  */}
       {props.createURL ? (
         <div
           style={{
@@ -166,6 +151,7 @@ interface indexEntityProps<T> {
   createURL?: string;
   entityName?: string;
   reload?: any;
+  
   children(
     entities: T[],
     buttons: (editURL: string, id: number) => ReactElement
@@ -182,5 +168,3 @@ const StyledTypography = styled(Typography)`
     color: #84a28e;
   }
 `;
-
-const NewCategoryButton = styled(Link)``;

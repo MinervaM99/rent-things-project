@@ -17,7 +17,7 @@ import { urlItems } from "../endpoints";
 import axios from "axios";
 import Swal from "sweetalert2";
 import customConfirm from "../utils/customConfirm";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AlertContext from "../utils/AlertContext";
 import styled from "styled-components";
 import { dropRight } from "lodash";
@@ -88,11 +88,15 @@ export default function SpecificItem(props: itemDTO) {
     }
   }
 
+  useEffect(()=> {
+    
+  }, []);
+
   return (
     <Container >
       <Paper
         elevation={3}
-        sx={{ height: "400px", width: "280px", margin: "15px" }}
+        sx={{ height: "auto", width: "280px", margin: "15px" }}
       >
         {/* <ItemBox> */}
         <CardContent
@@ -136,7 +140,7 @@ export default function SpecificItem(props: itemDTO) {
             </ItemPrice>
             {props.weekPrice ? (
               <ItemPrice to={buildLink()}>
-                {props.weekPrice} RON/saptamana
+                {props.weekPrice} RON/săptămână
               </ItemPrice>
             ) : null}
             {props.monthPrice ? (
@@ -145,7 +149,7 @@ export default function SpecificItem(props: itemDTO) {
               </ItemPrice>
             ) : null}
           </ItemPricesBox>
-          <p style={{ color: "gray", fontWeight: "bold" }}>{props.location}</p>
+          <p style={{ color: "gray", fontWeight: "bold", height:"40px" }}>{props.location}</p>
         </ItemDetails>
         {/* </ItemBox> */}
         

@@ -147,11 +147,11 @@ console.log(props.model, categoryOptions);
                   field="dayPrice"
                 />
                 <CheckBoxWithInput
-                  options={[{ label: "Saptamana", value: "weekPrice" }]}
+                  options={[{ label: "Săptămână", value: "weekPrice" }]}
                   field="weekPrice"
                 />
                 <CheckBoxWithInput
-                  options={[{ label: "Luna", value: "monthPrice" }]}
+                  options={[{ label: "Lună", value: "monthPrice" }]}
                   field="monthPrice"
                 />
               </div>

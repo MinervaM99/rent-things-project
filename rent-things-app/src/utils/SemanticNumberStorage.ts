@@ -16,7 +16,7 @@ export const ageOptions = [
   { label: "Mai putin de 2 ani", value: 2 },
   { label: "Mai putin de 5 ani", value: 3 },
   { label: "Mai putin de 10 ani", value: 4 },
-  { label: "Nu stiu", value: 5 },
+  { label: "Nu îmi amintesc", value: 5 },
 ];
 
 const ItemAvailability ={

@@ -39,7 +39,7 @@ export default function CreateCategory() {
   }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{paddingBottom: "300px"}}>
       <Box my={5} textAlign="center">
         <Typography
           variant="h4"

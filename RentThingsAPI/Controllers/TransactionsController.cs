@@ -52,7 +52,7 @@ namespace RentThingsAPI.Controllers
 			var newTransaction = mapper.Map<Transaction>(transactionDTO);
 			context.Add(newTransaction);
 			await context.SaveChangesAsync();
-			return NoContent();
+			return Ok(newTransaction);
 		}
 
 		//edit status of transaction
@@ -127,8 +127,8 @@ namespace RentThingsAPI.Controllers
 			{
 				return BadRequest("Status nevalid. Parametrul status trebuie sa 1, 2 sau 3");
 			}
-			var queryable = context.Transactions
-								.Include(t => t.Item).Include(x => x.User).Include(x => x.Item)
+			var queryable = context.Transactions.Include(t=>t.User)
+								.Include(t => t.Item).ThenInclude(x => x.User)
 								.Where(t => t.Item.UserId == lenderId && t.Status == status)
 								.AsQueryable();
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
@@ -146,13 +146,14 @@ namespace RentThingsAPI.Controllers
 			{
 				return BadRequest("Status nevalid. Parametrul status trebuie sa 1, 2 sau 3");
 			}
-			var queryable = context.Transactions.Include(x=>x.User).Include(x=>x.Item)
+			var queryable = context.Transactions.Include(t => t.User)
+								.Include(t => t.Item).ThenInclude(x => x.User)
 								.Where(t => t.UserId == borrowerId && (status == 1 ? t.Status == status : t.Status != 1))
 								.AsQueryable(); 
 			
 			await HttpContext.InsertParametersPaginationInHeader(queryable);
 
-			var transactions = await queryable.OrderByDescending(x => x.StartDate).Paginate(paginationDTO).ToListAsync();
+			var transactions = await queryable.Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<TransactionDTO>>(transactions);
 		}
 

@@ -4,7 +4,6 @@ import Button from "../utils/Button";
 import TextField from "../forms/TextField";
 import * as Yup from "yup";
 import { categoryCreationDTO } from "./category.model";
-import DateField from "../forms/DateField";
 
 export default function CategoryForm(props: categoryFormProps) {
   return (

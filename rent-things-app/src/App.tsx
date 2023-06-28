@@ -29,22 +29,20 @@ function App() {
     );
   }
 
- 
   function isUser() {
     return claims.length > 0;
   }
-
 
   return (
     <>
       <AuthenticationContext.Provider value={{ claims, update: setClaims }}>
         <NavigationMenu />
         <Box
-        sx={{
-          flexDirection: 'column',
-          // minHeight: '70vh',
-        }}
-      >
+          sx={{
+            flexDirection: "column",
+            // minHeight: '70vh',
+          }}
+        >
           <Routes>
             {routes.map((route) => (
               <Route
@@ -64,19 +62,27 @@ function App() {
               />
             ))}
           </Routes>
-          </Box>
-        <Footer className="bd-footer py-5" style={{ backgroundColor: "#fff"}}>
-          <div className="container">
-            CircleShare {new Date().getFullYear().toString()}
-          </div>
+        </Box>
+        <Footer
+          className="bd-footer"
+          style={{
+            backgroundColor: "#e4dfea",
+            height: "80px",
+            display: "flex",
+            padding: "20px 60px",
+            fontSize: "12px"
+          }}
+        >
+          <p>
+           <b style={{color: "#446145"}}> @CircleShare {new Date().getFullYear().toString()}</b>
+            <br/>Contact: contact@circleshare.ro
+          </p>
         </Footer>
       </AuthenticationContext.Provider>
     </>
   );
 }
 
-export const Footer = styled.footer`
- 
-` 
+export const Footer = styled.footer``;
 
 export default App;

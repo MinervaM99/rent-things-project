@@ -35,6 +35,7 @@ export default function ItemDetails() {
   // const [userInfo, setUserInfo] = useState<userInfoDTO>();
   const [errors, setErrors] = useState<string[]>([]);
   const [transactions, setTransactions] = useState<transactionDTO[]>([]);
+  const [transactionId, setTransactionId] = useState<transactionDTO[]>([]);
   const navigate = useNavigate();
 
   //obtine username din claims
@@ -96,14 +97,12 @@ export default function ItemDetails() {
         const endDate = new Date(values.endDate);
         const confirmResult = await Swal.fire({
           html: `
-          <h3>Doriti sa imprumutai acest produs?</h3>
-          <p><strong>Din data de:</strong> ${formatDate(
-            startDate
-          )}, ora ${startDate.toLocaleTimeString()}</p>
-          <p><strong>Pâna în data de:</strong> ${formatDate(
-            endDate
-          )}, ora ${endDate.toLocaleTimeString()}</p>
-          <p>Datorați proprietarului ${values.earnings} Ron</p>
+          <h3>Dorești să împrumuți acest obiect?</h3>
+          <p><br/>Din data de: <strong>${formatDate(startDate)}</strong></p>
+          <p>Pâna în data de: <strong>${formatDate(endDate)}</strong></p>
+          <p>Datorezi proprietarului <strong>${
+            values.earnings
+          } Ron</strong> </p>
         `,
           icon: "question",
           showCancelButton: true,
@@ -112,12 +111,19 @@ export default function ItemDetails() {
         });
         if (confirmResult.isConfirmed) {
           const response = await axios.post(urlTransactions, values);
-          console.log(response.data);
+          setTransactionId(response.data);
           Swal.fire("Cererea de împrumut a fost trimisă!", "success");
+          Swal.fire({
+            html: `
+            <h3>Cererea de împrumut a fost trimisă!</h3>
+          `,
+            icon: "success",
+            showCancelButton: true,
+            confirmButtonText: "Ok",
+          });
           navigate(`/item/${id}`);
         }
       } catch (error: any) {
-        setErrors(error.response.data);
         Swal.fire({
           icon: "error",
           html: `<h3> ${error.response.data}</h3> `,
@@ -134,7 +140,6 @@ export default function ItemDetails() {
         display: "flex",
         justifyContent: "center",
         backgroundColor: "#f4f5f7",
-        paddingBottom: "70px",
       }}
     >
       {/* <DisplayErrors errors={errors} /> */}
@@ -152,7 +157,12 @@ export default function ItemDetails() {
             {/* Item detalis */}
             <Paper
               elevation={2}
-              sx={{ width: "750px", height: "550px", padding: "20px" }}
+              sx={{
+                width: "710px",
+                height: "auto",
+                padding: "10px 20px 10px 10px",
+                marginBottom: "40px",
+              }}
             >
               <CardMedia
                 component="img"
@@ -160,7 +170,7 @@ export default function ItemDetails() {
                 alt="Product"
                 style={{
                   objectFit: "contain",
-                  height: "70%",
+                  height: "420px",
                   width: "100%",
                   marginBottom: "20px",
                 }}
@@ -169,7 +179,7 @@ export default function ItemDetails() {
                 variant="body2"
                 color="text.secondary"
                 fontSize={"18px"}
-                sx={{ display: "flex", padding: "0px 0 10px 0" }}
+                sx={{ display: "flex", padding: "0px 0 10px 10px" }}
               >
                 <div
                   style={{
@@ -177,35 +187,45 @@ export default function ItemDetails() {
                     justifyContent: "center",
                     border: "1px solid gray",
                     borderRadius: "12px",
+                    paddingTop: "1px",
                     width: "105px",
-                    fontSize: "13px",
+                    fontSize: "12px",
                     marginRight: "10px",
                   }}
                 >
                   {item.condition
-                    ? conditionOptions.map((age) =>
-                        age.value === item.age ? <>{age.label}</> : null
+                    ? conditionOptions.map((condition) =>
+                        condition.value === item.condition ? (
+                          <>{condition.label}</>
+                        ) : null
                       )
                     : null}
                 </div>
-                <div
-                  style={{
-                    border: "1px solid gray",
-                    borderRadius: "12px",
-                    width: "130px",
-                    fontSize: "13px",
-                    padding: "0 0px 0 10px",
-                  }}
-                >
+                <div>
                   {item.age
                     ? ageOptions.map((age) =>
-                        age.value === item.age ? <>{age.label}</> : null
+                        age.value === item.age && item.age !== 5 ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              borderRadius: "12px",
+                              justifyContent: "center",
+                              border: "1px solid gray",
+                              width: "118px",
+                              fontSize: "12px",
+                              paddingTop: "1px",
+                            }}
+                          >
+                            {age.label}
+                          </div>
+                        ) : null
                       )
                     : null}{" "}
                 </div>
               </Typography>
               <Typography
                 gutterBottom
+                paddingLeft={"10px"}
                 variant="h5"
                 component="div"
                 fontSize={"25px"}
@@ -213,6 +233,7 @@ export default function ItemDetails() {
               ></Typography>
 
               <Typography
+              paddingLeft={"10px"}
                 gutterBottom
                 variant="h5"
                 component="div"
@@ -220,10 +241,10 @@ export default function ItemDetails() {
                 dangerouslySetInnerHTML={{ __html: item.description }}
               ></Typography>
               <Typography
+              paddingLeft={"10px"}
                 sx={{
                   color: "gray",
                   fontWeight: "bold",
-                  marginBottom: "50px",
                   fontSize: "15px",
                   marginTop: "25px",
                 }}
@@ -243,7 +264,7 @@ export default function ItemDetails() {
           >
             <Paper
               elevation={2}
-              sx={{ width: 350, height: 360, padding: "20px" }}
+              sx={{ width: 350, height: 400, padding: "20px" }}
             >
               <Typography
                 gutterBottom
@@ -253,45 +274,54 @@ export default function ItemDetails() {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  paddingBottom: "10px" 
+                  paddingBottom: "15px",
+                  // fontWeight: "bold",
+                  fontSize: "20px",
+                  color: "gray"
                 }}
               >
                 Împrumută
               </Typography>
-              {item?.dayPrice != null ? (
-                item?.dayPrice > 0 ? (
-                  <Typography
-                    variant="h5"
-                    color="text.secondary"
-                    fontSize={"15px"}
-                  >
-                    <b>{item?.dayPrice} </b> Ron/zi
-                  </Typography>
-                ) : null
-              ) : null}
-              {item?.weekPrice != null ? (
-                item?.weekPrice > 0 ? (
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    fontSize={"15px"}
-                  >
-                    <b>{item?.weekPrice}</b> Ron/saptamana
-                  </Typography>
-                ) : null
-              ) : null}
-              {item?.monthPrice != null ? (
-                item?.monthPrice > 0 ? (
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    fontSize={"15px"}
-                  >
-                    {item?.monthPrice} Ron/luna
-                  </Typography>
-                ) : null
-              ) : null}
-
+              <div style={{ display: "flex", marginBottom: "5px"  }}>
+                {item?.dayPrice != null ? (
+                  item?.dayPrice > 0 ? (
+                    <Typography
+                      variant="h5"
+                      padding={"0 0 15px 5px"}
+                      color="text.secondary"
+                      fontSize={"30px"}
+                      marginRight={"50px"}
+                    >
+                      <span><b>{item?.dayPrice}</b><span style={{fontSize: "18px"}}>RON</span></span>
+                      <div style={{ fontSize: "15px", marginTop: "-5px",paddingLeft: "20px" }}>/zi</div>
+                    </Typography>
+                  ) : null
+                ) : null}
+                {item?.weekPrice != null ? (
+                  item?.weekPrice > 0 ? (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize={"30px"}
+                      marginRight={"60px"}
+                    >
+                      <span><b style={{paddingLeft: "0px" }}>{item?.weekPrice}</b><span style={{fontSize: "18px"}}>RON</span></span>
+                      <div style={{ fontSize: "13px", marginTop: "-5px", justifyContent:"space-between", display:"flex" }}> /săptămână</div>
+                    </Typography>
+                  ) : null
+                ) : null}
+                {item?.monthPrice != null ? (
+                  item?.monthPrice > 0 ? (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize={"30px"}
+                    >
+                      {item?.monthPrice} Ron/<br/>luna
+                    </Typography>
+                  ) : null
+                ) : null}
+              </div>
               <RentForm
                 model={{
                   userId: `${myUserId}`, //borrowerId (me)
@@ -308,6 +338,7 @@ export default function ItemDetails() {
               />
 
               {/* Display unavailable dates */}
+              <div style={{ height: '200px', overflow: 'auto' }}>
               <Typography>
                 {transactions.length === 0 ? null : (
                   <>
@@ -331,7 +362,7 @@ export default function ItemDetails() {
                             fontSize={"13px"}
                             sx={{ paddingTop: "2px" }}
                           >
-                            {formatDate(unavailableStartDate)} --{" "}
+                            {formatDate(unavailableStartDate)}&nbsp;&nbsp; - &nbsp;&nbsp;
                             {formatDate(unavailableEndDate)}
                           </Typography>
                         </div>
@@ -341,7 +372,7 @@ export default function ItemDetails() {
                     })}
                   </>
                 )}
-              </Typography>
+              </Typography></div>
             </Paper>
 
             {/* User Details */}

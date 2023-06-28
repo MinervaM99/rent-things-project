@@ -15,7 +15,6 @@ export default function MyAccount() {
   const navigate = useNavigate();
   const [items, setItems] = useState<itemDTO[]>([]);
   const [selectedOption, setSelectedOption] = useState<string>("optiunea1");
-  const [isDeleted, setIsDeleted] = useState<boolean>(false);
   function getUserName(): string {
     return claims.filter((x) => x.name === "userName")[0]?.value;
   }
@@ -28,7 +27,7 @@ export default function MyAccount() {
 
   useEffect(() => {
     loadData();
-  }, [userName, isDeleted]);
+  }, [userName]);
 
   function loadData() {
     try {
@@ -37,7 +36,6 @@ export default function MyAccount() {
         .then((response: AxiosResponse<itemDTO[]>) => {
           setItems(response.data);
         });
-      console.log("loadData");
     } catch (error: any) {
       console.log(error.data);
     }
@@ -131,12 +129,12 @@ export default function MyAccount() {
               {/* To do - sa pun parametru si sa vad cum fac sa iau tranzactiile */}
               <IndexTransaction
                 urlTransactionParam={`borrow/${myUserId}/${1 as number}`}
-                title="Cerereri de împrumut în așteptare"
+                title="Cerereri de împrumut în așteptare..."
               />
 
               <IndexTransaction
                 urlTransactionParam={`borrow/${myUserId}/${2 as number}`}
-                title="Răspunsul la cererile de împrumut trimise"
+                title="Răspunsul la cererile mele de împrumut"
               />
             </>
           )}
@@ -157,7 +155,7 @@ export default function MyAccount() {
 
 const Container = styled.div`
   display: flex;
-  height: 580px;
+  min-height: 525px;
 `;
 const ContainerLinks = styled.div`
   padding-top: 35px;
@@ -197,8 +195,4 @@ const Divider = styled.div`
 const Content = styled.div`
   flex: 1;
   padding: 20px;
-`;
-
-const StyledLetter = styled.span`
-  font-size: 34px;
 `;

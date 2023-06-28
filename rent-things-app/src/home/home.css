@@ -74,17 +74,17 @@
 
 .logo-text {
   font-weight: bold;
-  font-size: 24px; /* Ajustează dimensiunea textului după preferință */
+  font-size: 24px; 
 }
 
 .logo-circle {
-  background-color: #f6c942; /* Ajustează culoarea cercului după preferință */
-  color: #ffffff; /* Ajustează culoarea textului cercului după preferință */
+  background-color: #f6c942; 
+  color: #ffffff; 
   font-weight: bold;
-  font-size: 24px; /* Ajustează dimensiunea textului cercului după preferință */
+  font-size: 24px; 
   border-radius: 50%;
-  padding: 4px 8px; /* Ajustează dimensiunea și spațiul din jurul cercului după preferință */
-  margin-left: 8px; /* Ajustează distanța dintre textul "Share" și cercul "Circle" */
+  padding: 4px 8px; 
+  margin-left: 8px; 
 }
 
 

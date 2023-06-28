@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { urlTransactions } from "../endpoints";
+import { urlAccounts, urlTransactions } from "../endpoints";
 import IndexEntity from "../utils/IndexEntity";
 import { transactionDTO } from "./transactions.model";
 import { formatDate } from "../utils/utils";
@@ -7,13 +7,18 @@ import { useContext, useState } from "react";
 import AuthenticationContext from "../security/AuthentictionContext";
 import customConfirm from "../utils/customConfirm";
 import Button from "@mui/material/Button";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { userInfoDTO } from "../security/security.model";
 //to do
 export default function IndexTransaction(props: IndexTransactionProps) {
   const { claims } = useContext(AuthenticationContext);
-  const [reload, setReload] = useState<Boolean>(false);
+  const [reload, setReload] = useState(false);
+  const [lenderInfo, setLenderInfo] = useState<userInfoDTO>();
+  function reloadData() {
+    setReload((prevReload) => !prevReload);
+  }
   //obtine username din claims
   function getUserName(): string {
     return claims.find((x) => x.name === "userName")?.value || "";
@@ -30,9 +35,21 @@ export default function IndexTransaction(props: IndexTransactionProps) {
         icon: "success",
         confirmButtonText: "OK",
       });
-      setReload(true);
+      reloadData();
     } catch (error) {
       Swal.fire("Eroare. Ceva nu a funcționat", "error");
+    }
+  }
+
+  function detailsLender(userId: number) {
+    try {
+      axios
+        .get(`urlAccounts/${userId}`)
+        .then((response: AxiosResponse<userInfoDTO>) => {
+          setLenderInfo(response.data);
+        });
+    } catch (error: any) {
+      console.log(error.response.data);
     }
   }
 
@@ -40,27 +57,45 @@ export default function IndexTransaction(props: IndexTransactionProps) {
     <>
       <IndexEntity<transactionDTO>
         url={`${urlTransactions}/${props.urlTransactionParam}`}
-        reload={reload}
         title={props.title}
+        reload={reloadData} // Pass the reload function as a prop
       >
         {(transactions) => {
           return (
             <>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center" sx={{fontSize:"14px"}}>Acțiuni</TableCell>
-                  <TableCell align="center" sx={{fontSize:"14px"}}>Status</TableCell>
+                  <TableCell align="center" sx={{ fontSize: "14px" }}>
+                    Acțiuni
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontSize: "14px" }}>
+                    Status
+                  </TableCell>
                   {props.transactionType === 1 ? (
-                    <TableCell align="left" sx={{fontSize:"14px"}}>Debitor</TableCell>
+                    <TableCell align="left" sx={{ fontSize: "14px" }}>
+                      Debitor
+                    </TableCell>
                   ) : (
-                    <TableCell align="left" sx={{fontSize:"14px"}}>Proprietar</TableCell>
+                    <TableCell align="left" sx={{ fontSize: "14px" }}>
+                      Proprietar
+                    </TableCell>
                   )}
 
-                  <TableCell align="left" sx={{fontSize:"14px"}}>Produs</TableCell>
-                  <TableCell align="left" sx={{fontSize:"14px"}}>Data de început</TableCell>
-                  <TableCell align="left" sx={{fontSize:"14px"}}>Data de sfârșit</TableCell>
-                  <TableCell align="left" sx={{fontSize:"14px"}}>Câștig</TableCell>
-                  <TableCell align="left" sx={{fontSize:"14px"}}>Id Cerere</TableCell>
+                  <TableCell align="left" sx={{ fontSize: "14px" }}>
+                    Produs
+                  </TableCell>
+                  <TableCell align="left" sx={{ fontSize: "14px" }}>
+                    Data de început
+                  </TableCell>
+                  <TableCell align="left" sx={{ fontSize: "14px" }}>
+                    Data de sfârșit
+                  </TableCell>
+                  <TableCell align="left" sx={{ fontSize: "14px" }}>
+                    Preț total
+                  </TableCell>
+                  <TableCell align="left" sx={{ fontSize: "14px" }}>
+                    Id Cerere
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -69,6 +104,7 @@ export default function IndexTransaction(props: IndexTransactionProps) {
                     key={`${transaction.id}-${index}`}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
+                     
                     {transaction.status === 2 ? (
                       <TableCell></TableCell>
                     ) : (
@@ -95,15 +131,16 @@ export default function IndexTransaction(props: IndexTransactionProps) {
                       <TableCell>...</TableCell>
                     )}
                     {props.transactionType === 1 ? (
+                     
                       <TableCell align="left">
-                        <Link to={`/account/${transaction.itemId?.id}`}>
-                          Detalii Debitor
+                        <Link to={`/account/${transaction.itemId?.userId?.userName}`}>
+                        {transaction.itemId?.userId?.userName}
                         </Link>
                       </TableCell>
                     ) : (
                       <TableCell align="left">
-                        <Link to={`/account/${transaction.itemId?.id}`}>
-                          Detalii Proprietar
+                        <Link to={`/account/${transaction.itemId?.userId?.userName}`}>
+                        {transaction.itemId?.userId?.userName}
                         </Link>
                       </TableCell>
                     )}

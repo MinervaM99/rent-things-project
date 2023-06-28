@@ -79,10 +79,10 @@ export default function RentForm(props: rentFormProps) {
         {/* desable the subscribe button */}
 
         {(formikProps) => (
-          <Form>
+          <Form> <div style={{paddingTop: "8px",fontSize:"13px"}}>Selectează intervalul de timp: </div>
             <DatePickerContainer>
               <DatePickerWrapper>
-                din data de
+                
                 <DatePickerInput
                   dateFormat="dd/MM/yyyy"
                   selected={startDate}
@@ -102,13 +102,12 @@ export default function RentForm(props: rentFormProps) {
                   sx={{
                     position: "absolute",
                     right: "5px",
-                    top: "24px",
+                    top: "5px",
                     
                   }}
                 />
               </DatePickerWrapper>
               <DatePickerWrapper>
-                pana in data de
                 <DatePickerInput
                   dateFormat="dd/MM/yyyy"
                   selected={endDate}
@@ -133,8 +132,8 @@ export default function RentForm(props: rentFormProps) {
                 <CalendarMonthOutlinedIcon
                   sx={{
                     position: "absolute",
-                    right: "13px",
-                    top: "24px",
+                    right: "6px",
+                    top: "5px",
                     
                   }}
                 />

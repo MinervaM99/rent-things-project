@@ -26,7 +26,7 @@ namespace RentThingsAPI.Controllers
 		}
 
 		//get all categories
-		[HttpGet]
+		[HttpGet("display")]
 		public async Task<ActionResult<List<CategoryDTO>>> Get([FromQuery] PaginationDTO paginationDTO)
 		{
 			logger.LogInformation("Getting all the categories");
@@ -36,6 +36,20 @@ namespace RentThingsAPI.Controllers
 			var categories =  await queryable.OrderBy(x => x.Name).Paginate(paginationDTO).ToListAsync();
 			return mapper.Map<List<CategoryDTO>>(categories);
 		}
+
+		//get all categories
+		[HttpGet]
+		public async Task<ActionResult<List<CategoryDTO>>> GetCategoris()
+		{
+			var categories = await context.Categories.OrderBy(x => x.Name).ToListAsync();
+			if (categories == null)
+			{
+				return NotFound();
+			}
+
+			return mapper.Map<List<CategoryDTO>>(categories);
+		}
+
 
 
 

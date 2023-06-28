@@ -13,7 +13,7 @@ export default function IndexCategory() {
       // }}
     >
       <IndexEntity<categoryDTO>
-        url={urlCategorirs}
+        url={`${urlCategorirs}/display`}
         createURL="../category/create"
         title="Categorii"
         entityName="Adaugă o categorie nouă"

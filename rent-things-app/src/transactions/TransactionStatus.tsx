@@ -28,7 +28,6 @@ export default function IndexTransactionStatus() {
   const [confirmedTransactions, setConfirmedTransactions] =
     useState<transactionDTO[]>();
 
-  const [hasMoreData, setHasMoreData] = useState(true);
   const [reloadTransactions, setReloadTransactions] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const [page2, setPage2] = useState(1);
@@ -82,30 +81,33 @@ export default function IndexTransactionStatus() {
   //incarca date despre tranzactiile de manageuit
   async function loadTransactionRequests() {
     try {
-      const response = await axios.get(`${urlTransactions}/lend/${myUserId}/${1 as number}`, {
-        params: { page, recordsLoades },
-      });
+      const response = await axios.get(
+        `${urlTransactions}/lend/${myUserId}/${1 as number}`,
+        {
+          params: { page, recordsLoades },
+        }
+      );
       const totalAmountOfRecords = parseInt(
         response.headers["totalamountofrecords"],
         10
       );
       const totalPages = Math.ceil(totalAmountOfRecords / recordsLoades);
-      setHasMoreData(page < totalPages);
       setinProcessTransactions([...response.data]);
       setReloadTransactions(false);
-    } catch (error:any) {
+    } catch (error: any) {
       Swal.fire("Eroare", `${error.response.data}`, "error");
-      
     }
   }
 
   //incarca date istoric tranzactii acceptate
   async function loadAcceptedTransactions() {
-  
     try {
-      const response = await axios.get(`${urlTransactions}/lend/${myUserId}/${2 as number}`, {
-        params: { page, recordsLoades },
-      });
+      const response = await axios.get(
+        `${urlTransactions}/lend/${myUserId}/${2 as number}`,
+        {
+          params: { page, recordsLoades },
+        }
+      );
       const totalAmountOfRecords = parseInt(
         response.headers["totalamountofrecords"],
         10
@@ -114,14 +116,20 @@ export default function IndexTransactionStatus() {
       setConfirmedTransactions([...response.data]);
       setReloadTransactions(false);
       console.log(response.data);
-    } catch (error:any) {
+    } catch (error: any) {
       Swal.fire("Eroare", "error");
     }
   }
 
   return (
-    <div 
-    style={{height: "490px", marginTop:"-40px",backgroundColor:"#f4f5f7", }}>
+    <div
+      style={{
+        height: "100%",
+        marginTop: "-40px",
+        backgroundColor: "#f4f5f7",
+        overflowY: "auto",
+      }}
+    >
       <Container
         maxWidth="lg"
         sx={{
@@ -137,26 +145,26 @@ export default function IndexTransactionStatus() {
           loadingUI={<Loading />}
         >
           <div>
-            <h3>Raspunde cererilor de imprumut</h3>
+            <h3>Raspunde cererilor de împrumut</h3>
             {inProcessTransactions?.length === 0 ? (
               <h6>Nu există nici o solicitare.</h6>
             ) : (
               <div>
-                <h6 style={{ color: "red", marginBottom: "20px" }}>
+                <div style={{ color: "red", marginBottom: "20px" , fontSize: "13px"}}>
                   *Acceptarea unei cereri de imprumut care se suprapune ca
                   interval de timp cu o altă cerere de împrumut pentru același
                   produs, va determina respingerea tuturor celorlalte cereri de
                   împrumut!
-                </h6>
+                </div>
                 <table className="table table-striped">
                   <thead>
                     <tr>
-                      <th style={{textAlign: "center"}}>Acțiuni</th>
+                      <th style={{ textAlign: "center" }}>Acțiuni</th>
                       <th>Utilizator</th>
                       <th>Produs</th>
                       <th>Data de început</th>
                       <th>Data de sfârșit</th>
-                      <th>Caștig</th>
+                      <th>Preț total</th>
                       <th>Id Cerere</th>
                     </tr>
                   </thead>
@@ -165,6 +173,7 @@ export default function IndexTransactionStatus() {
                       <tr key={transaction.id}>
                         <td>
                           <Button
+                            style={{ color: "green" }}
                             onClick={() =>
                               customConfirm(
                                 () => handleTrRequest(transaction.id, 2),
@@ -176,6 +185,7 @@ export default function IndexTransactionStatus() {
                             Acceptă
                           </Button>
                           <Button
+                            style={{ color: "#ed6464" }}
                             onClick={() =>
                               customConfirm(
                                 () => handleTrRequest(transaction.id, 3),
@@ -210,13 +220,6 @@ export default function IndexTransactionStatus() {
             )}
           </div>
         </GenericListComponent>
-        {hasMoreData && (
-          <div style={{ marginTop: "20px" }}>
-            <Button onClick={() => setPage((prevPage) => prevPage + 1)}>
-              Încarcă mai mult
-            </Button>
-          </div>
-        )}
       </Container>
 
       <Container
@@ -248,7 +251,7 @@ export default function IndexTransactionStatus() {
                     <TableCell>Produs</TableCell>
                     <TableCell>Data de început</TableCell>
                     <TableCell>Data de sfârșit</TableCell>
-                    <TableCell>Caștig</TableCell>
+                    <TableCell>Preț total</TableCell>
                     <TableCell>Id Cerere</TableCell>
                   </TableRow>
                 </TableHead>

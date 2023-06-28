@@ -210,12 +210,12 @@ export const NavDropdownLink = styled(Link)`
 `;
 
 export const NavDropdownLogout = styled.span`
-  color: #3b8c6e;
+  color: #0f51ec;
   font-size: 14px;
   padding: 8px 0;
 
   &:hover {
-    color: #1e5959;
+    color: #6088e6;
   }
 `;
 

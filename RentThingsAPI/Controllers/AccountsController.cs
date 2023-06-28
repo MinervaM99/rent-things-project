@@ -150,6 +150,22 @@ namespace RentThingsAPI.Controllers
 
 		}
 
+		//get info about a user by ItemId
+		[HttpGet("{id:int}")]
+		public async Task<ActionResult<UserInfoDTO>> GetUserInfoByItem(int id)
+		{
+			var itemUser = await context.Items.FirstOrDefaultAsync(x=>x.Id == id);
+			var user = await context.Users.FirstOrDefaultAsync(x => x.Id == itemUser.UserId);
+
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			return mapper.Map<UserInfoDTO>(user);
+
+		}
+
 
 		[HttpGet("info/{userId}")]
 		public async Task<ActionResult<UserDTO>> GetUserInfoById(string userId)
